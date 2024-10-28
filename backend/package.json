@@ -1,0 +1,35 @@
+{
+  "name": "connect-backend",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "app.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kismatkc/connect-fullstack.git#main"
+  },
+  "author": "kismat kc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kismatkc/connect-fullstack/issues"
+  },
+  "homepage": "https://github.com/kismatkc/connect-fullstack/tree/main#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/pg": "^8.11.10",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "pg": "^8.13.1",
+    "uuid": "^11.0.1"
+  }
+}
