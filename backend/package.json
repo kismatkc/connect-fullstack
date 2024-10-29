@@ -21,6 +21,8 @@
   "homepage": "https://github.com/kismatkc/connect-fullstack/tree/main#readme",
   "description": "",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.0",
     "@types/pg": "^8.11.10",
     "dotenv": "^16.4.5",
     "nodemon": "^3.1.7",
@@ -29,7 +31,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "pg": "^8.13.1",
-    "uuid": "^11.0.1"
+    "express": "^4.21.1",
+    "pg": "^8.13.1"
   }
 }
