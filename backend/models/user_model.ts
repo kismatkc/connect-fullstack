@@ -1,12 +1,11 @@
 import { pool } from "../lib/database.js";
-import { userInput } from "../types/index.js";
+import { SignUpDetails, LoginDetails, user } from "../types/index.js";
 import bcrypt from "bcrypt";
 
 const userModel = {
-  create: async ({ email, userName, password, avatarUrl }: userInput) => {
+  create: async ({ email, userName, password, avatarUrl }: SignUpDetails) => {
     const salt = await bcrypt.genSalt(10);
     const password_hash = await bcrypt.hash(password, salt);
-    console.log(email, userName, password_hash, avatarUrl);
 
     const query = `
         INSERT INTO users (email, user_name, password_hash, avatar_url) 
@@ -23,6 +22,27 @@ const userModel = {
 
     return result.rows[0];
   },
-  verify: () => {},
+  verify: async ({ email, password }: LoginDetails) => {
+    const query = `SELECT id, email, user_name, password_hash, avatar_url, created_at FROM users WHERE email= \$1`;
+    const result = await pool.query(query, [email]);
+    console.log(result.rows);
+
+    if (!(result.rows.length > 0)) {
+      return { verified: false, error: "no user found", status: 404 };
+    }
+
+    const user: user = result.rows[0];
+    return (await bcrypt.compare(password, user.password_hash))
+      ? { verified: true, data: user, status: 200 }
+      : { verified: false, error: "Incorrect password", status: 401 };
+  },
 };
 export default userModel;
+
+// {
+//   "email": "anishgc27@gmail.com",
+//   "password": "Sova@321",
+//   "avatarUrl": "hello",
+//   "userName": "fido"
+
+// }

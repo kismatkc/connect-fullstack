@@ -1,12 +1,24 @@
 import { Request, Response } from "express";
 import userModel from "../models/user_model.js";
-import { userInput } from "../types/index.js";
+import { SignUpDetails, LoginDetails } from "../types/index.js";
 
 const userController = {
+  verify: async (req: Request, res: Response) => {
+    try {
+      const userDetails: LoginDetails = req.body;
+      const response = await userModel.verify(userDetails);
+      if (!response.verified) {
+        res.status(response.status).json({ message: response.error });
+      } else {
+        res.status(response.status).json({ data: response.data });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "server error" });
+    }
+  },
   create: async (req: Request, res: Response) => {
     try {
-      const userDetails: userInput = req.body;
-      console.log("user details", userDetails);
+      const userDetails: SignUpDetails = req.body;
 
       const response = await userModel.create(userDetails);
 
