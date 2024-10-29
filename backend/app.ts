@@ -1,5 +1,5 @@
 import express, { json } from "express";
-import connectToDatabase from "./lib/database.js";
+import connectToDatabase from "./lib/database.ts";
 import userRoutes from "./routes/user_routes.js";
 const app = express();
 const PORT = process.env.PORT || 4000;
