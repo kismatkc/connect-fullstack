@@ -6,10 +6,14 @@ dotenv.config();
 const postgresConfig = {
   user: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
-  host: process.env.POSTGRES_HOST,
-  port: process.env.POSTGRES_PORT as unknown as number,
+  // host: process.env.POSTGRES_HOST,
+  host: process.env.POSTGRES_REPLIT,
+  
+  // port: process.env.POSTGRES_PORT as unknown as number,
+  port: process.env.POSTGRES_REPLIT_PORT as unknown as number,
   database: process.env.POSTGRES_DATABASE,
 };
+console.log(postgresConfig)
 
 export const pool = new Pool(postgresConfig);
 
