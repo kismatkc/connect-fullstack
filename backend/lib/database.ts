@@ -3,6 +3,7 @@ import postGresPackage from "pg";
 const { Pool } = postGresPackage;
 dotenv.config();
 
+
 const postgresConfig = {
   user: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
@@ -10,6 +11,11 @@ const postgresConfig = {
 
   port: process.env.POSTGRES_PORT as unknown as number,
   database: process.env.POSTGRES_DATABASE,
+
+  ssl: {
+    rejectUnauthorized: false
+  }
+  
 };
 console.log(postgresConfig);
 

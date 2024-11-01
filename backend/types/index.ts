@@ -1,8 +1,10 @@
 export interface SignUpDetails {
   email: string;
-  userName: string;
-  password: string;
-  avatarUrl: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    birthday: Date;
+    gender: string;
 }
 export interface user {
   id: string;

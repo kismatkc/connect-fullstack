@@ -11,7 +11,9 @@ const interFont = Inter({
   weight: ["400", "800"],
   subsets: ["latin"],
 });
+import ReactQueryProvider from '@/components/react-query-provider';
 
+import { Toaster } from "@/components/ui/sonner"
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -20,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <body className={`${interFont.className} antialiased`}>
+        <ReactQueryProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -27,7 +30,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster />
         </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

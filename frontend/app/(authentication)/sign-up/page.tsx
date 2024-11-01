@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
-
+import useCreateUser from "@/hooks/create-user";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -63,7 +63,7 @@ const formSchema = z.object({
     .enum(["Male", "Female", "Other"], {
       message: "Gender must be either 'male', 'female', or 'other'.",
     })
-    .optional(), // Optional field
+     // Optional field
 });
 
 const SignUp = () => {
@@ -75,11 +75,16 @@ const SignUp = () => {
     },
   });
 
+  const {mutate: createUser} = useCreateUser();
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    createUser(values)
+    
+    
   }
 
   return (

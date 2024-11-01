@@ -3,27 +3,24 @@ import { SignUpDetails, LoginDetails, user } from "../types/index.js";
 import bcrypt from "bcrypt";
 
 const userModel = {
-  create: async ({ email, userName, password, avatarUrl }: SignUpDetails) => {
+  create: async ({ email, firstName, lastName, password, birthday, gender }: SignUpDetails) => {
     const salt = await bcrypt.genSalt(10);
     const password_hash = await bcrypt.hash(password, salt);
-
-    const query = `
-        INSERT INTO users (email, user_name, password_hash, avatar_url) 
-        VALUES (\$1, \$2, \$3, \$4) 
-        RETURNING id, email, user_name, password_hash, avatar_url, created_at
-      `;
-
+console.log(password_hash)
+    console.log(password_hash)
+    const query = `  
+        INSERT INTO users (email, first_name, last_name, password_hash, birthday, gender)   
+        VALUES ($1, $2, $3, $4, $5, $6)   
+        RETURNING id, email, first_name, last_name, password_hash, birthday, gender, created_at  
+    `;  
     const result = await pool.query(query, [
-      email,
-      userName,
-      password_hash,
-      avatarUrl,
+      email, firstName, lastName, password_hash, birthday, gender
     ]);
 
     return result.rows[0];
   },
   verify: async ({ email, password }: LoginDetails) => {
-    const query = `SELECT id, email, user_name, password_hash, avatar_url, created_at FROM users WHERE email= \$1`;
+    const query = `SELECT id , email, first_name,password_hash, last_name, birthday, gender FROM users WHERE email= \$1`;
     const result = await pool.query(query, [email]);
     console.log(result.rows);
 

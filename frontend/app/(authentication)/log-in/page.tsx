@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
+import useVerifyUser from "@/hooks/verify-user";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -44,12 +45,14 @@ const LogIn = () => {
       password: "",
     },
   });
+  const {mutate: verifyUser} = useVerifyUser();
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    verifyUser(values)
   }
 
   return (

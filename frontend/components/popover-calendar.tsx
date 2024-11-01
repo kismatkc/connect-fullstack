@@ -31,12 +31,12 @@ const PopoverCalendar = ({
   useEffect(() => {
     if (!open) return;
     const hello = () => {
-      console.log("see");
+      
 
       setOpen(false);
     };
-    window.addEventListener("click", hello);
-    return () => window.removeEventListener("click", hello);
+    // window.addEventListener("click", hello);
+    // return () => window.removeEventListener("click", hello);
   }, [open]);
 
   return (
