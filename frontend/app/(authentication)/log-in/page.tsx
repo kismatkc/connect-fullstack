@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useEffect } from "react";
 
 // Regular expression for validating email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -45,7 +46,8 @@ const LogIn = () => {
       password: "",
     },
   });
-  const {mutate: verifyUser} = useVerifyUser();
+  const {mutate: verifyUser,error} = useVerifyUser();
+  const { isValid } = form.formState;
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -54,6 +56,11 @@ const LogIn = () => {
     console.log(values);
     verifyUser(values)
   }
+   useEffect(() => {
+     if (error) {
+       form.reset();
+     }
+   }, [error]);
 
   return (
     <div className="flex flex-col justify-center items-center mt-2">
@@ -107,6 +114,7 @@ const LogIn = () => {
           <Link href="/sign-up" className="text-center">
             <Button
               type="submit"
+              disabled={!isValid}
               className="bg-green-500 hover:bg-green-600 transition-bg transition-colors"
             >
               Create new account

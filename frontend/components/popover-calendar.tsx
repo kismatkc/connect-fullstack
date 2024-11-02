@@ -22,7 +22,7 @@ const PopoverCalendar = ({
       email: string;
       password: string;
       birthday: Date;
-      gender?: "Male" | "Female" | "Other" | undefined;
+      gender: "Male" | "Female" | "Other" ;
     },
     "birthday"
   >;

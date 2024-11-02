@@ -4,7 +4,7 @@ import userRoutes from "./routes/user_routes.js";
 import cors from "cors";
 import { compareSync } from "bcrypt";
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 app.use(cors({
   origin: "*"
 }))

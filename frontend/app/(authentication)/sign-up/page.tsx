@@ -24,6 +24,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import PopoverCalendar from "@/components/popover-calendar";
+import { useEffect } from "react";
 
 // Regular expression for validating email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -63,7 +64,6 @@ const formSchema = z.object({
     .enum(["Male", "Female", "Other"], {
       message: "Gender must be either 'male', 'female', or 'other'.",
     })
-     // Optional field
 });
 
 const SignUp = () => {
@@ -72,20 +72,36 @@ const SignUp = () => {
     defaultValues: {
       birthday: new Date(),
       gender: "Male",
+      
     },
+    
   });
 
-  const {mutate: createUser} = useCreateUser();
+  const {mutate: createUser,error} = useCreateUser();
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
-    createUser(values)
+ 
+      createUser(values)
+      
+
+      
+
+    
     
     
   }
+
+  const { isValid } = form.formState;
+
+  useEffect(()=>{
+if(error) {
+  
+  form.setValue("email","")
+}
+  },[error])
 
   return (
     <div className="flex flex-col justify-center items-center mt-2">
@@ -193,6 +209,7 @@ const SignUp = () => {
           <Button
             type="submit"
             className="bg-green-500 hover:bg-green-600 transition-bg transition-colors"
+            disabled={!isValid}
           >
             SignUp
           </Button>
