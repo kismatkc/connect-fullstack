@@ -186,7 +186,7 @@ if(error) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input placeholder="Email" {...field} type="email"/>
                 </FormControl>
 
                 <FormMessage />

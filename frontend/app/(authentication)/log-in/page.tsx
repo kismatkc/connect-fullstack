@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
 import useVerifyUser from "@/hooks/verify-user";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -50,10 +49,10 @@ const LogIn = () => {
   const { isValid } = form.formState;
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+ async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+
     verifyUser(values)
   }
    useEffect(() => {
@@ -70,7 +69,7 @@ const LogIn = () => {
           className="space-y-8 border shadow-lg p-8 flex flex-col"
         >
           <span className="text-center block text-md font-semibold">
-            Log into Connect
+            Login to Connect
           </span>
           <FormField
             control={form.control}
@@ -78,7 +77,7 @@ const LogIn = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input placeholder="Email" {...field} type="email"/>
                 </FormControl>
 
                 <FormMessage />

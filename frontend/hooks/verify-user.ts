@@ -4,14 +4,16 @@ import { toast } from "sonner";
 
 import { SignInForm } from "@/types/index";
 import { Api } from "@/lib/utils";
+import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation";
 
 const verifyUser = async (input: SignInForm) => {
+
     try {
+
         const response = await Api.post("/verify_user", input);
-        
         return response.data;
-        
+
     } catch (error: unknown) {
 
         throw new Error("Error verifying credentials");
@@ -19,13 +21,21 @@ const verifyUser = async (input: SignInForm) => {
 };
 
 export default function useVerifyUser() {
+    const router = useRouter()
     const queryClient = useQueryClient();
-const router =  useRouter()
     return useMutation({
         mutationFn: verifyUser,
-        onSuccess: ()=>{
+        onSuccess: async (data, variables) => {
+
+         const resposne = await   signIn("credentials", {
+                email: variables.email,
+                password: variables.password,
+
+                redirect: false
+            })
             router.push("/")
-        },onError:()=>{
+
+        }, onError: () => {
             toast.error("Error verifying credentials");
 
         }
