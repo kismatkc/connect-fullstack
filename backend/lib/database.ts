@@ -13,7 +13,6 @@ const postgresConfig = {
   database: process.env.POSTGRES_DATABASE
   
 };
-console.log(postgresConfig);
 
 export const pool = new Pool(postgresConfig);
 

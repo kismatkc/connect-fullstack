@@ -1,6 +1,7 @@
 import { Api } from "@/lib/utils";
+import { PostGresUser } from "@/types";
 import { AxiosResponse } from "axios";
-import { NextAuthOptions, Session } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -18,26 +19,36 @@ const authOptions: NextAuthOptions = {
                 },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials) {
 
-
-                try {
-
-                    const response = await Api.post("/verify_user", credentials);
-                    console.log("happening");
-                    
-                    return response.data;
-
-                } catch (error: unknown) {
-
-                    throw new Error("Error verifying credentials");
-                }
+            async authorize(credentials, req) {
+                //this belwo logic is nto reposne for verifying it is beign fired after succesfull validation from the veryufy-user hook
+                if (!req.body) return null
+                return req.body as any
             }
         })
     ],
     session: {
         strategy: "jwt",
     },
+    callbacks: {
+        jwt: async function (params) {
+            const { user, token, session } = params;
+            console.log("user", user);
+            console.log("token", token);
+            console.log("session", session);
+            if (!user) return token
+            // @ts-ignore
+            token.name = `${user.first_name} ${user.last_name}`;
+
+            return token
+        },
+        session: async function ({ session ,token}) {
+            console.log("session", session);
+        
+
+            return session
+        }
+    }
 
 };
 

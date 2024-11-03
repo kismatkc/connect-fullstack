@@ -19,12 +19,14 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
 import PopoverCalendar from "@/components/popover-calendar";
 import { useEffect } from "react";
+import ProfileUpload from "@/components/profile-upload";
 
 // Regular expression for validating email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -60,10 +62,9 @@ const formSchema = z.object({
 
   birthday: z.date({ message: "Invalid date. Please enter a valid birthday." }),
 
-  gender: z
-    .enum(["Male", "Female", "Other"], {
-      message: "Gender must be either 'male', 'female', or 'other'.",
-    })
+  gender: z.enum(["Male", "Female", "Other"], {
+    message: "Gender must be either 'male', 'female', or 'other'.",
+  }),
 });
 
 const SignUp = () => {
@@ -72,36 +73,26 @@ const SignUp = () => {
     defaultValues: {
       birthday: new Date(),
       gender: "Male",
-      
     },
-    
   });
 
-  const {mutate: createUser,error} = useCreateUser();
+  const { mutate: createUser, error } = useCreateUser();
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
- 
-      createUser(values)
-      
 
-      
-
-    
-    
-    
+    createUser(values);
   }
 
   const { isValid } = form.formState;
 
-  useEffect(()=>{
-if(error) {
-  
-  form.setValue("email","")
-}
-  },[error])
+  useEffect(() => {
+    if (error) {
+      form.setValue("email", "");
+    }
+  }, [error]);
 
   return (
     <div className="flex flex-col justify-center items-center mt-2">
@@ -164,7 +155,7 @@ if(error) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Select {...field} onValueChange={field.onChange}>
+                  <Select onValueChange={field.onChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="Female" />
                     </SelectTrigger>
@@ -186,7 +177,7 @@ if(error) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Email" {...field} type="email"/>
+                  <Input placeholder="Email" {...field} type="email" />
                 </FormControl>
 
                 <FormMessage />
@@ -200,6 +191,23 @@ if(error) {
               <FormItem>
                 <FormControl>
                   <Input type="password" {...field} placeholder="Password" />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel >Profile</FormLabel>
+                <FormControl>
+                  
+                   <ProfileUpload />
+                 
                 </FormControl>
 
                 <FormMessage />

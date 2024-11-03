@@ -25,11 +25,11 @@ export default function useVerifyUser() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: verifyUser,
-        onSuccess: async (data, variables) => {
+        onSuccess: async (user, variables) => {
 
-         const resposne = await   signIn("credentials", {
-                email: variables.email,
-                password: variables.password,
+            const resposne = await signIn("credentials", {
+                ...user.data,
+
 
                 redirect: false
             })

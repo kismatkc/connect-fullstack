@@ -6,12 +6,12 @@ import { SignUpDetails, LoginDetails } from "../types/index.js";
 const userController = {
   verify: async (req: Request, res: Response) => {
     try {
-      console.log(req.body)
       const userDetails: LoginDetails = req.body;
       const response = await userModel.verify(userDetails);
       if (!response.verified) {
         res.status(response.status).json({ message: response.error });
       } else {
+        
         res.status(response.status).json({ data: response.data });
       }
     } catch (error) {

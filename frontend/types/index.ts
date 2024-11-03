@@ -13,3 +13,12 @@ export type SignUpForm = {
 }
 
 
+export interface PostGresUser {
+  id: string;
+  email: string;
+  userName: string;
+  password_hash: string;
+  avatarUrl: string;
+  created_at: string;
+}
+
