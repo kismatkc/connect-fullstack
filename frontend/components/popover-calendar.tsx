@@ -22,7 +22,8 @@ const PopoverCalendar = ({
       email: string;
       password: string;
       birthday: Date;
-      gender: "Male" | "Female" | "Other" ;
+      gender: "Male" | "Female" | "Other";
+      avatarUrl: File;
     },
     "birthday"
   >;
@@ -31,8 +32,6 @@ const PopoverCalendar = ({
   useEffect(() => {
     if (!open) return;
     const hello = () => {
-      
-
       setOpen(false);
     };
     // window.addEventListener("click", hello);

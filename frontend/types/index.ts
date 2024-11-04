@@ -4,14 +4,14 @@ export type SignInForm = {
 };
 
 export type SignUpForm = {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    birthday: Date;
-    gender: string;
-}
-
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  birthday: Date;
+  gender: string;
+  avatarUrl: File;
+};
 
 export interface PostGresUser {
   id: string;
@@ -21,4 +21,3 @@ export interface PostGresUser {
   avatarUrl: string;
   created_at: string;
 }
-

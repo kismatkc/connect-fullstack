@@ -7,19 +7,33 @@ interface FileWithPreview extends File {
   preview?: string;
 }
 
-const ImageUpload = () => {
+const ImageUpload = ({
+  onValueChange,
+}: {
+  onValueChange: (value: File) => void;
+}) => {
   const [file, setFile] = useState<FileWithPreview | null>(null);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const selectedFile = acceptedFiles[0];
-    if (selectedFile) {
-      // Create preview URL
-      const previewUrl = URL.createObjectURL(selectedFile);
-      setFile(Object.assign(selectedFile, { preview: previewUrl }));
-      console.log(selectedFile);
-      
-    }
-  }, []);
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      const selectedFile = acceptedFiles[0];
+      if (selectedFile) {
+        // Create preview URL
+        const previewUrl = URL.createObjectURL(selectedFile);
+        setFile(Object.assign(selectedFile, { preview: previewUrl }));
+        const formData = new FormData();
+        formData.append("firstName", "kismat");
+        formData.append("file", selectedFile);
+        const resposne = await fetch("/api/uploadProfile", {
+          method: "POST",
+
+          body: formData,
+        });
+        onValueChange(selectedFile);
+      }
+    },
+    [onValueChange]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import PopoverCalendar from "@/components/popover-calendar";
 import { useEffect } from "react";
 import ProfileUpload from "@/components/profile-upload";
+import useSaveProfile from "@/hooks/upload-picture";
 
 // Regular expression for validating email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -65,6 +66,7 @@ const formSchema = z.object({
   gender: z.enum(["Male", "Female", "Other"], {
     message: "Gender must be either 'male', 'female', or 'other'.",
   }),
+  avatarUrl: z.instanceof(File),
 });
 
 const SignUp = () => {
@@ -77,13 +79,15 @@ const SignUp = () => {
   });
 
   const { mutate: createUser, error } = useCreateUser();
+  // const { mutate: getPublicUrl, error: googleError } = useSaveProfile();
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-
-    createUser(values);
+    // createUser(values);
+    // getPublicUrl()
+    console.log(values.avatarUrl, values.firstName);
   }
 
   const { isValid } = form.formState;
@@ -92,7 +96,7 @@ const SignUp = () => {
     if (error) {
       form.setValue("email", "");
     }
-  }, [error]);
+  }, [error, form]);
 
   return (
     <div className="flex flex-col justify-center items-center mt-2">
@@ -200,14 +204,16 @@ const SignUp = () => {
 
           <FormField
             control={form.control}
-            name="lastName"
+            name="avatarUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel >Profile</FormLabel>
+                <FormLabel>Profile</FormLabel>
                 <FormControl>
-                  
-                   <ProfileUpload />
-                 
+                  <ProfileUpload
+                    onValueChange={(value: File) => {
+                      field.onChange(value);
+                    }}
+                  />
                 </FormControl>
 
                 <FormMessage />
