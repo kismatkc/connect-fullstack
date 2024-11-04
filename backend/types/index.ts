@@ -1,10 +1,11 @@
 export interface SignUpDetails {
   email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    birthday: Date;
-    gender: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  birthday: Date;
+  gender: string;
+  avatarUrl: string;
 }
 export interface user {
   id: string;
