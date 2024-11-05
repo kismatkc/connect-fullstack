@@ -17,7 +17,7 @@ const userModel = {
     console.log(password_hash);
     const query = `  
         INSERT INTO users (email, first_name, last_name, password_hash, birthday, gender,avatar_url)   
-        VALUES ($1, $2, $3, $4, $5, $6)   
+        VALUES ($1, $2, $3, $4, $5, $6,$7)   
         RETURNING id, email, first_name, last_name, password_hash, avatar_url,birthday, gender, created_at  
     `;
     const result = await pool.query(query, [
@@ -25,9 +25,9 @@ const userModel = {
       firstName,
       lastName,
       password_hash,
-      avatarUrl,
       birthday,
       gender,
+      avatarUrl,
     ]);
 
     return result.rows[0];

@@ -1,16 +1,27 @@
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
-async function saveProfile({
-  firstName,
-  file,
-}: {
-  firstName: string;
-  file: File;
-}) {
+async function saveProfile(file: File) {
   try {
-    return { message: "success" };
+    const formData = new FormData();
+    formData.append("imageName", file.name);
+    formData.append("fileType", file.type);
+
+    const response = await axios.post("/api/getProfileSignedUrl", formData);
+    const url: { success: boolean; signedUrl: string } = response.data;
+
+    const upload = await axios.put(url.signedUrl, file, {
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+    return {
+      url: `https://storage.googleapis.com/${process.env.NEXT_PUBLIC_PROFILE_BUCKET_NAME}/${file.name}`,
+    };
   } catch (error) {
-    return { message: "fail" };
+    console.log(error);
+
+    return { message: "fail to retrieve url " };
   }
 }
 

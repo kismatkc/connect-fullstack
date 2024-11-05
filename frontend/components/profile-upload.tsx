@@ -2,6 +2,7 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
+import useSaveProfile from "@/hooks/upload-picture";
 
 interface FileWithPreview extends File {
   preview?: string;
@@ -16,20 +17,17 @@ const ImageUpload = ({
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      const selectedFile = acceptedFiles[0];
-      if (selectedFile) {
-        // Create preview URL
-        const previewUrl = URL.createObjectURL(selectedFile);
-        setFile(Object.assign(selectedFile, { preview: previewUrl }));
-        const formData = new FormData();
-        formData.append("firstName", "kismat");
-        formData.append("file", selectedFile);
-        const resposne = await fetch("/api/uploadProfile", {
-          method: "POST",
+      try {
+        const selectedFile = acceptedFiles[0];
+        if (selectedFile) {
+          // Create preview URL
+          const previewUrl = URL.createObjectURL(selectedFile);
+          setFile(Object.assign(selectedFile, { preview: previewUrl }));
 
-          body: formData,
-        });
-        onValueChange(selectedFile);
+          onValueChange(selectedFile);
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
     [onValueChange]

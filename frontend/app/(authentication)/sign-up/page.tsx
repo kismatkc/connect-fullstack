@@ -79,15 +79,13 @@ const SignUp = () => {
   });
 
   const { mutate: createUser, error } = useCreateUser();
-  // const { mutate: getPublicUrl, error: googleError } = useSaveProfile();
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    // createUser(values);
+    createUser(values);
     // getPublicUrl()
-    console.log(values.avatarUrl, values.firstName);
   }
 
   const { isValid } = form.formState;

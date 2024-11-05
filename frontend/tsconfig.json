@@ -26,7 +26,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/api/uploadProfile"
+    "app/api/getProfileSignedUrl"
   ],
   "exclude": ["node_modules"]
 }
