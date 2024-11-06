@@ -1,16 +1,20 @@
 import express, { json } from "express";
 import connectToDatabase from "./lib/database.ts";
 import userRoutes from "./routes/user_routes.js";
+
 import cors from "cors";
-import { compareSync } from "bcrypt";
+import { corsOptions, verifyToken } from "./lib/utils.ts";
+import cookieParser from "cookie-parser";
 const app = express();
 const PORT = 4000;
-app.use(cors({
-  origin: "*"
-}))
+app.use(cors(corsOptions()));
+console.log(corsOptions());
+app.use(cookieParser());
+
 app.use(json());
 app.use("/api", userRoutes);
 
+app.use("/api", verifyToken);
 
 app.get("/", (req, res) => {
   res.send("Hello from the connect backend");

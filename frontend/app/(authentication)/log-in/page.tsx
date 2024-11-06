@@ -45,21 +45,21 @@ const LogIn = () => {
       password: "",
     },
   });
-  const {mutate: verifyUser,error} = useVerifyUser();
+  const { mutate: verifyUser, error } = useVerifyUser();
   const { isValid } = form.formState;
 
   // 2. Define a submit handler.
- async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
-    verifyUser(values)
+    verifyUser(values);
   }
-   useEffect(() => {
-     if (error) {
-       form.reset();
-     }
-   }, [error]);
+  useEffect(() => {
+    if (error) {
+      form.reset();
+    }
+  }, [error, form]);
 
   return (
     <div className="flex flex-col justify-center items-center mt-2">
@@ -77,7 +77,7 @@ const LogIn = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Email" {...field} type="email"/>
+                  <Input placeholder="Email" {...field} type="email" />
                 </FormControl>
 
                 <FormMessage />

@@ -27,7 +27,6 @@ import { Input } from "@/components/ui/input";
 import PopoverCalendar from "@/components/popover-calendar";
 import { useEffect } from "react";
 import ProfileUpload from "@/components/profile-upload";
-import useSaveProfile from "@/hooks/upload-picture";
 
 // Regular expression for validating email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

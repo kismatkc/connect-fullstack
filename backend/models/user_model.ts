@@ -14,7 +14,6 @@ const userModel = {
   }: SignUpDetails) => {
     const salt = await bcrypt.genSalt(10);
     const password_hash = await bcrypt.hash(password, salt);
-    console.log(password_hash);
     const query = `  
         INSERT INTO users (email, first_name, last_name, password_hash, birthday, gender,avatar_url)   
         VALUES ($1, $2, $3, $4, $5, $6,$7)   
