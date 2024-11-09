@@ -5,9 +5,7 @@ import { generateToken } from "../lib/utils.ts";
 
 const userController = {
   verify: async (req: Request, res: Response) => {
-    console.log("f")
     try {
-      console.log("request received");
 
       const userDetails: LoginDetails = req.body;
 

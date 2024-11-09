@@ -1,20 +1,26 @@
+
+
+
+
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { ArrowLeft, Search } from "lucide-react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import ThemeToggleButton from "./theme-toggler-button";
-// import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
-import Messenger from "@/components/messenger";
+import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
+import { useMessengerStore } from "@/hooks/global-zustand-hooks";
 const SearchBar = () => {
   const { theme } = useTheme();
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [typing, setTyping] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
+    const { open, setOpen } = useMessengerStore();
   useEffect(() => {
+
     if (!showSearchBar) return;
-if(inputRef.current){
-  inputRef.current.focus()
-}
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setShowSearchBar(false);
@@ -25,7 +31,7 @@ if(inputRef.current){
     return () => {
       document.removeEventListener("keydown", handleEsc);
     };
-  }, [showSearchBar]);
+  }, [showSearchBar,open]);
 
   return (
     <div className="relative w-full ">
@@ -80,7 +86,7 @@ if(inputRef.current){
         }`}
       >
         <div className="flex grow justify-between">
-          <div className="flex gap-x-5 items-center">
+          <div className="flex gap-x-5 items-center" onClick={()=>setOpen(false)}>
             <Image
               className="size-[30px] scale-125"
               src={`/header/connect-logo-${
@@ -90,6 +96,7 @@ if(inputRef.current){
               width={30}
               height={30}
               priority
+
             />
             <button
               className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark p-2.5 
@@ -103,15 +110,14 @@ if(inputRef.current){
           </div>
           <div className="flex gap-x-2 transition-all duration-200">
             <ThemeToggleButton />
-            {/* <button
+            <button
               className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark  pb-1 pr-1
                          hover:bg-gray-200 dark:hover:bg-gray-700 
                          transition-all duration-200"
-              aria-label="Open messenger"
+              onClick={() => setOpen(true)}
             >
               <FacebookMessengerIcon />
-            </button> */}
-            <Messenger />
+            </button>
           </div>
         </div>
       </div>

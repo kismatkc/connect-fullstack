@@ -9,6 +9,8 @@ import SearchBar from "./search-bar";
 const Header = () => {
   const [mounted, setMounted] = useState(false);
   const {data: session} = useSession()
+
+
   useEffect(() => {
     setMounted(true);
     console.log(session);

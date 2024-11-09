@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 import SessionProviderWrapper from "@/components/session-provider";
 
 const interFont = Inter({
-  weight: ["400", "800"],
+  weight: ["400" ,"600","800"],
   subsets: ["latin"],
 });
 import ReactQueryProvider from "@/components/react-query-provider";

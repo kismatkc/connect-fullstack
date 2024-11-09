@@ -27,6 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/api/getProfileSignedUrl"
-  ],
+, "test.js"  ],
   "exclude": ["node_modules"]
 }
