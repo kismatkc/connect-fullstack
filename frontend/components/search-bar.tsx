@@ -3,7 +3,8 @@ import { useTheme } from "next-themes";
 import { ArrowLeft, Search } from "lucide-react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import ThemeToggleButton from "./theme-toggler-button";
-import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
+// import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
+import Messenger from "@/components/messenger";
 const SearchBar = () => {
   const { theme } = useTheme();
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -102,14 +103,15 @@ if(inputRef.current){
           </div>
           <div className="flex gap-x-2 transition-all duration-200">
             <ThemeToggleButton />
-            <button
+            {/* <button
               className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark  pb-1 pr-1
                          hover:bg-gray-200 dark:hover:bg-gray-700 
                          transition-all duration-200"
               aria-label="Open messenger"
             >
               <FacebookMessengerIcon />
-            </button>
+            </button> */}
+            <Messenger />
           </div>
         </div>
       </div>

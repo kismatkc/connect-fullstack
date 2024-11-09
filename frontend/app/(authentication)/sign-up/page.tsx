@@ -71,10 +71,7 @@ const formSchema = z.object({
 const SignUp = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      birthday: new Date(),
-      gender: "Male",
-    },
+    
   });
 
   const { mutate: createUser, error } = useCreateUser();
@@ -96,7 +93,7 @@ const SignUp = () => {
   }, [error, form]);
 
   return (
-    <div className="flex flex-col justify-center items-center mt-2">
+    <div className="flex flex-col justify-center items-center mt-2" >
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

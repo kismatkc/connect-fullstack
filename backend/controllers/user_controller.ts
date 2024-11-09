@@ -5,6 +5,7 @@ import { generateToken } from "../lib/utils.ts";
 
 const userController = {
   verify: async (req: Request, res: Response) => {
+    console.log("f")
     try {
       console.log("request received");
 
@@ -17,7 +18,7 @@ const userController = {
         const user = response.data;
         res.cookie("jwt", generateToken(user), {
           httpOnly: true,
-          secure: process.env.environment === "production",
+          secure: process.env.ENVIRONMENT === "production",
           sameSite: "lax",
           maxAge: 30 * 60 * 1000,
           path: "/",

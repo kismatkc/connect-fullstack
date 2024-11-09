@@ -10,7 +10,9 @@ const postgresConfig = {
   host: process.env.POSTGRES_HOST,
 
   port: process.env.POSTGRES_PORT as unknown as number,
-  database: process.env.POSTGRES_DATABASE
+  database: process.env.POSTGRES_DATABASE,ssl: {
+    rejectUnauthorized: false,
+  }
   
 };
 
@@ -25,3 +27,6 @@ export default async function connectToDatabase() {
     console.log("Connection to th database unsuccessful",error);
   }
 }
+
+
+

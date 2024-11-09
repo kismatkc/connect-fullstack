@@ -7,6 +7,13 @@ export const corsOptions = (): CorsOptions => ({
   methods: ["GET", "POST", "PUT", "OPTIONS"],
 });
 
+
+
+
+
+
+
+
 type user = {
   email: string;
   firstName: string;
@@ -40,13 +47,3 @@ export const verifyToken = (
     console.log(error);
   }
 };
-// console.log(
-//   generateToken({
-//     email: "john.doe@example.com",
-//     firstName: "John",
-//     lastName: "Doe",
-//     birthday: new Date("1990-01-01"),
-//     gender: "male",
-//     avatarUrl: "https://placehold.co/150x150",
-//   })
-// );
