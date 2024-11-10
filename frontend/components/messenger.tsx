@@ -8,30 +8,29 @@ import MessengerExistingMessages from "./messenger-existing-messages";
 
 export default function Messenger() {
   const { open, setOpen } = useMessengerStore();
-  const messengerRef = useRef<HTMLDivElement>(null);
+  const messengerRef =useRef<HTMLDivElement>(null);
 
-  // Prevent scrolling when the overlay is active
   useEffect(() => {
+    const mainElement = document.getElementById("main")
     const closeMessenger = (e: Event) => {
-      if (!(e.target === messengerRef.current)) {
-        console.log(
-          e.target,
-          messengerRef.current,
-          e.target === messengerRef.current
-        );
-        
+      if (!messengerRef.current?.contains(e.target as Node)) {
+   
+
         setOpen(false);
       }
     };
     if (open) {
-      document.body.classList.add("no-scroll");
 
+document.body.classList.add("h-screen","overflow-hidden")
+mainElement?.classList.add("overflow-hidden")
       document.addEventListener("click", closeMessenger);
     }
 
     // Cleanup when component unmounts or open changes
     return () => {
-      document.body.classList.remove("no-scroll");
+      
+document.body.classList.remove("h-screen", "overflow-hidden");
+mainElement?.classList.remove("overflow-hidden");
       document.removeEventListener("click", closeMessenger);
     };
   }, [open, messengerRef]);
@@ -40,11 +39,14 @@ export default function Messenger() {
     <section
       ref={messengerRef}
       className={cn(
-        "z-50 absolute flex flex-col h-full w-[83vw] right-0 translate-x-full transition-transform duration-300 ease-in-out container-bg-light container-bg-dark",
+        "z-[101] absolute flex flex-col h-full  w-[83vw] right-0 translate-x-full  transition-transform duration-300 ease-in-out container-bg-light container-bg-dark",
         {
           "translate-x-0": open,
         }
       )}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
     >
       <header className="flex flex-row justify-between p-3 ">
         <span className="font-semibold text-xl">Chats</span>

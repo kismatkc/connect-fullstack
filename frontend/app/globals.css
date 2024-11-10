@@ -2,13 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
-
-.no-scroll {
-  overflow: hidden;
-} 
+/* globals.css */
 
 @layer utilities {
   .text-balance {

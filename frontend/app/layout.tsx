@@ -20,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" >
-      <body className={`${interFont.className} antialiased`}>
+    <html lang="en" className="">
+      <body className={`${interFont.className} antialiased `}>
         <ReactQueryProvider>
           <SessionProviderWrapper>
             <ThemeProvider
