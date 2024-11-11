@@ -9,7 +9,6 @@ const Home = ({}) => {
   return (
     <>
       <Messenger />
-      <MessengerChatBox />
       <Header />
 
       <CreatePost />
@@ -18,6 +17,7 @@ const Home = ({}) => {
       <Posts />
       <Posts />
       <Posts />
+      <MessengerChatBox />
     </>
   );
 };

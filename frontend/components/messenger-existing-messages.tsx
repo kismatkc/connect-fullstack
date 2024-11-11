@@ -1,26 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMessengerStore } from "@/hooks/global-zustand-hooks";
 
 const MessengerExistingMessages = () => {
-  const [overflowing,setOverflowing] = useState(false)
-  const messegesRef = useRef<HTMLDivElement>(null)
-  useEffect(()=>{
-
-   const scroll = setTimeout(() => {
-      
-    }, 100);
-if(messegesRef.current){
-  messegesRef.current.scrollHeight > messegesRef.current.clientHeight && (setOverflowing(true))
-
-}
-  },[overflowing])
-
+  const [overflowing, setOverflowing] = useState(false);
+  const messegesRef = useRef<HTMLDivElement>(null);
+  const { setOpenChatbox } = useMessengerStore();
+  useEffect(() => {
+    if (messegesRef.current) {
+      messegesRef.current.scrollHeight > messegesRef.current.clientHeight &&
+        setOverflowing(true);
+    }
+  }, [overflowing]);
 
   return (
     <section
       className="flex flex-col p-3  h-full overflow-y-auto scroll-smooth"
       ref={messegesRef}
-     
+      onClick={(e: any) => {
+        const parent = messegesRef.current;
+        const target = e.target;
+        if (parent?.contains(target)) return setOpenChatbox(true);
+      }}
     >
       <div className="flex flex-col ">
         {Array.from({ length: 50 }).map((_, index) => (
@@ -44,6 +45,6 @@ if(messegesRef.current){
       )}
     </section>
   );
-}
+};
 
-export default MessengerExistingMessages
+export default MessengerExistingMessages;

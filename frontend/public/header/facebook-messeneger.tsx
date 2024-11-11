@@ -1,8 +1,8 @@
 const FacebookMessengerIcon = ({}) => {
   return (
     <svg
-      width={32}
-      height={32}
+      width={28}
+      height={28}
       viewBox="-140.97 -140.97 684.71 684.71"
       xmlns="http://www.w3.org/2000/svg"
       fill="#000000"

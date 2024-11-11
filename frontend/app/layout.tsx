@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 import SessionProviderWrapper from "@/components/session-provider";
 
 const interFont = Inter({
-  weight: ["400" ,"600","800"],
+  weight: ["400", "600", "800"],
   subsets: ["latin"],
 });
 import ReactQueryProvider from "@/components/react-query-provider";
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="">
+    <html lang="en" className="overflow-y-scroll">
       <body className={`${interFont.className} antialiased `}>
         <ReactQueryProvider>
           <SessionProviderWrapper>

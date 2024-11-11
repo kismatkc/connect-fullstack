@@ -1,53 +1,54 @@
 "use client";
 import { useMessengerStore } from "@/hooks/global-zustand-hooks";
 import { cn } from "@/lib/utils";
-import { Search } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
 import { useEffect, useRef } from "react";
 import MessengerActivePeople from "./messenger-active-people";
 import MessengerExistingMessages from "./messenger-existing-messages";
 
 export default function Messenger() {
-  const { open, setOpen } = useMessengerStore();
-  const messengerRef =useRef<HTMLDivElement>(null);
+  const { openSheet, setOpenSheet } = useMessengerStore();
+  const messengerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const mainElement = document.getElementById("main")
+    const mainElement = document.getElementById("main");
     const closeMessenger = (e: Event) => {
-      if (!messengerRef.current?.contains(e.target as Node)) {
-   
-
-        setOpen(false);
-      }
+      // if (!messengerRef.current?.contains(e.target as Node)) {
+      //   setOpenSheet(false);
+      // }
     };
-    if (open) {
-
-document.body.classList.add("h-screen","overflow-hidden")
-mainElement?.classList.add("overflow-hidden")
-      document.addEventListener("click", closeMessenger);
+    if (openSheet) {
+      document.body.classList.add("h-screen", "overflow-hidden");
+      mainElement?.classList.add("overflow-hidden");
     }
 
     // Cleanup when component unmounts or open changes
     return () => {
-      
-document.body.classList.remove("h-screen", "overflow-hidden");
-mainElement?.classList.remove("overflow-hidden");
-      document.removeEventListener("click", closeMessenger);
+      document.body.classList.remove("h-screen", "overflow-hidden");
+      mainElement?.classList.remove("overflow-hidden");
     };
-  }, [open, messengerRef]);
+  }, [openSheet, messengerRef]);
 
   return (
     <section
       ref={messengerRef}
       className={cn(
-        "z-[101] absolute flex flex-col h-full  w-[83vw] right-0 translate-x-full  transition-transform duration-300 ease-in-out container-bg-light container-bg-dark",
+        "z-40 absolute flex flex-col h-full  w-[83vw] right-0 translate-x-full  transition-transform duration-300 ease-in-out container-bg-light container-bg-dark",
         {
-          "translate-x-0": open,
+          "translate-x-0": openSheet,
         }
       )}
       onClick={(e) => {
         e.stopPropagation();
       }}
     >
+      {openSheet && (
+        <ArrowLeft
+          className="absolute -left-7 top-16 "
+          onClick={() => setOpenSheet(false)}
+          size={28}
+        />
+      )}
       <header className="flex flex-row justify-between p-3 ">
         <span className="font-semibold text-xl">Chats</span>
         <div className="flex relative">

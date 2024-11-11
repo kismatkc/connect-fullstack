@@ -48,7 +48,7 @@ const CommentSection = () => {
                          transition-colors duration-200 bg-icon-bg-light dark:bg-icon-bg-dark mr-3"
               placeholder="Comment as kismat kc"
             />
-            <div className="flex gap-x-1 absolute left-4 bottom-[4%] z-100 [&>svg]:stroke-[1.5px] dark:[&>svg]:stroke-[1px] [&>svg]:stroke-gray-700 dark:[&>svg]:stroke-white">
+            <div className="flex gap-x-1 absolute left-4 bottom-[4%]  [&>svg]:stroke-[1.5px] dark:[&>svg]:stroke-[1px] [&>svg]:stroke-gray-700 dark:[&>svg]:stroke-white">
               <SmileIcon className="cursor-pointer" />
               <Image className="cursor-pointer" />
             </div>
