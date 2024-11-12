@@ -40,3 +40,14 @@ CREATE TABLE likes (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(post_id, user_id) -- Prevent duplicate likes
 );
+
+
+
+
+
+
+
+
+
+ 
+   

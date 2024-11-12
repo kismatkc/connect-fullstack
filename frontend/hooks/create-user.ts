@@ -14,7 +14,8 @@ async function saveProfile(file: File) {
     formData.append("fileType", file.type);
 
     const response = await axios.post("/api/getProfileSignedUrl", formData);
-    const url: { success: boolean; signedUrl: string } = response.data;
+    const url: { success: boolean; signedUrl: string; fileName: string } =
+      response.data;
 
     const upload = await axios.put(url.signedUrl, file, {
       headers: {
@@ -22,7 +23,7 @@ async function saveProfile(file: File) {
       },
     });
     return {
-      url: `https://storage.googleapis.com/${process.env.NEXT_PUBLIC_PROFILE_BUCKET_NAME}/${file.name}`,
+      url: `https://storage.googleapis.com/${process.env.NEXT_PUBLIC_PROFILE_BUCKET_NAME}/${url.fileName}`,
     };
   } catch (error) {
     console.log(error);

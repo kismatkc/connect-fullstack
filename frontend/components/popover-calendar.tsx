@@ -142,7 +142,6 @@
 //   );
 // }
 
-
 "use client";
 
 import * as React from "react";
@@ -176,7 +175,7 @@ interface DatePickerProps {
       email: string;
       password: string;
       birthday: Date;
-      gender: "Male" | "Female" | "Other";
+      gender: "male" | "female" | "other";
       avatarUrl: File;
     },
     "birthday"
@@ -191,7 +190,8 @@ export default function DatePicker({
   const [date, setDate] = React.useState<Date | null>(null);
 
   React.useEffect(() => {
-    setDate(new Date());
+    // setDate(new Date());
+    setDate(null);
   }, []);
 
   const months = [

@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       contentType: fileType as string,
     });
 
-    return NextResponse.json({ success: true, signedUrl });
+    return NextResponse.json({ success: true, signedUrl, fileName });
   } catch (error) {
     return NextResponse.json({
       success: false,

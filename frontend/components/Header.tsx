@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
 
 import { Bell, Search } from "lucide-react";
 import Image from "next/image";
@@ -9,16 +8,16 @@ import { useTheme } from "next-themes";
 import ThemeToggleButton from "./theme-toggler-button";
 import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
 import { useMessengerStore } from "@/hooks/global-zustand-hooks";
+import HeaderUserDropDownMenu from "./header-user-dropdown";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
-  const { data: session } = useSession();
   const { theme } = useTheme();
   const { openSheet, setOpenSheet } = useMessengerStore();
 
   useEffect(() => {
     setMounted(true);
-  }, [session]);
+  }, []);
 
   if (!mounted) return null;
   return (
@@ -39,7 +38,7 @@ const Header = () => {
           <input
             type="text"
             className="bg-icon-bg-light dark:bg-icon-bg-dark rounded-full text-xs  pl-7"
-            placeholder="Search messenger"
+            placeholder="Search friends"
           />
         </div>
       </div>
@@ -56,14 +55,7 @@ const Header = () => {
         <button className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark size-8 pl-2">
           <Bell width={16} height={16} fill="black" />
         </button>
-        <button
-          className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark size-8 flex items-center justify-center"
-          onClick={() => {
-            signOut();
-          }}
-        >
-          {session?.user?.name && session?.user?.name[0].toLocaleUpperCase()}
-        </button>
+        <HeaderUserDropDownMenu />
       </div>
     </header>
   );

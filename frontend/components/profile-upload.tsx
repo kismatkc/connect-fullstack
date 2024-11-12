@@ -2,7 +2,6 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-import useSaveProfile from "@/hooks/upload-picture";
 
 interface FileWithPreview extends File {
   preview?: string;
@@ -40,6 +39,7 @@ const ImageUpload = ({
     },
     maxSize: 4 * 1024 * 1024, // 4MB
     multiple: false,
+    minSize: 0,
   });
 
   // Cleanup preview URL on unmount

@@ -32,7 +32,7 @@ const userModel = {
     return result.rows[0];
   },
   verify: async ({ email, password }: LoginDetails) => {
-    const query = `SELECT id , email, first_name,password_hash, last_name, birthday, gender FROM users WHERE email= \$1`;
+    const query = `SELECT id , email, first_name,password_hash,avatar_url, last_name, birthday, gender FROM users WHERE email= \$1`;
     const result = await pool.query(query, [email]);
     if (!(result.rows.length > 0)) {
       return { verified: false, error: "no user found", status: 404 };

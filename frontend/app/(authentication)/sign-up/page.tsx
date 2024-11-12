@@ -62,7 +62,7 @@ const formSchema = z.object({
 
   birthday: z.date({ message: "Invalid date. Please enter a valid birthday." }),
 
-  gender: z.enum(["Male", "Female", "Other"], {
+  gender: z.enum(["male", "female", "other"], {
     message: "Gender must be either 'male', 'female', or 'other'.",
   }),
   avatarUrl: z.instanceof(File),
@@ -71,7 +71,6 @@ const formSchema = z.object({
 const SignUp = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    
   });
 
   const { mutate: createUser, error } = useCreateUser();
@@ -84,8 +83,6 @@ const SignUp = () => {
     // getPublicUrl()
   }
 
-  const { isValid } = form.formState;
-
   useEffect(() => {
     if (error) {
       form.setValue("email", "");
@@ -93,7 +90,7 @@ const SignUp = () => {
   }, [error, form]);
 
   return (
-    <div className="flex flex-col justify-center items-center mt-2" >
+    <div className="flex flex-col justify-center items-center mt-2">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -155,12 +152,12 @@ const SignUp = () => {
                 <FormControl>
                   <Select onValueChange={field.onChange}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Female" />
+                      <SelectValue placeholder="Gender" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -217,7 +214,6 @@ const SignUp = () => {
           <Button
             type="submit"
             className="bg-green-500 hover:bg-green-600 transition-bg transition-colors"
-            disabled={!isValid}
           >
             SignUp
           </Button>
