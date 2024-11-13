@@ -8,8 +8,7 @@ import StoryCarousal from "@/components/story-carousal";
 const Home = ({}) => {
   return (
     <>
-      <Messenger />
-      <Header />
+      {/* <Header /> */}
 
       <CreatePost />
       <StoryCarousal />

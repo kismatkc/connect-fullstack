@@ -9,6 +9,7 @@ import ThemeToggleButton from "./theme-toggler-button";
 import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
 import { useMessengerStore } from "@/hooks/global-zustand-hooks";
 import HeaderUserDropDownMenu from "./header-user-dropdown";
+import Link from "next/link";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -23,16 +24,19 @@ const Header = () => {
   return (
     <header className="flex  justify-between  container-bg-light dark:container-bg-dark  px-2 py-4 border-light border-dark  z-30 sticky -top-3 left-0 right-0">
       <div className="flex gap-x-3">
-        <Image
-          className="size-[30px] scale-125 self-center"
-          src={`/header/connect-logo-${
-            theme === "light" ? "lighttheme" : "darktheme"
-          }.png`}
-          alt="connect logo"
-          width={30}
-          height={30}
-          priority
-        />
+        <Link href="/">
+          <Image
+            className="size-[30px] scale-125 self-center"
+            src={`/header/connect-logo-${
+              theme === "light" ? "lighttheme" : "darktheme"
+            }.png`}
+            alt="connect logo"
+            width={30}
+            height={30}
+            priority
+          />
+        </Link>
+
         <div className="flex relative pr-1">
           <Search className="absolute top-1/4 left-2  " size={16} />
           <input

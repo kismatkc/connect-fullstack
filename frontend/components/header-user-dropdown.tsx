@@ -21,13 +21,21 @@ const HeaderUserDropDownMenu = ({}) => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="container-bg-dark container-bg-light mt-1 mr-2">
-        <DropdownMenuLabel className="flex items-center gap-x-3 ">
+        {/* <DropdownMenuLabel className="flex items-center gap-x-3 ">
           <Avatar className="size-7 ">
             <AvatarImage src={session?.user?.image as string} />
           </Avatar>
           <span className="text-sm font-semibold "> {session?.user?.name}</span>
-        </DropdownMenuLabel>
+        </DropdownMenuLabel> */}
         <DropdownMenuSeparator />
+        <DropdownMenuItem className="flex items-center ">
+          <Avatar className="size-7 ">
+            <AvatarImage src={session?.user?.image as string} />
+          </Avatar>
+          <span className="text-sm font-semibold "> {session?.user?.name}</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+
         <DropdownMenuItem className="flex items-center ">
           <button
             className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark  
@@ -38,6 +46,8 @@ const HeaderUserDropDownMenu = ({}) => {
           </button>
           <span className="text-sm font-semibold">Help & support</span>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+
         <DropdownMenuItem
           className="flex items-center "
           onClick={() => {
