@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import PopoverCalendar from "@/components/popover-calendar";
 import { useEffect } from "react";
 import ProfileUpload from "@/components/profile-upload";
+import AutoCompleteCollege from "@/components/autocomplete-inputs";
 
 // Regular expression for validating email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -52,6 +53,18 @@ const formSchema = z.object({
     .min(12, { message: "Email must be at least 12 characters long." })
     .max(50, { message: "Email must be at most 50 characters long." })
     .regex(emailRegex, { message: "Invalid email format." }),
+
+  college: z
+    .string()
+    .min(4, { message: "college must be at least 4 characters long." })
+    .max(50, { message: "Email must be at most 50 characters long." })
+,
+
+  city: z
+    .string()
+    .min(6, { message: "City must be at least 6 characters long." })
+    .max(50, { message: "City must be at most 50 characters long." })
+,
 
   password: z
     .string()
@@ -160,6 +173,33 @@ const SignUp = () => {
                       <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="college"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="College" {...field} type="string" />
+                </FormControl>
+                  <AutoCompleteCollege onValueChange={field.onChange} value= {field.value}/>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="City" {...field} type="city" />
                 </FormControl>
 
                 <FormMessage />

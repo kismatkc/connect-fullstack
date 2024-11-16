@@ -38,6 +38,14 @@ const userController = {
       res.status(500).json({ message: "user not created", error });
     }
   },
+  getDetails: async(req: Request, res: Response) => {
+    try{
+      
+    }catch(error){
+      
+    }
+  }
 };
 
 export default userController;
+

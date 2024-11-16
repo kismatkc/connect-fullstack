@@ -3,35 +3,33 @@ import postGresPackage from "pg";
 const { Pool } = postGresPackage;
 dotenv.config();
 
-
 const postgresConfig = () => {
-
   if (process.env.ENVIRONMENT === "replit") {
-    return ({
+    return {
       user: process.env.POSTGRES_USERNAME,
       password: process.env.POSTGRES_PASSWORD,
       host: process.env.POSTGRES_HOST,
 
       port: process.env.POSTGRES_PORT as unknown as number,
-      database: process.env.POSTGRES_DATABASE, ssl: {
-        rejectUnauthorized: false
-      }
-    })
+      database: process.env.POSTGRES_DATABASE,
+      keepAlive: true, // Enable keep-alive
+      idleTimeoutMillis: 0, // Prevent disconnections due to inactivity
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    };
   }
 
-
-  return ({
+  
+  return {
     user: process.env.POSTGRES_USERNAME,
     password: process.env.POSTGRES_PASSWORD,
     host: process.env.POSTGRES_HOST,
 
     port: process.env.POSTGRES_PORT as unknown as number,
-    database: process.env.POSTGRES_DATABASE
-
-  })
-
-}
-
+    database: process.env.POSTGRES_DATABASE,
+  };
+};
 
 export const pool = new Pool(postgresConfig());
 
@@ -45,5 +43,4 @@ export default async function connectToDatabase() {
   }
 }
 
-
-
+pool.on("error", connectToDatabase);

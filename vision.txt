@@ -1,4 +1,6 @@
 
+psql -h ep-shrill-brook-a5noyapn.us-east-2.aws.neon.tech -U neondb_owner -d neondb -p 5432 -f your_table_backup.sql
+pg_dump -h localhost -U your_local_user -d your_local_db -t your_table_name -F c -f your_table_backup.sql
 
 
 data structure
@@ -6,7 +8,9 @@ data structure
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
+    first_name VARCHAR(50) UNIQUE NOT NULL,
+    last_name VARCHAR(50) UNIQUE NOT NULL,
+    birthday Date
     password_hash VARCHAR(255)  NOT NULL
     avatar_url VARCHAR(255),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

@@ -173,6 +173,8 @@ interface DatePickerProps {
       firstName: string;
       lastName: string;
       email: string;
+      college: string;
+      city: string;
       password: string;
       birthday: Date;
       gender: "male" | "female" | "other";

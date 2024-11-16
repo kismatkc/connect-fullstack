@@ -8,8 +8,8 @@ import cookieParser from "cookie-parser";
 const app = express();
 const PORT = 4000;
 app.use(cors(corsOptions()));
-console.log(corsOptions());
 app.use(cookieParser());
+connectToDatabase();
 
 app.use(json());
 app.use("/api", userRoutes);
@@ -24,4 +24,3 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
-connectToDatabase();
