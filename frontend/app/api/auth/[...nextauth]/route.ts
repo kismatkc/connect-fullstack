@@ -40,7 +40,7 @@ const authOptions: NextAuthOptions = {
       token.name = `${user.first_name} ${user.last_name}`;
       // @ts-ignore
 
-      token.picture = user.avatar_url;
+      token.picture = user.profile_picture_url;
 
       return token;
     },

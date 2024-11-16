@@ -1,57 +1,13 @@
-
-psql -h ep-shrill-brook-a5noyapn.us-east-2.aws.neon.tech -U neondb_owner -d neondb -p 5432 -f your_table_backup.sql
-pg_dump -h localhost -U your_local_user -d your_local_db -t your_table_name -F c -f your_table_backup.sql
-
-
-data structure
--- Users Table
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email VARCHAR(255) UNIQUE NOT NULL,
-    first_name VARCHAR(50) UNIQUE NOT NULL,
-    last_name VARCHAR(50) UNIQUE NOT NULL,
-    birthday Date
-    password_hash VARCHAR(255)  NOT NULL
-    avatar_url VARCHAR(255),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    id UUID PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    dob DATE,
+    password_hash VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    profile_picture_url TEXT,
+    gender VARCHAR(10),
+    city VARCHAR(200),
+    college VARCHAR(200),
 );
-
--- Posts Table
-CREATE TABLE posts (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    image_url VARCHAR(255) NOT NULL,
-    caption TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Comments Table
-CREATE TABLE comments (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    post_id UUID REFERENCES posts(id) ON DELETE CASCADE,
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Likes Table
-CREATE TABLE likes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    post_id UUID REFERENCES posts(id) ON DELETE CASCADE,
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(post_id, user_id) -- Prevent duplicate likes
-);
-
-
-
-
-
-
-
-
-
- 
-   

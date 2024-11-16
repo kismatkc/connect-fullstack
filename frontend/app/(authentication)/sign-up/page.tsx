@@ -28,6 +28,7 @@ import PopoverCalendar from "@/components/popover-calendar";
 import { useEffect } from "react";
 import ProfileUpload from "@/components/profile-upload";
 import AutoCompleteCollege from "@/components/autocomplete-inputs";
+import AutoCompleteCity from "@/components/autocomplete-inputs";
 
 // Regular expression for validating email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -57,15 +58,11 @@ const formSchema = z.object({
   college: z
     .string()
     .min(4, { message: "college must be at least 4 characters long." })
-    .max(50, { message: "Email must be at most 50 characters long." })
-,
-
+    .max(50, { message: "Email must be at most 50 characters long." }),
   city: z
     .string()
     .min(6, { message: "City must be at least 6 characters long." })
-    .max(50, { message: "City must be at most 50 characters long." })
-,
-
+    .max(100, { message: "City must be at most 100 characters long." }),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long." })
@@ -92,7 +89,9 @@ const SignUp = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    createUser(values);
+    // createUser(values);
+    console.log(values);
+
     // getPublicUrl()
   }
 
@@ -185,9 +184,17 @@ const SignUp = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="College" {...field} type="string" />
+                  <Input
+                    placeholder="College"
+                    {...field}
+                    type="string"
+                    value={field.value}
+                  />
                 </FormControl>
-                  <AutoCompleteCollege onValueChange={field.onChange} value= {field.value}/>
+                <AutoCompleteCollege
+                  onValueChange={field.onChange}
+                  value={field.value || ""}
+                />
 
                 <FormMessage />
               </FormItem>
@@ -201,7 +208,10 @@ const SignUp = () => {
                 <FormControl>
                   <Input placeholder="City" {...field} type="city" />
                 </FormControl>
-
+                <AutoCompleteCity
+                  onValueChange={field.onChange}
+                  value={field.value || ""}
+                />
                 <FormMessage />
               </FormItem>
             )}

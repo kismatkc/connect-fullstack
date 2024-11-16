@@ -6,6 +6,8 @@ export interface SignUpDetails {
   birthday: Date;
   gender: string;
   avatarUrl: string;
+  city: string;
+  college: string
 }
 export interface user {
   id: string;
