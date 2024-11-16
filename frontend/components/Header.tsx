@@ -24,9 +24,9 @@ const Header = () => {
   return (
     <header className="flex  justify-between  container-bg-light dark:container-bg-dark  px-2 py-4 border-light border-dark  z-30 sticky -top-3 left-0 right-0">
       <div className="flex gap-x-3">
-        <Link href="/">
+        <Link href="/" className="size-[30px]">
           <Image
-            className="size-[30px] scale-125 self-center"
+            className=" self-center"
             src={`/header/connect-logo-${
               theme === "light" ? "lighttheme" : "darktheme"
             }.png`}

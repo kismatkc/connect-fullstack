@@ -47,18 +47,10 @@ const userModel = {
       ? { verified: true, data: user, status: 200 }
       : { verified: false, error: "Incorrect password", status: 401 };
   },
-  // getProfileDetails: async ({ email }: {email: string}) => {
-  //   const query = `SELECT id , email, first_name,password_hash,avatar_url, last_name, birthday, gender FROM users WHERE email= \$1`;
-  //   const result = await pool.query(query, [email]);
-  //   if (!(result.rows.length > 0)) {
-  //     return { verified: false, error: "no user found", status: 404 };
-  //   }
+  getProfileDetails: async ({ email }: { email: string }) => {
+    const query = `SELECT id , email, first_name,password_hash,avatar_url, last_name, birthday, gender FROM users WHERE email= \$1`;
+    const result = await pool.query(query, [email]);
 
-  //   const { password_hash, ...user } = result.rows[0];
-
-  //   return (await bcrypt.compare(password, password_hash))
-  //     ? { verified: true, data: user, status: 200 }
-  //     : { verified: false, error: "Incorrect password", status: 401 };
-  // },
+  },
 };
 export default userModel;

@@ -9,6 +9,7 @@ import {
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { signOut, useSession } from "next-auth/react";
 import { HelpCircleIcon, LogOutIcon } from "lucide-react";
+import Link from "next/link";
 
 const HeaderUserDropDownMenu = ({}) => {
   const { data: session } = useSession();
@@ -16,6 +17,7 @@ const HeaderUserDropDownMenu = ({}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
+        <Link href={`/${2}`}></Link>
         <Avatar className="size-8">
           <AvatarImage src={session?.user?.image as string} />
         </Avatar>

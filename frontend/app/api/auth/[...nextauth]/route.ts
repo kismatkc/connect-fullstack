@@ -41,10 +41,17 @@ const authOptions: NextAuthOptions = {
       // @ts-ignore
 
       token.picture = user.profile_picture_url;
+      token.id = user.id
 
       return token;
     },
     session: async function ({ session, token }) {
+      console.log("session", session);
+      if (token) {
+        // @ts-ignore
+
+        session.user.id = token.id;
+      }
       console.log("session", session);
 
       return session;
