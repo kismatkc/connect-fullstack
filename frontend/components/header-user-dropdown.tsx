@@ -10,32 +10,43 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { signOut, useSession } from "next-auth/react";
 import { HelpCircleIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 const HeaderUserDropDownMenu = ({}) => {
   const { data: session } = useSession();
+  const [openDropdown, setOpenDrowdown] = useState(true);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu
+      open={openDropdown}
+      onOpenChange={(val) => setOpenDrowdown(val)}
+    >
       <DropdownMenuTrigger asChild>
-        <Link href={`/${2}`}></Link>
         <Avatar className="size-8">
           <AvatarImage src={session?.user?.image as string} />
         </Avatar>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent className="container-bg-dark container-bg-light mt-1 mr-2">
-        {/* <DropdownMenuLabel className="flex items-center gap-x-3 ">
-          <Avatar className="size-7 ">
-            <AvatarImage src={session?.user?.image as string} />
-          </Avatar>
-          <span className="text-sm font-semibold "> {session?.user?.name}</span>
-        </DropdownMenuLabel> */}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center ">
-          <Avatar className="size-7 ">
-            <AvatarImage src={session?.user?.image as string} />
-          </Avatar>
-          <span className="text-sm font-semibold "> {session?.user?.name}</span>
-        </DropdownMenuItem>
+        <Link
+          href={`/${session?.user.name?.replaceAll(/ /g, "")}`}
+          className=" flex items-center "
+        >
+          <DropdownMenuItem
+            onClick={() => setOpenDrowdown(false)}
+            className="w-full"
+          >
+            <Avatar className="size-7 ">
+              <AvatarImage src={session?.user?.image as string} />
+            </Avatar>
+            <span className="text-sm font-semibold ml-1 ">
+              {session?.user.name &&
+                session.user.name[0].toUpperCase() +
+                  session.user.name.toLocaleLowerCase().slice(1)}
+            </span>
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
 
         <DropdownMenuItem className="flex items-center ">

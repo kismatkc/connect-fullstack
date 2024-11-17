@@ -1,5 +1,5 @@
 import express, { json } from "express";
-import connectToDatabase from "./lib/database.ts";
+// import connectToDatabase from "./lib/database.ts";
 import userRoutes from "./routes/user_routes.js";
 
 import cors from "cors";
@@ -9,7 +9,7 @@ const app = express();
 const PORT = 4000;
 app.use(cors(corsOptions()));
 app.use(cookieParser());
-connectToDatabase();
+// connectToDatabase();
 
 app.use(json());
 app.use("/api", userRoutes);

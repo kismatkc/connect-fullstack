@@ -9,5 +9,5 @@ CREATE TABLE users (
     profile_picture_url TEXT,
     gender VARCHAR(10),
     city VARCHAR(200),
-    college VARCHAR(200),
+    college VARCHAR(200)
 );

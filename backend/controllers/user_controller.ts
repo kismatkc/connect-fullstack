@@ -9,20 +9,19 @@ const userController = {
 
       const userDetails: LoginDetails = req.body;
 
-      const response = await userModel.verify(userDetails);
-      if (!response.verified) {
-        res.status(response.status).json({ message: response.error });
-      } else {
-        const user = response.data;
-        res.cookie("jwt", generateToken(user), {
-          httpOnly: true,
-          secure: process.env.ENVIRONMENT === "production",
-          sameSite: "lax",
-          maxAge: 30 * 60 * 1000,
-          path: "/",
-        });
-        res.status(response.status).json({ data: response.data });
-      }
+      const response: any = await userModel.verify(userDetails);
+      console.log(response);
+
+
+      res.cookie("jwt", generateToken(response), {
+        httpOnly: true,
+        secure: process.env.ENVIRONMENT === "production",
+        sameSite: "lax",
+        maxAge: 30 * 60 * 1000,
+        path: "/",
+      });
+      res.status(response.status).json({ data: response });
+
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "server error" });
@@ -38,11 +37,11 @@ const userController = {
       res.status(500).json({ message: "user not created", error });
     }
   },
-  getDetails: async(req: Request, res: Response) => {
-    try{
-      
-    }catch(error){
-      
+  getDetails: async (req: Request, res: Response) => {
+    try {
+
+    } catch (error) {
+
     }
   }
 };

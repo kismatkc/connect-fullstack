@@ -27,18 +27,17 @@ const UserProfile = ({ params }: { params: { id: number } }) => {
           <div className="flex gap-x-2 ">
             {Array.from({ length: 7 }).map((item, i) => (
               <Avatar className="size-8">
-                {/* <AvatarImage src={""} /> */}
                 <AvatarFallback>kk</AvatarFallback>
               </Avatar>
             ))}
           </div>
           <div className="flex gap-x-2 w-full justify-center">
-            <button className="bg-gray-300 rounded-md flex gap-x-2 items-center px-2 py-3">
+            <button className="bg-gray-300 hover:bg-gray-400 rounded-md transition-colors flex gap-x-2 items-center px-2 py-3">
               <UserPlus />
               <span className="text-lg">Add friend</span>
             </button>
 
-            <button className="bg-[rgb(8,102,255)] rounded-md flex gap-x-2 items-center px-2 py-3">
+            <button className="bg-blue-500 hover:bg-blue-600 transition-colors rounded-md flex gap-x-2 items-center px-2 py-3">
               <FacebookMessengerIcon />
               <span className="text-lg">Message</span>
             </button>

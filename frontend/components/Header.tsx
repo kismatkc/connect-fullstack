@@ -10,6 +10,7 @@ import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
 import { useMessengerStore } from "@/hooks/global-zustand-hooks";
 import HeaderUserDropDownMenu from "./header-user-dropdown";
 import Link from "next/link";
+import FriendsSuggestion from "./friends-suggestion";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -23,7 +24,7 @@ const Header = () => {
   if (!mounted) return null;
   return (
     <header className="flex  justify-between  container-bg-light dark:container-bg-dark  px-2 py-4 border-light border-dark  z-30 sticky -top-3 left-0 right-0">
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 relative">
         <Link href="/" className="size-[30px]">
           <Image
             className=" self-center"
@@ -36,7 +37,6 @@ const Header = () => {
             priority
           />
         </Link>
-
         <div className="flex relative pr-1">
           <Search className="absolute top-1/4 left-2  " size={16} />
           <input
@@ -45,6 +45,7 @@ const Header = () => {
             placeholder="Search friends"
           />
         </div>
+        {/* <FriendsSuggestion /> */}
       </div>
       <div className="flex gap-x-1 justify-between items-center ">
         <ThemeToggleButton />

@@ -6,5 +6,6 @@
     "esModuleInterop": true,
     "module": "NodeNext", // Add this
     "moduleResolution": "NodeNext" // Add this
+    
   }
 }
