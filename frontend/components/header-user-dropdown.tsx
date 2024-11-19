@@ -14,7 +14,7 @@ import { useState } from "react";
 
 const HeaderUserDropDownMenu = ({}) => {
   const { data: session } = useSession();
-  const [openDropdown, setOpenDrowdown] = useState(true);
+  const [openDropdown, setOpenDrowdown] = useState(false);
 
   return (
     <DropdownMenu

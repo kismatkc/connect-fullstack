@@ -37,15 +37,8 @@ const Header = () => {
             priority
           />
         </Link>
-        <div className="flex relative pr-1">
-          <Search className="absolute top-1/4 left-2  " size={16} />
-          <input
-            type="text"
-            className="bg-icon-bg-light dark:bg-icon-bg-dark rounded-full text-xs  pl-7"
-            placeholder="Search friends"
-          />
-        </div>
-        {/* <FriendsSuggestion /> */}
+
+        <FriendsSuggestion />
       </div>
       <div className="flex gap-x-1 justify-between items-center ">
         <ThemeToggleButton />

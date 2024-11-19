@@ -10,7 +10,9 @@ export type SignUpForm = {
   lastName: string;
   birthday: Date;
   gender: string;
-  avatarUrl: File;
+  avatarUrl: File | string;
+  city: string;
+  college: string;
 };
 
 export interface PostGresUser {

@@ -1,50 +1,49 @@
 import { Request, Response } from "express";
-import userModel from "../models/user_model.js";
-import { SignUpDetails, LoginDetails } from "../types/index.js";
-import { generateToken } from "../lib/utils.ts";
+
+import userModel from "../models/user_model.ts";
 
 const userController = {
-  verify: async (req: Request, res: Response) => {
-    try {
-
-      const userDetails: LoginDetails = req.body;
-
-      const response: any = await userModel.verify(userDetails);
-      console.log(response);
-
-
-      res.cookie("jwt", generateToken(response), {
-        httpOnly: true,
-        secure: process.env.ENVIRONMENT === "production",
-        sameSite: "lax",
-        maxAge: 30 * 60 * 1000,
-        path: "/",
-      });
-      res.status(response.status).json({ data: response });
-
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "server error" });
-    }
-  },
   create: async (req: Request, res: Response) => {
     try {
-      const userDetails: SignUpDetails = req.body;
-      const response = await userModel.create(userDetails);
-      res.status(201).json({ message: "user created", response });
+      const userDetails = req.body;
+      const user = await userModel.create(userDetails);
+      if (user.status === 201) {
+        res
+          .status(user.status)
+          .json({ success: true, data: user.data, message: user.message });
+      } else {
+        console.log(user.error);
+
+        res.status(user.status).json({ success: false, message: user.message });
+      }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "user not created", error });
+
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
     }
   },
-  getDetails: async (req: Request, res: Response) => {
+
+  verify: async (req: Request, res: Response) => {
     try {
+      const userDetails = req.body;
+      const user = await userModel.verify(userDetails);
+      if (user.status === 200) {
+        res
+          .status(user.status)
+          .json({ success: true, data: user.data, message: user.message });
+      } else {
+        console.log(user.error);
 
+        res.status(user.status).json({ success: false, message: user.message });
+      }
     } catch (error) {
-
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
     }
-  }
+  },
 };
 
 export default userController;
-

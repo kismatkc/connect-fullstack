@@ -89,8 +89,15 @@ const SignUp = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    // createUser(values);
-    console.log(values);
+    const formValuesAltered = {
+      ...values,
+      firstName:
+        values.firstName[0].toLocaleUpperCase() + values.firstName.slice(1),
+      lastName:
+        values.lastName[0].toLocaleUpperCase() + values.lastName.slice(1),
+    };
+    createUser(values);
+    console.log(formValuesAltered);
 
     // getPublicUrl()
   }
