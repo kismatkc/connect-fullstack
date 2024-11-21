@@ -33,7 +33,7 @@ const userModel = {
           },
         ])
         .select(
-          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college"
+          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college",
         )
         .single();
       if (error)
@@ -49,7 +49,7 @@ const userModel = {
       const { data, error } = await supabase
         .from("users")
         .select(
-          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college,password_hash"
+          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college,password_hash",
         )
         .eq("email", email)
         .single();
@@ -66,6 +66,28 @@ const userModel = {
         data: dataWithoutPassword,
       };
     } catch (error) {
+      throw error;
+    }
+  },
+  getFriends: async (query: string) => {
+    try {
+      const queryToLowerCase = `${query.toLowerCase()}%`;
+      console.log(queryToLowerCase)
+      const { data: usingFirstName ,error: firstNameError} = await supabase
+        .from("users")
+        .select("id,first_name,last_name,profile_picture_url")
+.ilike("first_name", queryToLowerCase)
+      if (firstNameError){
+
+        return { status: 404, message: "Friends not found",data: [] };
+      }
+      if (usingFirstName.length > 0)
+        return { status: 200, message: "Friends found", data: usingFirstName };
+
+
+      return { status: 404, message: "Friends not found",data: [] };
+    } catch (error) {
+      console.log(error)
       throw error;
     }
   },

@@ -44,6 +44,26 @@ const userController = {
         .json({ success: false, message: "Internal server error" });
     }
   },
+  getFriends: async (req: Request, res: Response) => {
+    try {
+      const query = req.query.query as string;
+     
+      const response = await userModel.getFriends(query);
+
+ 
+      res
+        .status(response.status)
+        .json({
+          success: true,
+          data: response.data,
+          message: response.message,
+        });
+    } catch {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  },
 };
 
 export default userController;

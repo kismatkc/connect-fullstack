@@ -3,14 +3,16 @@ import { useMutation } from "@tanstack/react-query";
 
 async function getSearchedFriends(query: string) {
   try {
+
     const response = await Api.get("/get-searched-friends", {
       params: {
         query,
       },
     });
-    return response.data;
+
+    return response.data.data;
   } catch (error) {
-    console.log(error);
+
     throw error;
   }
 }
