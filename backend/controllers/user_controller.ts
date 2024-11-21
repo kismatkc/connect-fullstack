@@ -44,11 +44,11 @@ const userController = {
         .json({ success: false, message: "Internal server error" });
     }
   },
-  getFriends: async (req: Request, res: Response) => {
+    getPeople: async (req: Request, res: Response) => {
     try {
       const query = req.query.query as string;
      
-      const response = await userModel.getFriends(query);
+      const response = await userModel.getPeople(query);
 
  
       res

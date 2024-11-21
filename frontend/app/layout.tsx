@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="overflow-y-scroll">
+    <html lang="en">
       <body className={`${interFont.className} antialiased `}>
         <ReactQueryProvider>
           <SessionProviderWrapper>

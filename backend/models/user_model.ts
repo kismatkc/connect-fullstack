@@ -69,25 +69,39 @@ const userModel = {
       throw error;
     }
   },
-  getFriends: async (query: string) => {
+  getPeople: async (query: string) => {
     try {
       const queryToLowerCase = `${query.toLowerCase()}%`;
-      console.log(queryToLowerCase)
-      const { data: usingFirstName ,error: firstNameError} = await supabase
+
+      const { data: usingFirstName, error: firstNameError } = await supabase
         .from("users")
         .select("id,first_name,last_name,profile_picture_url")
-.ilike("first_name", queryToLowerCase)
-      if (firstNameError){
-
-        return { status: 404, message: "Friends not found",data: [] };
+        .ilike("first_name", queryToLowerCase);
+      if (firstNameError) {
+        return { status: 404, message: "Friends not found", data: [] };
       }
       if (usingFirstName.length > 0)
         return { status: 200, message: "Friends found", data: usingFirstName };
 
-
-      return { status: 404, message: "Friends not found",data: [] };
+      return { status: 404, message: "Friends not found", data: [] };
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      throw error;
+    }
+  },
+  getUserDetails: async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .select(
+          "id,profile_picture_url,first_name,last_name,city,college,created_at",
+        )
+        .eq("id", id)
+        .single();
+      if (error) return { status: 500, message: "database error", error };
+      if (!data) return { status: 404, message: "User not found", data: [] };
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   },
