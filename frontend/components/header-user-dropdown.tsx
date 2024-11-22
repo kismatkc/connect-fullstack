@@ -30,7 +30,7 @@ const HeaderUserDropDownMenu = ({}) => {
       <DropdownMenuContent className="container-bg-dark container-bg-light mt-1 mr-2">
         <DropdownMenuSeparator />
         <Link
-          href={`/${session?.user.name?.replaceAll(/ /g, "")}`}
+          href={`/${session?.user.name?.replaceAll(/ /g, "").toLowerCase()}`}
           className=" flex items-center "
         >
           <DropdownMenuItem

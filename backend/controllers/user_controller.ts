@@ -64,6 +64,28 @@ const userController = {
         .json({ success: false, message: "Internal server error" });
     }
   },
+  getUserDetails: async (req: Request, res: Response) => {
+    try {
+      const id = req.query.query as string;
+
+      const response = await userModel.getUserDetails(id);
+
+
+      res
+        .status(response.status)
+        .json({
+          success: true,
+          data: response.data,
+          message: response.message,
+        });
+    } catch (error) {
+      console.log(error);
+      res
+          .status(500)
+          .json({ success: false, message: "Internal server error" });
+      }
+    }
+
 };
 
 export default userController;

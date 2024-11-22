@@ -98,13 +98,16 @@ const userModel = {
         )
         .eq("id", id)
         .single();
-      if (error) return { status: 500, message: "database error", error };
+      if (error) throw error
+        
+   
       if (!data) return { status: 404, message: "User not found", data: [] };
+      return { status: 200, message: "User found", data };
     } catch (error) {
       console.log(error);
       throw error;
     }
-  },
+  }
 };
 
 export default userModel;

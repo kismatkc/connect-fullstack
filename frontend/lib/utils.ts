@@ -42,4 +42,11 @@ const ApiOptions = () => {
   return options;
 };
 
+export function truncuateTillKeyword(string: string,keyword: string): string | null{
+      if(!(string || keyword)) return null
+      const desiredStringLength = string.indexOf(keyword) + keyword.length
+      const desiredString = string.slice(0,desiredStringLength)
+      return desiredString;
+  }
+
 export const Api = axios.create(ApiOptions());
