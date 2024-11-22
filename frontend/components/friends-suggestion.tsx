@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Search } from "lucide-react";
 import useGetSearchedFriends from "@/hooks/get-searched-friends";
-
+import Link from "next/link";
 const FriendsSuggestion = () => {
   const { data, error, mutate: getFriends } = useGetSearchedFriends();
   const [friends, setFriends] = useState<
@@ -46,15 +46,24 @@ const FriendsSuggestion = () => {
       <div className="absolute  w-full top-full mt-2.5 z-50 container-bg-light dark:container-bg-dark">
         <ul className="flex flex-col">
           {friends.map((user) => (
-            <li key={user.id} className="flex gap-x-2 p-3">
-              <Avatar className="size-8">
-                <AvatarImage src={user.profile_picture_url} />
-              </Avatar>
-              <div className="flex flex-nowrap gap-x-1">
-                <span>{user.first_name}</span>
-                <span>{user.last_name}</span>
-              </div>
-            </li>
+            <Link
+              href={`/${user.id}`}
+              key={user.id}
+              onClick={() => {
+                setQuery("");
+                setFriends([]);
+              }}
+            >
+              <li key={user.id} className="flex gap-x-2 p-3">
+                <Avatar className="size-8">
+                  <AvatarImage src={user.profile_picture_url} />
+                </Avatar>
+                <div className="flex flex-nowrap gap-x-1">
+                  <span>{user.first_name}</span>
+                  <span>{user.last_name}</span>
+                </div>
+              </li>
+            </Link>
           ))}
         </ul>
       </div>

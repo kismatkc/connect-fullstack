@@ -18,7 +18,7 @@ import { useSession } from "next-auth/react";
 import { truncuateTillKeyword } from "@/lib/utils";
 import { formatDate } from "date-fns";
 
-const UserProfile = () => {
+const UserProfile = ({params}: {params: {id: string}}) => {
   const {
     data: user,
     error,
@@ -27,7 +27,7 @@ const UserProfile = () => {
   } = useGetUserProfileDetails();
   const { data: session } = useSession();
   useEffect(() => {
-    const id = session?.user.id;
+    const id = params.id;
     if (!id) return;
     getProfileDetails(id);
   }, [session]);
