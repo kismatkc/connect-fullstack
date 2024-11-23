@@ -17,8 +17,9 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { truncuateTillKeyword } from "@/lib/utils";
 import { formatDate } from "date-fns";
+import FriendRequestButton from "@/components/friend-request-button";
 
-const UserProfile = ({params}: {params: {id: string}}) => {
+const UserProfile = ({ params }: { params: { profileId: string } }) => {
   const {
     data: user,
     error,
@@ -27,9 +28,9 @@ const UserProfile = ({params}: {params: {id: string}}) => {
   } = useGetUserProfileDetails();
   const { data: session } = useSession();
   useEffect(() => {
-    const id = params.id;
-    if (!id) return;
-    getProfileDetails(id);
+    const profileId = params.profileId;
+    if (!profileId) return;
+    getProfileDetails(profileId);
   }, [session]);
 
   if (isPending || error)
@@ -69,10 +70,14 @@ const UserProfile = ({params}: {params: {id: string}}) => {
               ))}
             </div>
             <div className="flex gap-x-4 w-full justify-center p-2">
-              <button className="bg-gray-300 hover:bg-gray-400 rounded-md transition-colors flex gap-x-2 items-center px-2 py-2">
-                <UserPlus />
-                <span className="text-lg">Add friend</span>
-              </button>
+              {session && params && (
+                <FriendRequestButton
+                  requestDetails={{
+                    requesterId: session.user.id,
+                    recipientId: params.profileId,
+                  }}
+                />
+              )}
 
               <button className="bg-blue-500 hover:bg-blue-600 transition-colors rounded-md flex gap-x-2 items-center px-2 py-2">
                 <FacebookMessengerIcon />
@@ -91,11 +96,15 @@ const UserProfile = ({params}: {params: {id: string}}) => {
             </figure>
             <figure className="flex gap-x-3 p-2">
               <HomeIcon />
-              <figcaption>{truncuateTillKeyword(user.city, "Canada")}</figcaption>
+              <figcaption>
+                {truncuateTillKeyword(user.city, "Canada")}
+              </figcaption>
             </figure>
             <figure className="flex gap-x-3 p-2">
               <Clock2Icon />
-              <figcaption>{formatDate(user.created_at,"'Joined' MMM dd, yyyy")}</figcaption>
+              <figcaption>
+                {formatDate(user.created_at, "'Joined' MMM dd, yyyy")}
+              </figcaption>
             </figure>
           </div>
         </div>

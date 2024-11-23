@@ -99,13 +99,29 @@ const userModel = {
         .eq("id", id)
         .single();
       if (error) throw error
-        
-   
+
+
       if (!data) return { status: 404, message: "User not found", data: [] };
       return { status: 200, message: "User found", data };
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  },
+  sendFriendRequest: async (friendRequestDetails: { requesterId: string, recipientId: string }) => {
+    try {
+      const { data, error } = await supabase.from("friend_requests").insert([{ requester_id: friendRequestDetails.requesterId, recipient_id: friendRequestDetails.recipientId }])
+      if (error) {
+        console.log(error);
+
+        return { status: 400, message: "Database error occurred", error };
+      }
+      return { status: 201, message: "Friend request sent", data }
+
+    } catch (error) {
+      console.log(error);
+
+      throw error
     }
   }
 };

@@ -44,13 +44,13 @@ const userController = {
         .json({ success: false, message: "Internal server error" });
     }
   },
-    getPeople: async (req: Request, res: Response) => {
+  getPeople: async (req: Request, res: Response) => {
     try {
       const query = req.query.query as string;
-     
+
       const response = await userModel.getPeople(query);
 
- 
+
       res
         .status(response.status)
         .json({
@@ -81,11 +81,34 @@ const userController = {
     } catch (error) {
       console.log(error);
       res
-          .status(500)
-          .json({ success: false, message: "Internal server error" });
-      }
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
     }
+  },
+  sendFriendRequest: async (req: Request, res: Response) => {
+    try {
+      const friendRequestDetails = req.body;
+      const response = await userModel.sendFriendRequest(friendRequestDetails)
+
+      res
+        .status(response.status)
+        .json({
+          success: true,
+          data: response.data || null,
+          error: response.error || null,
+          message: response.message,
+        });
+
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  }
 
 };
+
+
 
 export default userController;

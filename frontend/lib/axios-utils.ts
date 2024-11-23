@@ -14,10 +14,12 @@ const ApiOptions = () => {
 
 
 
-const friendRequest = {
-    send: async (requesterId: string, recipientId: string) => {
+export const friendRequest = {
+    send: async (requestDetails: { requesterId: string, recipientId: string }) => {
         try {
-            const response = await Api.post("/send-friend-request", { requesterId, recipientId })
+            const response = await Api.post("/send-friend-request", requestDetails)
+
+
             return response.data
         } catch (error) {
             console.log(error);

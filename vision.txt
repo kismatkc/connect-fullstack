@@ -11,3 +11,20 @@ CREATE TABLE users (
     city VARCHAR(200),
     college VARCHAR(200)
 );
+
+
+pseudocode for showing which button
+button types
+1. addicon friend(add friend text)
+2. checkicon friend(request sent text)
+3. checkicon friend (friends text)
+
+1.makes a reqest to the server to see if
+a.relationship doesnot exist = addicon friend(add friend text)
+b.relationship exist ? see status 
+  case "pending"
+  checkicon friend(request sent text)
+  case "accepted"
+  checkicon friend (friends text)
+  case "rejected"
+  
