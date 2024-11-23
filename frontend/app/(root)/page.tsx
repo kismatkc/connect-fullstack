@@ -16,7 +16,7 @@ const Home = ({}) => {
       <Posts />
       <Posts />
       <Posts />
-      <MessengerChatBox />
+
     </>
   );
 };

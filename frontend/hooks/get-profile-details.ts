@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { SignInForm } from "@/types/index";
-import { Api } from "@/lib/utils";
+import { Api } from "@/lib/axios-utils";
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation";
 

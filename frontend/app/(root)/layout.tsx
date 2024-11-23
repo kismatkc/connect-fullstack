@@ -9,6 +9,7 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
         <Messenger />
         <Header />
         {children}
+        <MessengerChatBox />
       </main>
     </>
   );

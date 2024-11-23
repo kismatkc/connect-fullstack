@@ -1,4 +1,4 @@
-import { Api } from "@/lib/utils";
+import { Api } from "@/lib/axios-utils";
 import { useMutation } from "@tanstack/react-query";
 
 async function getSearchedFriends(query: string) {

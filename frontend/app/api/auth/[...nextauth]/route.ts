@@ -1,4 +1,4 @@
-import { Api } from "@/lib/utils";
+import { Api } from "@/lib/axios-utils";
 import { PostGresUser } from "@/types";
 import { AxiosResponse } from "axios";
 import { NextAuthOptions } from "next-auth";
