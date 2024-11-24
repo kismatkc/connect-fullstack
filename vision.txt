@@ -12,7 +12,6 @@ CREATE TABLE users (
     college VARCHAR(200)
 );
 
-
 pseudocode for showing which button
 button types
 1. addicon friend(add friend text)
@@ -26,5 +25,5 @@ b.relationship exist ? see status
   checkicon friend(request sent text)
   case "accepted"
   checkicon friend (friends text)
-  case "rejected"
+ 
   

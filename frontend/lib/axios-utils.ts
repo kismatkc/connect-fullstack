@@ -25,7 +25,35 @@ export const friendRequest = {
             console.log(error);
 
         }
+    }, delete: async (recipientId: string) => {
+        try {
+            const response = await Api.get("/delete-friend-request", { params: recipientId })
+
+
+
+            return response.data
+        } catch (error) {
+            console.log(error);
+
+        }
     }
 }
 
+
+export const notifications = {
+    getPendingRequest: async (recipientId: string) => {
+        try {
+            console.log("fired");
+
+            const response = await Api.get("/get-pending-request", { params: { recipientId } })
+
+
+
+            return response.data
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+}
 export const Api = axios.create(ApiOptions());

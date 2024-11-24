@@ -123,6 +123,23 @@ const userModel = {
 
       throw error
     }
+  },
+  getPendingRequests: async (recipientId: string) => {
+    try {
+
+
+      const { data, error } = await supabase.from("friend_requests").select("").eq("recipient_id", recipientId).eq("status", "pending")
+      if (error) {
+        return console.log(error);
+
+      }
+      return console.log(data);
+
+    } catch (error) {
+      console.log(error);
+
+      throw error
+    }
   }
 };
 

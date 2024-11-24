@@ -105,6 +105,20 @@ const userController = {
         .status(500)
         .json({ success: false, message: "Internal server error", error });
     }
+  },
+  getPendingRequests: async (req: Request, res: Response) => {
+    try {
+      const recipientId = req.query.recipientId as string;
+      console.log(recipientId);
+
+      const response = await userModel.getPendingRequests(recipientId);
+
+    } catch (error) {
+      console.log(error);
+      // res
+      //   .status(500)
+      //   .json({ success: false, message: "Internal server error", error });
+    }
   }
 
 };

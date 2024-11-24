@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 
-import { Bell, Search } from "lucide-react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import ThemeToggleButton from "./theme-toggler-button";
@@ -11,6 +10,7 @@ import { useMessengerStore } from "@/hooks/global-zustand-hooks";
 import HeaderUserDropDownMenu from "./header-user-dropdown";
 import Link from "next/link";
 import FriendsSuggestion from "./friends-suggestion";
+import Notifications from "./notifications";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -50,9 +50,10 @@ const Header = () => {
         >
           <FacebookMessengerIcon />
         </button>
-        <button className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark size-8 pl-2">
+        {/* <button className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark size-8 pl-2">
           <Bell width={16} height={16} fill="black" />
-        </button>
+        </button> */}
+        <Notifications />
         <HeaderUserDropDownMenu />
       </div>
     </header>

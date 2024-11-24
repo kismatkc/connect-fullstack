@@ -61,6 +61,8 @@ const config: Config = {
 
         "icon-bg-light": "rgb(228,230,235)",
         "icon-bg-dark": "rgb(255,255,255,.1)",
+        "hover-icon-bg-light": "rgb(238,240,245)",
+        "hover-icon-bg-dark": "rgb(255,255,255,.4)",
       },
 
     },

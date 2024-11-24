@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Search } from "lucide-react";
 import useGetSearchedFriends from "@/hooks/get-searched-friends";
@@ -14,6 +14,7 @@ const FriendsSuggestion = () => {
     }[]
   >([]);
   const [query, setQuery] = useState("");
+
   useEffect(() => {
     if (data) {
       setFriends(data);
@@ -30,7 +31,7 @@ const FriendsSuggestion = () => {
   return (
     <>
       <div className="flex relative pr-1">
-        <Search className="absolute top-1/4 left-2  " size={16} />
+        {!query && <Search className="absolute top-1/4 left-2  " size={16} />}
         <input
           type="text"
           className="bg-icon-bg-light dark:bg-icon-bg-dark rounded-full text-xs  pl-7"
