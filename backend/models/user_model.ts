@@ -33,7 +33,7 @@ const userModel = {
           },
         ])
         .select(
-          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college",
+          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college"
         )
         .single();
       if (error)
@@ -49,7 +49,7 @@ const userModel = {
       const { data, error } = await supabase
         .from("users")
         .select(
-          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college,password_hash",
+          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college,password_hash"
         )
         .eq("email", email)
         .single();
@@ -94,12 +94,11 @@ const userModel = {
       const { data, error } = await supabase
         .from("users")
         .select(
-          "id,profile_picture_url,first_name,last_name,city,college,created_at",
+          "id,profile_picture_url,first_name,last_name,city,college,created_at"
         )
         .eq("id", id)
         .single();
-      if (error) throw error
-
+      if (error) throw error;
 
       if (!data) return { status: 404, message: "User not found", data: [] };
       return { status: 200, message: "User found", data };
@@ -108,39 +107,48 @@ const userModel = {
       throw error;
     }
   },
-  sendFriendRequest: async (friendRequestDetails: { requesterId: string, recipientId: string }) => {
+  sendFriendRequest: async (friendRequestDetails: {
+    requesterId: string;
+    recipientId: string;
+  }) => {
     try {
-      const { data, error } = await supabase.from("friend_requests").insert([{ requester_id: friendRequestDetails.requesterId, recipient_id: friendRequestDetails.recipientId }])
+      const { data, error } = await supabase.from("friend_requests").insert([
+        {
+          requester_id: friendRequestDetails.requesterId,
+          recipient_id: friendRequestDetails.recipientId,
+        },
+      ]);
       if (error) {
         console.log(error);
 
         return { status: 400, message: "Database error occurred", error };
       }
-      return { status: 201, message: "Friend request sent", data }
-
+      return { status: 201, message: "Friend request sent", data };
     } catch (error) {
       console.log(error);
 
-      throw error
+      throw error;
     }
   },
   getPendingRequests: async (recipientId: string) => {
     try {
-
-
-      const { data, error } = await supabase.from("friend_requests").select("").eq("recipient_id", recipientId).eq("status", "pending")
+      const { data, error } = await supabase
+        .from("friend_requests")
+        .select(
+          "id,requester_id,requester:users!fk_requester(first_name,last_name,profile_picture_url)"
+        )
+        .eq("recipient_id", recipientId)
+        .eq("status", "pending");
       if (error) {
-        return console.log(error);
-
+        return { status: 400, message: "Friend request doesn't exists", error };
       }
-      return console.log(data);
-
+      return { status: 200, message: "Friend request exists", data };
     } catch (error) {
       console.log(error);
 
-      throw error
+      throw error;
     }
-  }
+  },
 };
 
 export default userModel;

@@ -50,14 +50,11 @@ const userController = {
 
       const response = await userModel.getPeople(query);
 
-
-      res
-        .status(response.status)
-        .json({
-          success: true,
-          data: response.data,
-          message: response.message,
-        });
+      res.status(response.status).json({
+        success: true,
+        data: response.data,
+        message: response.message,
+      });
     } catch {
       res
         .status(500)
@@ -70,14 +67,11 @@ const userController = {
 
       const response = await userModel.getUserDetails(id);
 
-
-      res
-        .status(response.status)
-        .json({
-          success: true,
-          data: response.data,
-          message: response.message,
-        });
+      res.status(response.status).json({
+        success: true,
+        data: response.data,
+        message: response.message,
+      });
     } catch (error) {
       console.log(error);
       res
@@ -88,17 +82,14 @@ const userController = {
   sendFriendRequest: async (req: Request, res: Response) => {
     try {
       const friendRequestDetails = req.body;
-      const response = await userModel.sendFriendRequest(friendRequestDetails)
+      const response = await userModel.sendFriendRequest(friendRequestDetails);
 
-      res
-        .status(response.status)
-        .json({
-          success: true,
-          data: response.data || null,
-          error: response.error || null,
-          message: response.message,
-        });
-
+      res.status(response.status).json({
+        success: true,
+        data: response.data || null,
+        error: response.error || null,
+        message: response.message,
+      });
     } catch (error) {
       console.log(error);
       res
@@ -112,17 +103,25 @@ const userController = {
       console.log(recipientId);
 
       const response = await userModel.getPendingRequests(recipientId);
+      const data = response.data.map((item) => {
+        const { id, requester_id, requester } = item;
 
+        return { id, requester_id, ...requester };
+      });
+
+      res.status(response.status).json({
+        success: true,
+        data: data || null,
+        error: response.error || null,
+        message: response.message,
+      });
     } catch (error) {
       console.log(error);
-      // res
-      //   .status(500)
-      //   .json({ success: false, message: "Internal server error", error });
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
     }
-  }
-
+  },
 };
-
-
 
 export default userController;

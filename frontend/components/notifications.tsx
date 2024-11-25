@@ -13,23 +13,14 @@ const HeaderUserDropDownMenu = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const notificationContainerRef = useRef<HTMLDivElement>(null);
-  const [friends, setFriends] = useState<
+  const [friendRequests, setFriendRequests] = useState<
     {
       profile_picture_url: string;
       first_name: string;
       last_name: string;
       id: string;
     }[]
-  >([
-    {
-      profile_picture_url:
-        "https://storage.googleapis.com/connect_profile_pictures/1731400150415-female_1.jpg",
-
-      first_name: "Nisha",
-      last_name: "Kc",
-      id: "1",
-    },
-  ]);
+  >([]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -49,11 +40,18 @@ const HeaderUserDropDownMenu = () => {
 
   useEffect(() => {
     if (!session) return;
+    const getPendingRequests = async () => {
+      const friendRequests = await notifications.getPendingRequest(
+        session.user.id
+      );
 
-    (() => {
-      console.log(session.user.id);
-      notifications.getPendingRequest(session.user.id);
-    })();
+      if (friendRequests) {
+        console.log("format", friendRequests);
+
+        setFriendRequests(friendRequests);
+      }
+    };
+    getPendingRequests();
   }, [session]);
 
   return (
@@ -67,9 +65,9 @@ const HeaderUserDropDownMenu = () => {
       {openDropdown && (
         <div className="z-50 absolute container-bg-dark container-bg-light right-1 top-[130%] shadow-md rounded-md border-t-2">
           <ul className="flex flex-col">
-            {friends &&
-              friends.map((item) => (
-                <div className="flex p-2">
+            {friendRequests &&
+              friendRequests.map((item) => (
+                <div className="flex p-2" key={item.id}>
                   <div className="flex gap-x-1">
                     <Avatar className="size-7 ">
                       <AvatarImage src={item.profile_picture_url} />
