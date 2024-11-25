@@ -19,6 +19,7 @@ const HeaderUserDropDownMenu = () => {
       first_name: string;
       last_name: string;
       id: string;
+      requester_id: string;
     }[]
   >([]);
 
@@ -63,17 +64,21 @@ const HeaderUserDropDownMenu = () => {
         <Bell width={16} height={16} fill="black" />
       </button>
       {openDropdown && (
-        <div className="z-50 absolute container-bg-dark container-bg-light right-1 top-[130%] shadow-md rounded-md border-t-2">
-          <ul className="flex flex-col">
+        <div className="z-50 absolute container-bg-dark container-bg-light right-1 top-[130%] shadow-md rounded-md border-t-2 w-[280px]">
+          <h1 className="font-bold ml-3 pt-1">Friend Requests</h1>
+          <ul className="flex flex-col w-full">
             {friendRequests &&
               friendRequests.map((item) => (
-                <div className="flex p-2" key={item.id}>
-                  <div className="flex gap-x-1">
+                <div
+                  className="flex p-2 justify-between flex-nowrap"
+                  key={item.id}
+                >
+                  <div className="flex gap-x-3">
                     <Avatar className="size-7 ">
                       <AvatarImage src={item.profile_picture_url} />
                     </Avatar>
 
-                    <div className="text-sm font-semibold self-center">
+                    <div className="text-sm font-semibold self-center overflow-x-clip">
                       <span>{item.first_name}</span>
                       <span>{item.last_name}</span>
                     </div>
@@ -91,7 +96,7 @@ const HeaderUserDropDownMenu = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         setOpenDrowdown(false);
-                        router.push(`/${session?.user.id}`);
+                        router.push(`/${item.requester_id}`);
                       }}
                     >
                       <ExternalLinkIcon />
