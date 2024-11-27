@@ -8,5 +8,7 @@ router.get("/get-searched-friends", userController.getPeople);
 router.get("/get-user-profile-details", userController.getUserDetails);
 router.post("/send-friend-request", userController.sendFriendRequest);
 router.get("/get-pending-request", userController.getPendingRequests);
+router.delete("/delete-pending-request", userController.deletePendingRequest);
+router.patch("/accept-pending-request", userController.acceptPendingRequest);
 
 export default router;

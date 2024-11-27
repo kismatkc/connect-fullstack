@@ -4,41 +4,33 @@ import { toast } from "sonner";
 
 import { SignInForm } from "@/types/index";
 import { Api } from "@/lib/axios-utils";
-import { signIn } from "next-auth/react"
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const verifyUser = async (input: SignInForm) => {
-
-    try {
-
-        const response = await Api.post("/verify_user", input);
-        return response.data;
-
-    } catch (error: unknown) {
-
-        throw new Error("Error verifying credentials");
-    }
+  try {
+    const response = await Api.post("/verify_user", input);
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error("Error verifying credentials");
+  }
 };
 
 export default function useVerifyUser() {
-    const router = useRouter()
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: verifyUser,
-        onSuccess: async (user, variables) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: verifyUser,
+    onSuccess: async (user, variables) => {
+      const resposne = await signIn("credentials", {
+        ...user.data,
 
-            const resposne = await signIn("credentials", {
-                ...user.data,
-
-
-                redirect: false
-            })
-            router.push("/")
-
-        }, onError: () => {
-            toast.error("Error verifying credentials");
-
-        }
-    });
+        redirect: false,
+      });
+      router.push("/");
+    },
+    onError: () => {
+      toast.error("Error verifying credentials");
+    },
+  });
 }
-

@@ -30,7 +30,7 @@ const autoComplete = ({
         console.log(error);
       }
     },
-    [value]
+    [value],
   );
   useEffect(() => {
     setIsSelected(false);

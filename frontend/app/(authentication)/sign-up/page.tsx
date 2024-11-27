@@ -97,7 +97,6 @@ const SignUp = () => {
         values.lastName[0].toLocaleUpperCase() + values.lastName.slice(1),
     };
     createUser(values);
-    console.log(formValuesAltered);
 
     // getPublicUrl()
   }

@@ -27,7 +27,7 @@ const MessengerChatBox = () => {
           "flex flex-col  container-bg-light container-bg-dark  bottom-0 left-[6%]  ":
             !chatHead,
           "size-12 rounded-full bg-black  bottom-10 left-[85%] ": chatHead,
-        }
+        },
       )}
       onClick={() => {
         if (chatHead) return setChatHead(!chatHead);

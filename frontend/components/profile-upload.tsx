@@ -29,7 +29,7 @@ const ImageUpload = ({
         console.log(error);
       }
     },
-    [onValueChange]
+    [onValueChange],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

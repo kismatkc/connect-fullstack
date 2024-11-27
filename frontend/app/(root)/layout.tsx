@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import Header from "@/components/Header";
 import Messenger from "@/components/messenger";
 import MessengerChatBox from "@/components/messenger-chat-box";
+import { Toaster } from "@/components/ui/sonner"
 const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (
     <>
@@ -9,6 +10,7 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
         <Messenger />
         <Header />
         {children}
+        <Toaster />
         <MessengerChatBox />
       </main>
     </>

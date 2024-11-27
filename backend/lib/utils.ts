@@ -4,15 +4,8 @@ import jwt from "jsonwebtoken";
 export const corsOptions = (): CorsOptions => ({
   origin: process.env.FRONTEND_URL,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "OPTIONS","DELETE","PATCH"],
 });
-
-
-
-
-
-
-
 
 type user = {
   email: string;
@@ -33,7 +26,7 @@ export const generateToken = (user: user) => {
 export const verifyToken = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const token = req.cookies.jwt;

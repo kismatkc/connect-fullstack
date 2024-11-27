@@ -3,7 +3,6 @@ import { twMerge } from "tailwind-merge";
 import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
 const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-
 const geocodingClient = mbxGeocoding({ accessToken } as {
   accessToken: string;
 });
@@ -28,13 +27,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-
-
-export function truncuateTillKeyword(string: string, keyword: string): string | null {
-  if (!(string || keyword)) return null
-  const desiredStringLength = string.indexOf(keyword) + keyword.length
-  const desiredString = string.slice(0, desiredStringLength)
+export function truncuateTillKeyword(
+  string: string,
+  keyword: string,
+): string | null {
+  if (!(string || keyword)) return null;
+  const desiredStringLength = string.indexOf(keyword) + keyword.length;
+  const desiredString = string.slice(0, desiredStringLength);
   return desiredString;
 }
-
-

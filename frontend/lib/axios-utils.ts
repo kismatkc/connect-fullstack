@@ -51,5 +51,29 @@ export const notifications = {
       console.log("notiffcation fetchign errors");
     }
   },
+  deletePendingRequest: async (friendRequestId: string): Promise<boolean> => {
+    try {
+      const response = await Api.delete("/delete-pending-request", {
+        params: { friendRequestId },
+      });
+
+      return response.data.success;
+    } catch (error) {
+      console.log("deleting request errors");
+      return false;
+    }
+  },
+  acceptPendingRequest: async (friendRequestId: string): Promise<boolean> => {
+    try {
+      const response = await Api.patch("/accept-pending-request", {
+        friendRequestId,
+      });
+
+      return response.data.success;
+    } catch (error) {
+      console.log("Error accepting request");
+      return false;
+    }
+  },
 };
 export const Api = axios.create(ApiOptions());

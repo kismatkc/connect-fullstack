@@ -33,7 +33,7 @@ const userModel = {
           },
         ])
         .select(
-          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college"
+          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college",
         )
         .single();
       if (error)
@@ -49,7 +49,7 @@ const userModel = {
       const { data, error } = await supabase
         .from("users")
         .select(
-          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college,password_hash"
+          "id, email, first_name, last_name, profile_picture_url, dob, gender, city, college,password_hash",
         )
         .eq("email", email)
         .single();
@@ -94,7 +94,7 @@ const userModel = {
       const { data, error } = await supabase
         .from("users")
         .select(
-          "id,profile_picture_url,first_name,last_name,city,college,created_at"
+          "id,profile_picture_url,first_name,last_name,city,college,created_at",
         )
         .eq("id", id)
         .single();
@@ -135,7 +135,7 @@ const userModel = {
       const { data, error } = await supabase
         .from("friend_requests")
         .select(
-          "id,requester_id,requester:users!fk_requester(first_name,last_name,profile_picture_url)"
+          "id,requester_id,requester:users!fk_requester(first_name,last_name,profile_picture_url)",
         )
         .eq("recipient_id", recipientId)
         .eq("status", "pending");
@@ -146,6 +146,37 @@ const userModel = {
     } catch (error) {
       console.log(error);
 
+      throw error;
+    }
+  },
+  deletePendingRequest: async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("friend_requests")
+        .delete()
+        .eq("id", id);
+      if (error) {
+        console.log(error);
+        return { status: 400, message: "Database error occurred", error };
+      }
+      return { status: 200, message: "Friend request deleted", data };
+    } catch (error) {
+      throw error;
+    }
+  },
+  acceptPendingRequest: async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("friend_requests")
+        .update({ status: "accepted" })
+        .eq("id", id)
+        .eq("status", "pending");
+      if (error) {
+        console.log(error);
+        return { status: 400, message: "Database error occurred", error };
+      }
+      return { status: 200, message: "Friend request accepted", data };
+    } catch (error) {
       throw error;
     }
   },

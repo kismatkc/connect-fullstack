@@ -36,7 +36,7 @@ export default function Messenger() {
         "z-40 absolute flex flex-col h-full  w-[83vw] right-0 translate-x-full  transition-transform duration-300 ease-in-out container-bg-light container-bg-dark",
         {
           "translate-x-0": openSheet,
-        }
+        },
       )}
       onClick={(e) => {
         e.stopPropagation();

@@ -41,7 +41,7 @@ const authOptions: NextAuthOptions = {
       // @ts-ignore
 
       token.picture = user.profile_picture_url;
-      token.id = user.id
+      token.id = user.id;
 
       return token;
     },

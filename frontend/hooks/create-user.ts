@@ -12,9 +12,6 @@ async function saveProfile(file: File) {
   try {
     const bucketName = process.env.NEXT_PUBLIC_PROFILE_BUCKET_NAME;
     const filePath: string = `${Date.now()}-${file.name}`;
-    console.log(bucketName);
-    console.log(filePath);
-    console.log(file);
 
     if (!bucketName) throw new Error("Please provide bucket name");
     const { data, error } = await supabase.storage

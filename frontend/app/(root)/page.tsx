@@ -16,7 +16,6 @@ const Home = ({}) => {
       <Posts />
       <Posts />
       <Posts />
-
     </>
   );
 };

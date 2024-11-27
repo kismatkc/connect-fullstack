@@ -68,7 +68,7 @@ export default function DatePicker({
   ];
   const years = Array.from(
     { length: endYear - startYear + 1 },
-    (_, i) => startYear + i
+    (_, i) => startYear + i,
   );
 
   const handleMonthChange = (month: string) => {
@@ -99,7 +99,7 @@ export default function DatePicker({
           variant={"outline"}
           className={cn(
             "justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />

@@ -4,6 +4,7 @@ import { Bell, Check, ExternalLinkIcon, X } from "lucide-react";
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import React from "react";
 import { notifications } from "@/lib/axios-utils";
@@ -43,12 +44,10 @@ const HeaderUserDropDownMenu = () => {
     if (!session) return;
     const getPendingRequests = async () => {
       const friendRequests = await notifications.getPendingRequest(
-        session.user.id
+        session.user.id,
       );
 
       if (friendRequests) {
-        console.log("format", friendRequests);
-
         setFriendRequests(friendRequests);
       }
     };
@@ -67,7 +66,7 @@ const HeaderUserDropDownMenu = () => {
         <div className="z-50 absolute container-bg-dark container-bg-light right-1 top-[130%] shadow-md rounded-md border-t-2 w-[280px]">
           <h1 className="font-bold ml-3 pt-1">Friend Requests</h1>
           <ul className="flex flex-col w-full">
-            {friendRequests &&
+            {friendRequests.length > 0 ? (
               friendRequests.map((item) => (
                 <div
                   className="flex p-2 justify-between flex-nowrap"
@@ -85,10 +84,36 @@ const HeaderUserDropDownMenu = () => {
                   </div>
 
                   <div className="flex gap-x-2 ml-3 ">
-                    <button className=" rounded-full bg-green-400 hover:bg-green-600 flex items-center justify-center p-1">
+                    <button
+                      className=" rounded-full bg-green-400 hover:bg-green-600 flex items-center justify-center p-1"
+                      onClick={async () => {
+                        const success =
+                          await notifications.acceptPendingRequest(item.id);
+                        if (success) {
+                          setFriendRequests((prevRequests) =>
+                            prevRequests.filter((req) => !(item.id === req.id)),
+                          );
+                          return toast.success("Request Accepted");
+                        }
+                        toast.error("Requets Not Accepted,Please try again");
+                      }}
+                    >
                       <Check />
                     </button>
-                    <button className="  rounded-full bg-red-400 flex hover:bg-red-600 items-center justify-center  p-1">
+                    <button
+                      className="  rounded-full bg-red-400 flex hover:bg-red-600 items-center justify-center  p-1"
+                      onClick={async () => {
+                        const success =
+                          await notifications.deletePendingRequest(item.id);
+                        if (success) {
+                          setFriendRequests((prevRequests) =>
+                            prevRequests.filter((req) => !(item.id === req.id)),
+                          );
+                          return toast.success("Request Deleted");
+                        }
+                        toast.error("Requets not deleted,Please try again");
+                      }}
+                    >
                       <X />
                     </button>
                     <button
@@ -103,7 +128,12 @@ const HeaderUserDropDownMenu = () => {
                     </button>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="flex justify-center items-center p-5">
+                No Pending Requests
+              </div>
+            )}
           </ul>
         </div>
       )}

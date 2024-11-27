@@ -100,7 +100,6 @@ const userController = {
   getPendingRequests: async (req: Request, res: Response) => {
     try {
       const recipientId = req.query.recipientId as string;
-      console.log(recipientId);
 
       const response = await userModel.getPendingRequests(recipientId);
       const data = response.data.map((item) => {
@@ -112,6 +111,44 @@ const userController = {
       res.status(response.status).json({
         success: true,
         data: data || null,
+        error: response.error || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  },
+  deletePendingRequest: async (req: Request, res: Response) => {
+    try {
+ 
+      const id = req.query.friendRequestId as string;
+ 
+      const response = await userModel.deletePendingRequest(id);
+      res.status(response.status).json({
+        success: true,
+        data: response.data || null,
+        error: response.error || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  },
+  acceptPendingRequest: async (req: Request, res: Response) => {
+    try {
+ 
+      const id = req.body.friendRequestId as string;
+ console.log("test",id)
+      const response = await userModel.acceptPendingRequest(id);
+      res.status(response.status).json({
+        success: true,
+        data: response.data || null,
         error: response.error || null,
         message: response.message,
       });

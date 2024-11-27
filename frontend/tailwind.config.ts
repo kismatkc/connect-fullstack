@@ -50,7 +50,6 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -58,13 +57,11 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       backgroundColor: {
-
         "icon-bg-light": "rgb(228,230,235)",
         "icon-bg-dark": "rgb(255,255,255,.1)",
         "hover-icon-bg-light": "rgb(238,240,245)",
         "hover-icon-bg-dark": "rgb(255,255,255,.4)",
       },
-
     },
   },
   plugins: [require("tailwindcss-animate")],

@@ -29,11 +29,7 @@ const HeaderUserDropDownMenu = ({}) => {
 
       <DropdownMenuContent className="container-bg-dark container-bg-light mt-1 mr-2">
         <DropdownMenuSeparator />
-        <Link
-      
-          href={`/${session?.user.id}`}
-          className=" flex items-center "
-        >
+        <Link href={`/${session?.user.id}`} className=" flex items-center ">
           <DropdownMenuItem
             onClick={() => setOpenDrowdown(false)}
             className="w-full"
@@ -83,4 +79,6 @@ const HeaderUserDropDownMenu = ({}) => {
 };
 
 export default HeaderUserDropDownMenu;
-{/* href={`/${session?.user.name?.replaceAll(/ /g, "").toLowerCase()}`} */}
+{
+  /* href={`/${session?.user.name?.replaceAll(/ /g, "").toLowerCase()}`} */
+}
