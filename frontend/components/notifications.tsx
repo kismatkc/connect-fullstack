@@ -41,18 +41,24 @@ const HeaderUserDropDownMenu = () => {
   }, [openDropdown]);
 
   useEffect(() => {
-    if (!session) return;
+    if (!session || !openDropdown) return;
+
     const getPendingRequests = async () => {
-      const friendRequests = await notifications.getPendingRequest(
-        session.user.id,
+      const newFriendRequests = await notifications.getPendingRequest(
+        session.user.id
       );
 
-      if (friendRequests) {
-        setFriendRequests(friendRequests);
+      if (newFriendRequests) {
+        const currentInStringFormat = JSON.stringify(friendRequests);
+        const newStateInStringFormat = JSON.stringify(newFriendRequests);
+        if (currentInStringFormat === newStateInStringFormat) return;
+        const newState = JSON.parse(newStateInStringFormat);
+
+        setFriendRequests(newState);
       }
     };
     getPendingRequests();
-  }, [session]);
+  }, [session, openDropdown]);
 
   return (
     <div className="relative" ref={notificationContainerRef}>
@@ -91,7 +97,7 @@ const HeaderUserDropDownMenu = () => {
                           await notifications.acceptPendingRequest(item.id);
                         if (success) {
                           setFriendRequests((prevRequests) =>
-                            prevRequests.filter((req) => !(item.id === req.id)),
+                            prevRequests.filter((req) => !(item.id === req.id))
                           );
                           return toast.success("Request Accepted");
                         }
@@ -107,7 +113,7 @@ const HeaderUserDropDownMenu = () => {
                           await notifications.deletePendingRequest(item.id);
                         if (success) {
                           setFriendRequests((prevRequests) =>
-                            prevRequests.filter((req) => !(item.id === req.id)),
+                            prevRequests.filter((req) => !(item.id === req.id))
                           );
                           return toast.success("Request Deleted");
                         }

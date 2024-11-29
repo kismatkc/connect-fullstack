@@ -142,7 +142,6 @@ const userController = {
   acceptPendingRequest: async (req: Request, res: Response) => {
     try {
       const id = req.body.friendRequestId as string;
-      console.log("test", id);
       const response = await userModel.acceptPendingRequest(id);
       res.status(response.status).json({
         success: true,
@@ -159,8 +158,10 @@ const userController = {
   },
   getFriendshipStatus: async (req: Request, res: Response) => {
     try {
-      const friendshipDetails = req.query.friendshipDetails as {userId: string,friendId: string};
-      console.log("request received",friendshipDetails)
+      const friendshipDetails = req.query.friendshipDetails as {
+        userId: string;
+        friendId: string;
+      };
       const response = await userModel.getFriendshipStatus(friendshipDetails);
       res.status(response.status).json({
         success: true,
@@ -174,7 +175,7 @@ const userController = {
         .status(500)
         .json({ success: false, message: "Internal server error", error });
     }
-  }
+  },
 };
 
 export default userController;
