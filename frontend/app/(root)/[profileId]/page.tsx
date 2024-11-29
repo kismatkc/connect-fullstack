@@ -1,19 +1,15 @@
 "use client";
 import Image from "next/image";
+import { notifications } from "@/lib/axios-utils";
+
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { AvatarFallback } from "@radix-ui/react-avatar";
-import {
-  Clock2Icon,
-  GraduationCapIcon,
-  HomeIcon,
-  UserPlus,
-} from "lucide-react";
+import { Clock2Icon, GraduationCapIcon, HomeIcon } from "lucide-react";
 
 import Posts from "@/components/posts";
 import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
 import useGetUserProfileDetails from "@/hooks/get-user-profile-details";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { truncuateTillKeyword } from "@/lib/utils";
 import { formatDate } from "date-fns";
@@ -27,13 +23,40 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
     mutate: getProfileDetails,
   } = useGetUserProfileDetails();
   const { data: session } = useSession();
+  const [friendshipStatus, setFriendshipStatus] = useState<{
+    status: string;
+    id: string;
+  }>({ status: "", id: "" });
+
+  useEffect(() => {
+    const requestDetails = {
+      userId: session?.user.id as string,
+      friendId: params.profileId as string,
+    };
+    if (!requestDetails) return;
+    const getFriendshipStatus = async () => {
+      try {
+        const status = (await notifications.getFriendshipStatus(
+          requestDetails,
+        )) as { status: string; id: string };
+        if (status) {
+          console.log(status);
+          return setFriendshipStatus(status);
+        }
+        return setFriendshipStatus({ status: "", id: "" });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFriendshipStatus();
+  }, [session?.user.id, params.profileId]);
   useEffect(() => {
     const profileId = params.profileId;
     if (!profileId) return;
     getProfileDetails(profileId);
   }, [session]);
 
-  if (isPending || error)
+  if (isPending || error || !friendshipStatus)
     return (
       <div className="flex flex-col gap-y-5 p-5 w-full">
         <div className="flex justify-center w-full">
@@ -60,30 +83,36 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
               <span className="text-3xl">{user.first_name}</span>
               <span className="text-3xl">{user.last_name}</span>
             </div>
+            {!(session?.user.id === params.profileId) && (
+              <>
+                <span className="font-medium">10 Friends</span>
+                <div className="flex gap-x-2 ">
+                  {Array.from({ length: 7 }).map((item, i) => (
+                    <Avatar className="size-8" key={i}>
+                      <AvatarImage src={user.profile_picture_url} />
+                    </Avatar>
+                  ))}
+                </div>
+                <div className="flex gap-x-4 w-full justify-center p-2">
+                  {session && params && (
+                    <FriendRequestButton
+                      requestDetails={{
+                        requesterId: session.user.id,
+                        recipientId: params.profileId,
+                      }}
+                      status={friendshipStatus.status}
+                      id={friendshipStatus.id}
+                      reset = {() => setFriendshipStatus({ status: "", id: "" })}
+                    />
+                  )}
 
-            <span className="font-medium">10 Friends</span>
-            <div className="flex gap-x-2 ">
-              {Array.from({ length: 7 }).map((item, i) => (
-                <Avatar className="size-8" key={i}>
-                  <AvatarImage src={user.profile_picture_url} />
-                </Avatar>
-              ))}
-            </div>
-            <div className="flex gap-x-4 w-full justify-center p-2">
-              {session && params && (
-                <FriendRequestButton
-                  requestDetails={{
-                    requesterId: session.user.id,
-                    recipientId: params.profileId,
-                  }}
-                />
-              )}
-
-              <button className="bg-blue-500 hover:bg-blue-600 transition-colors rounded-md flex gap-x-2 items-center px-2 py-2">
-                <FacebookMessengerIcon />
-                <span className="text-lg">Message</span>
-              </button>
-            </div>
+                  <button className="bg-blue-500 hover:bg-blue-600 transition-colors rounded-md flex gap-x-2 items-center px-2 py-2">
+                    <FacebookMessengerIcon />
+                    <span className="text-lg">Message</span>
+                  </button>
+                </div>
+              </>
+            )}
           </div>
           <div className="flex flex-col items-left font-semi-bold pb-4">
             <h1 className="font-bold p-2">Intro</h1>

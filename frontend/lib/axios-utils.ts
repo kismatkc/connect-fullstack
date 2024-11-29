@@ -75,5 +75,19 @@ export const notifications = {
       return false;
     }
   },
+  getFriendshipStatus: async (friendshipDetails: {
+    userId: string;
+    friendId: string;
+  }): Promise<{ status: string } | undefined> => {
+    try {
+      const response = await Api.get("/get-friendship-status", {
+        params: { friendshipDetails },
+      });
+      if (!response) return;
+      return response.data.data;
+    } catch (error) {
+      console.log("Error getting friendship status");
+    }
+  },
 };
 export const Api = axios.create(ApiOptions());

@@ -123,9 +123,8 @@ const userController = {
   },
   deletePendingRequest: async (req: Request, res: Response) => {
     try {
- 
       const id = req.query.friendRequestId as string;
- 
+
       const response = await userModel.deletePendingRequest(id);
       res.status(response.status).json({
         success: true,
@@ -142,9 +141,8 @@ const userController = {
   },
   acceptPendingRequest: async (req: Request, res: Response) => {
     try {
- 
       const id = req.body.friendRequestId as string;
- console.log("test",id)
+      console.log("test", id);
       const response = await userModel.acceptPendingRequest(id);
       res.status(response.status).json({
         success: true,
@@ -159,6 +157,24 @@ const userController = {
         .json({ success: false, message: "Internal server error", error });
     }
   },
+  getFriendshipStatus: async (req: Request, res: Response) => {
+    try {
+      const friendshipDetails = req.query.friendshipDetails as {userId: string,friendId: string};
+      console.log("request received",friendshipDetails)
+      const response = await userModel.getFriendshipStatus(friendshipDetails);
+      res.status(response.status).json({
+        success: true,
+        data: response.data || null,
+        error: response.error || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  }
 };
 
 export default userController;

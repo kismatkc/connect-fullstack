@@ -117,7 +117,7 @@ const userModel = {
           requester_id: friendRequestDetails.requesterId,
           recipient_id: friendRequestDetails.recipientId,
         },
-      ]);
+      ]).select("id");
       if (error) {
         console.log(error);
 
@@ -180,6 +180,34 @@ const userModel = {
       throw error;
     }
   },
+  getFriendshipStatus: async (friendRequestDetails: {userId: string,friendId: string}) => {
+    try {
+
+const { data, error } = await supabase
+  .from("friend_requests")
+  .select("status,id")
+  .or(
+    `and(requester_id.eq.${friendRequestDetails.userId},recipient_id.eq.${friendRequestDetails.friendId}),and(requester_id.eq.${friendRequestDetails.friendId},recipient_id.eq.${friendRequestDetails.userId})`
+  )
+  .single();
+
+if (error) {
+  console.log(error);
+  return { status: 400, message: "Database error occurred", error };
+}
+
+if (data) {
+
+  return { status: 200, message: "Friend request exists", data };
+}
+
+return { status: 200, message: "No friend request found" };
+
+    
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 export default userModel;
