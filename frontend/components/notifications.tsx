@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import React from "react";
 import { notifications } from "@/lib/axios-utils";
+import Link from "next/link";
 
 const HeaderUserDropDownMenu = () => {
   const [openDropdown, setOpenDrowdown] = useState(false);
@@ -21,6 +22,15 @@ const HeaderUserDropDownMenu = () => {
       last_name: string;
       id: string;
       requester_id: string;
+    }[]
+  >([]);
+  const [generalNotifications, setGeneralNotifications] = useState<
+    {
+      notification_description: string;
+      profile_picture_url: string;
+      first_name: string;
+      last_name: string;
+      id: string;
     }[]
   >([]);
 
@@ -57,7 +67,23 @@ const HeaderUserDropDownMenu = () => {
         setFriendRequests(newState);
       }
     };
+    const getNewGeneralNotifications = async () => {
+      const newGeneralNotifications =
+        await notifications.getGeneralNotifications({
+          notificationType: "friendRequest",
+          notificationFor: session.user.id,
+        });
+      if (newGeneralNotifications) {
+        const currentInStringFormat = JSON.stringify(generalNotifications);
+        const newStateInStringFormat = JSON.stringify(newGeneralNotifications);
+        if (currentInStringFormat === newStateInStringFormat) return;
+        const newState = JSON.parse(newStateInStringFormat);
+
+        setGeneralNotifications(newState);
+      }
+    };
     getPendingRequests();
+    getNewGeneralNotifications();
   }, [session, openDropdown]);
 
   return (
@@ -70,7 +96,6 @@ const HeaderUserDropDownMenu = () => {
       </button>
       {openDropdown && (
         <div className="z-50 absolute container-bg-dark container-bg-light right-1 top-[130%] shadow-md rounded-md border-t-2 w-[280px]">
-          <h1 className="font-bold ml-3 pt-1">Friend Requests</h1>
           <ul className="flex flex-col w-full">
             {friendRequests.length > 0 ? (
               friendRequests.map((item) => (
@@ -83,7 +108,7 @@ const HeaderUserDropDownMenu = () => {
                       <AvatarImage src={item.profile_picture_url} />
                     </Avatar>
 
-                    <div className="text-sm font-semibold self-center overflow-x-clip">
+                    <div className="text-sm font-semibold self-center overflow-x-clip flex gap-x-1 flex-nowrap">
                       <span>{item.first_name}</span>
                       <span>{item.last_name}</span>
                     </div>
@@ -148,6 +173,32 @@ const HeaderUserDropDownMenu = () => {
                 No Pending Requests
               </div>
             )}
+          </ul>
+          <ul className="flex flex-col w-full">
+            {generalNotifications.length > 0 &&
+              generalNotifications.map((item) => (
+                <Link
+                  className="flex p-2 justify-between flex-nowrap"
+                  key={item.id}
+                  href={`/${item.id}`}
+                  onClick={() => setOpenDrowdown(false)}
+                >
+                  <div className="flex gap-x-3">
+                    <Avatar className="size-7 ">
+                      <AvatarImage src={item.profile_picture_url} />
+                    </Avatar>
+
+                    <div className="text-sm   overflow-x-clip flex flex-col ">
+                      <div className="font-semibold flex gap-x-1 flex-nowrap">
+                        <span>{item.first_name}</span>
+                        <span>{item.last_name}</span>
+                      </div>
+
+                      <span>{item.notification_description}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
           </ul>
         </div>
       )}

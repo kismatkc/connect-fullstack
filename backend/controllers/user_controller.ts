@@ -195,6 +195,41 @@ const userController = {
         .status(500)
         .json({ success: false, message: "Internal server error", error });
     }
+  },
+  getGeneralNotifications: async (req: Request, res: Response) => {
+
+    try {
+      const notificationDetails = req.query as { notificationFor: string, notificationType: string }
+
+
+      const notification = await userModel.getGeneralNotification(notificationDetails);
+      if (notification?.data && notification.data.length > 0) {
+        const data = notification.data.map((item) => {
+          return { notification_description: item.notification_description, ...item.notification_from }
+        })
+        console.log(data);
+
+
+        res.status(notification.status).json({
+          success: true,
+          data: data || null,
+          error: notification.error || null,
+          message: notification.message,
+        });
+      } else {
+        res.status(notification.status).json({
+          success: true,
+          data: notification.data || null,
+          error: notification.error || null,
+          message: notification.message,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
   }
 };
 

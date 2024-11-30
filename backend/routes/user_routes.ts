@@ -10,6 +10,7 @@ router.post("/send-friend-request", userController.sendFriendRequest);
 router.post("/create-general-notification", userController.createGeneralNotifications);
 router.get("/get-pending-request", userController.getPendingRequests);
 router.get("/get-friendship-status", userController.getFriendshipStatus);
+router.get("/get-general-notifications", userController.getGeneralNotifications);
 router.delete("/delete-pending-request", userController.deletePendingRequest);
 router.patch("/accept-pending-request", userController.acceptPendingRequest);
 

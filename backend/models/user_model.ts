@@ -214,7 +214,7 @@ const userModel = {
   },
   createGeneralNotifications: async ({ notificationFor, notificationFrom, notificationType, notificationDescription }: createGeneralNotificationsType) => {
     try {
-      console.log("details");
+
 
       const { data, error } = await supabase.from("notifications_general").insert([{
         notification_for: notificationFor,
@@ -223,13 +223,32 @@ const userModel = {
         notification_description: notificationDescription
       }]).select().single();
       if (error) {
-        // console.log(error);
+        console.log(error);
 
         return { status: 400, message: "Error creating general notification", error }
       }
 
       return { status: 201, message: "general notification created", data };
 
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+  getGeneralNotification: async ({ notificationFor, notificationType }: { notificationFor: string, notificationType: string }) => {
+    try {
+      const today = Date.now()
+      const { data, error } = await supabase.from("notifications_general").select("notification_from(first_name,last_name,profile_picture_url,id),notification_description").eq("notification_for", notificationFor).eq("notification_type", notificationType);
+      if (error) {
+        console.log(error);
+        return { status: 400, message: "Database error", error }
+
+      }
+
+
+      if (data.length > 0) return { status: 200, message: "General notifications found", data }
+      console.log(data);
+
+      return { status: 200, message: "No noptifications found", data }
     } catch (error) {
       throw new Error(error)
     }

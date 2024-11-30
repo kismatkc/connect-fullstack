@@ -92,14 +92,28 @@ export const notifications = {
   },
   createGeneralNotification: async (notificationsDetails: createGeneralNotificationsType) => {
     try {
-      console.log("fired");
 
-      const response = await Api.post("create-general-notification", notificationsDetails)
-      console.log(response);
+
+      const response = await Api.post("/create-general-notification", notificationsDetails)
+
 
       return response.data.data
     } catch (error) {
       console.log("General notification error", error)
+    }
+
+  },
+  getGeneralNotifications: async (notificationsDetails: { notificationFor: string, notificationType: string }) => {
+    try {
+
+
+      const response = await Api.get("/get-general-notifications", { params: notificationsDetails })
+
+
+
+      return response.data.data
+    } catch (error) {
+      console.log("General notification fetching error", error)
     }
 
   }
