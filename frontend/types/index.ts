@@ -23,3 +23,5 @@ export interface PostGresUser {
   avatarUrl: string;
   created_at: string;
 }
+
+export type createGeneralNotificationsType = { notificationFor: string, notificationFrom: string, notificationType: string, notificationDescription: string }

@@ -7,6 +7,7 @@ router.post("/verify_user", userController.verify);
 router.get("/get-searched-friends", userController.getPeople);
 router.get("/get-user-profile-details", userController.getUserDetails);
 router.post("/send-friend-request", userController.sendFriendRequest);
+router.post("/create-general-notification", userController.createGeneralNotifications);
 router.get("/get-pending-request", userController.getPendingRequests);
 router.get("/get-friendship-status", userController.getFriendshipStatus);
 router.delete("/delete-pending-request", userController.deletePendingRequest);

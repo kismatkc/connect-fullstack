@@ -1,0 +1,1 @@
+export type createGeneralNotificationsType = { notificationFor: string, notificationFrom: string, notificationType: string, notificationDescription: string }

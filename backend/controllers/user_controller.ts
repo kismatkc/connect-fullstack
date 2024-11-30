@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import userModel from "../models/user_model.ts";
+import { createGeneralNotificationsType } from "../types/index.ts";
 
 const userController = {
   create: async (req: Request, res: Response) => {
@@ -176,6 +177,25 @@ const userController = {
         .json({ success: false, message: "Internal server error", error });
     }
   },
+  createGeneralNotifications: async (req: Request, res: Response) => {
+
+    try {
+      const notificationDetails = req.body as createGeneralNotificationsType
+
+      const notification = await userModel.createGeneralNotifications(notificationDetails)
+      res.status(notification.status).json({
+        success: true,
+        data: notification.data || null,
+        error: notification.error || null,
+        message: notification.message,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  }
 };
 
 export default userController;

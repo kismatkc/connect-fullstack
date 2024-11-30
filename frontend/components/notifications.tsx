@@ -95,6 +95,14 @@ const HeaderUserDropDownMenu = () => {
                       onClick={async () => {
                         const success =
                           await notifications.acceptPendingRequest(item.id);
+                        const createNotification =
+                          await notifications.createGeneralNotification({
+                            notificationType: "friendRequest",
+                            notificationDescription:
+                              "has accepted your friend request",
+                            notificationFrom: session?.user.id as string,
+                            notificationFor: item.requester_id,
+                          });
                         if (success) {
                           setFriendRequests((prevRequests) =>
                             prevRequests.filter((req) => !(item.id === req.id))

@@ -1,6 +1,7 @@
 import { SignUpForm, SignInForm } from "../../frontend/types/index.ts";
 import { supabase } from "../lib/database.ts";
 import bcrypt from "bcrypt";
+import { createGeneralNotificationsType } from "../types/index.ts";
 const userModel = {
   create: async (userDetails: SignUpForm) => {
     try {
@@ -211,6 +212,28 @@ const userModel = {
       throw error;
     }
   },
+  createGeneralNotifications: async ({ notificationFor, notificationFrom, notificationType, notificationDescription }: createGeneralNotificationsType) => {
+    try {
+      console.log("details");
+
+      const { data, error } = await supabase.from("notifications_general").insert([{
+        notification_for: notificationFor,
+        notification_from: notificationFrom,
+        notification_type: notificationType,
+        notification_description: notificationDescription
+      }]).select().single();
+      if (error) {
+        // console.log(error);
+
+        return { status: 400, message: "Error creating general notification", error }
+      }
+
+      return { status: 201, message: "general notification created", data };
+
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 };
 
 export default userModel;

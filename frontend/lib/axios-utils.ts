@@ -1,3 +1,4 @@
+import { createGeneralNotificationsType } from "@/types";
 import axios from "axios";
 const ApiOptions = () => {
   const options = {
@@ -89,5 +90,18 @@ export const notifications = {
       console.log("Error getting friendship status");
     }
   },
+  createGeneralNotification: async (notificationsDetails: createGeneralNotificationsType) => {
+    try {
+      console.log("fired");
+
+      const response = await Api.post("create-general-notification", notificationsDetails)
+      console.log(response);
+
+      return response.data.data
+    } catch (error) {
+      console.log("General notification error", error)
+    }
+
+  }
 };
 export const Api = axios.create(ApiOptions());
