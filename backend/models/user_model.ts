@@ -236,8 +236,11 @@ const userModel = {
   },
   getGeneralNotification: async ({ notificationFor, notificationType }: { notificationFor: string, notificationType: string }) => {
     try {
-      const today = Date.now()
-      const { data, error } = await supabase.from("notifications_general").select("notification_from(first_name,last_name,profile_picture_url,id),notification_description").eq("notification_for", notificationFor).eq("notification_type", notificationType);
+      const today = Date.now();
+      const twoDaysAgo = new Date(today);//we update the day later on
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 1);
+      const twoDaysAgoInIsoFormat = twoDaysAgo.toISOString()
+      const { data, error } = await supabase.from("notifications_general").select("notification_from(first_name,last_name,profile_picture_url,id),notification_description").eq("notification_for", notificationFor).eq("notification_type", notificationType).gte("created_at", twoDaysAgoInIsoFormat);
       if (error) {
         console.log(error);
         return { status: 400, message: "Database error", error }

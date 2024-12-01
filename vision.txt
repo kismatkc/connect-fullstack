@@ -26,15 +26,21 @@ b.relationship exist ? see status
   case "accepted"
   checkicon friend (friends text)
 
-  nov27
-  nov26
-  nov29
+ 
 nov30
 nov 24
 
 
+today = nov 30
+i want two days only from nov 28
 
-nove 28 < nove 27,nove 26,nove 24
+
+
+to picl from 
+ nov27
+  nov26
+  nov 28
+  nov29
 
  
   
