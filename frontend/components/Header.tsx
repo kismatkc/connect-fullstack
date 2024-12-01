@@ -50,9 +50,7 @@ const Header = () => {
         >
           <FacebookMessengerIcon />
         </button>
-        {/* <button className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark size-8 pl-2">
-          <Bell width={16} height={16} fill="black" />
-        </button> */}
+
         <Notifications />
         <HeaderUserDropDownMenu />
       </div>
