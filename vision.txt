@@ -44,3 +44,26 @@ to picl from
 
  
   
+
+
+  visualiation 
+  users table 
+  id name age
+  1 kismat 10
+  2 anish 11
+  3 praman 12
+
+  friend_requests
+  id requester_id recipient_id status
+  hfh  1           3             accepted
+  hfh  1           2             pending
+  hfh  2           3             accepted
+
+
+  hfh  1           3             accepted join     1 kismat 10  if 1 matches 1  3 praman 12
+
+
+  hfh  1           3             accepted  3 praman 12
+
+
+

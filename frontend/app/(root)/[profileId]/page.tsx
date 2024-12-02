@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { notifications } from "@/lib/axios-utils";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+// import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Clock2Icon, GraduationCapIcon, HomeIcon } from "lucide-react";
 
 import Posts from "@/components/posts";
@@ -14,19 +14,25 @@ import { useSession } from "next-auth/react";
 import { truncuateTillKeyword } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import FriendRequestButton from "@/components/friend-request-button";
+import ProfilePageFriendsSection from "@/components/profilepage-freinds-section";
 
 const UserProfile = ({ params }: { params: { profileId: string } }) => {
   const {
+    //@ts-ignore
     data: user,
     error,
     isPending,
     mutate: getProfileDetails,
   } = useGetUserProfileDetails();
+
   const { data: session } = useSession();
   const [friendshipStatus, setFriendshipStatus] = useState<{
     status: string;
     id: string;
   }>({ status: "", id: "" });
+  if (user) {
+    console.log("test,", user);
+  }
 
   useEffect(() => {
     const requestDetails = {
@@ -37,7 +43,7 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
     const getFriendshipStatus = async () => {
       try {
         const status = (await notifications.getFriendshipStatus(
-          requestDetails,
+          requestDetails
         )) as { status: string; id: string };
         if (status) {
           console.log(status);
@@ -54,6 +60,7 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
     const profileId = params.profileId;
     if (!profileId) return;
     getProfileDetails(profileId);
+    //eslint-disable-next-line
   }, [session]);
 
   if (isPending || error || !friendshipStatus)
@@ -85,14 +92,15 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
             </div>
             {!(session?.user.id === params.profileId) && (
               <>
-                <span className="font-medium">10 Friends</span>
+                {/* <span className="font-medium">10 Friends</span>
                 <div className="flex gap-x-2 ">
                   {Array.from({ length: 7 }).map((item, i) => (
                     <Avatar className="size-8" key={i}>
                       <AvatarImage src={user.profile_picture_url} />
                     </Avatar>
                   ))}
-                </div>
+                </div> */}
+                <ProfilePageFriendsSection friendsDetails={user} />
                 <div className="flex gap-x-4 w-full justify-center p-2">
                   {session && params && (
                     <FriendRequestButton
@@ -102,7 +110,7 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
                       }}
                       status={friendshipStatus.status}
                       id={friendshipStatus.id}
-                      reset = {() => setFriendshipStatus({ status: "", id: "" })}
+                      reset={() => setFriendshipStatus({ status: "", id: "" })}
                     />
                   )}
 

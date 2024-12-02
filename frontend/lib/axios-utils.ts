@@ -90,32 +90,44 @@ export const notifications = {
       console.log("Error getting friendship status");
     }
   },
-  createGeneralNotification: async (notificationsDetails: createGeneralNotificationsType) => {
+  createGeneralNotification: async (
+    notificationsDetails: createGeneralNotificationsType
+  ) => {
     try {
+      const response = await Api.post(
+        "/create-general-notification",
+        notificationsDetails
+      );
 
-
-      const response = await Api.post("/create-general-notification", notificationsDetails)
-
-
-      return response.data.data
+      return response.data.data;
     } catch (error) {
-      console.log("General notification error", error)
+      console.log("General notification error", error);
     }
-
   },
-  getGeneralNotifications: async (notificationsDetails: { notificationFor: string, notificationType: string }) => {
+  getGeneralNotifications: async (notificationsDetails: {
+    notificationFor: string;
+    notificationType: string;
+  }) => {
     try {
+      const response = await Api.get("/get-general-notifications", {
+        params: notificationsDetails,
+      });
 
-
-      const response = await Api.get("/get-general-notifications", { params: notificationsDetails })
-
-
-
-      return response.data.data
+      return response.data.data;
     } catch (error) {
-      console.log("General notification fetching error", error)
+      console.log("General notification fetching error", error);
     }
+  },
+  getFriendsDetails: async (friendsDetails: { userId: string }) => {
+    try {
+      const response = await Api.get("/get-friends", {
+        params: friendsDetails,
+      });
 
-  }
+      return response.data.data;
+    } catch (error) {
+      console.log("error getting friends details", error);
+    }
+  },
 };
 export const Api = axios.create(ApiOptions());

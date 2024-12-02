@@ -3,13 +3,13 @@ import { useMutation } from "@tanstack/react-query";
 
 async function getUserProfileDetails(query: string) {
   try {
-    const response = await Api.get("/get-user-profile-details", {
+    const introDetails = await Api.get("/get-user-profile-details", {
       params: {
         query,
       },
     });
 
-    return response.data.data;
+    return introDetails.data.data;
   } catch (error) {
     throw error;
   }

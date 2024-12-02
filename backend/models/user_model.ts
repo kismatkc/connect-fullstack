@@ -212,50 +212,93 @@ const userModel = {
       throw error;
     }
   },
-  createGeneralNotifications: async ({ notificationFor, notificationFrom, notificationType, notificationDescription }: createGeneralNotificationsType) => {
+  createGeneralNotifications: async ({
+    notificationFor,
+    notificationFrom,
+    notificationType,
+    notificationDescription,
+  }: createGeneralNotificationsType) => {
     try {
-
-
-      const { data, error } = await supabase.from("notifications_general").insert([{
-        notification_for: notificationFor,
-        notification_from: notificationFrom,
-        notification_type: notificationType,
-        notification_description: notificationDescription
-      }]).select().single();
+      const { data, error } = await supabase
+        .from("notifications_general")
+        .insert([
+          {
+            notification_for: notificationFor,
+            notification_from: notificationFrom,
+            notification_type: notificationType,
+            notification_description: notificationDescription,
+          },
+        ])
+        .select()
+        .single();
       if (error) {
         console.log(error);
 
-        return { status: 400, message: "Error creating general notification", error }
+        return {
+          status: 400,
+          message: "Error creating general notification",
+          error,
+        };
       }
 
       return { status: 201, message: "general notification created", data };
-
     } catch (error) {
-      throw new Error(error)
+      throw new Error(error);
     }
   },
-  getGeneralNotification: async ({ notificationFor, notificationType }: { notificationFor: string, notificationType: string }) => {
+  getGeneralNotification: async ({
+    notificationFor,
+    notificationType,
+  }: {
+    notificationFor: string;
+    notificationType: string;
+  }) => {
     try {
       const today = Date.now();
-      const twoDaysAgo = new Date(today);//we update the day later on
+      const twoDaysAgo = new Date(today); //we update the day later on
       twoDaysAgo.setDate(twoDaysAgo.getDate() - 1);
-      const twoDaysAgoInIsoFormat = twoDaysAgo.toISOString()
-      const { data, error } = await supabase.from("notifications_general").select("notification_from(first_name,last_name,profile_picture_url,id),notification_description").eq("notification_for", notificationFor).eq("notification_type", notificationType).gte("created_at", twoDaysAgoInIsoFormat);
+      const twoDaysAgoInIsoFormat = twoDaysAgo.toISOString();
+      const { data, error } = await supabase
+        .from("notifications_general")
+        .select(
+          "notification_from(first_name,last_name,profile_picture_url,id),notification_description"
+        )
+        .eq("notification_for", notificationFor)
+        .eq("notification_type", notificationType)
+        .gte("created_at", twoDaysAgoInIsoFormat);
       if (error) {
         console.log(error);
-        return { status: 400, message: "Database error", error }
-
+        return { status: 400, message: "Database error", error };
       }
 
-
-      if (data.length > 0) return { status: 200, message: "General notifications found", data }
+      if (data.length > 0)
+        return { status: 200, message: "General notifications found", data };
       console.log(data);
 
-      return { status: 200, message: "No noptifications found", data }
+      return { status: 200, message: "No noptifications found", data };
     } catch (error) {
-      throw new Error(error)
+      throw new Error(error);
     }
-  }
+  },
+
+  getFriendsDetails: async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("friend_requests")
+        .select(
+          "fk_requester(id,first_name,last_name,profile_picture_url),fk_recipient(id,first_name,last_name,profile_picture_url)"
+        )
+        .eq("status", "accepted")
+        .or(`requester_id.eq.${userId},recipient_id.eq.${userId}`);
+      if (error) {
+        console.log(error);
+        return { status: 400, message: "Database error", error };
+      }
+      return { status: 200, message: "Friends found", data };
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 };
 
 export default userModel;

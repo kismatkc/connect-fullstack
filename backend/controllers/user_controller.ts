@@ -178,11 +178,12 @@ const userController = {
     }
   },
   createGeneralNotifications: async (req: Request, res: Response) => {
-
     try {
-      const notificationDetails = req.body as createGeneralNotificationsType
+      const notificationDetails = req.body as createGeneralNotificationsType;
 
-      const notification = await userModel.createGeneralNotifications(notificationDetails)
+      const notification = await userModel.createGeneralNotifications(
+        notificationDetails
+      );
       res.status(notification.status).json({
         success: true,
         data: notification.data || null,
@@ -197,18 +198,23 @@ const userController = {
     }
   },
   getGeneralNotifications: async (req: Request, res: Response) => {
-
     try {
-      const notificationDetails = req.query as { notificationFor: string, notificationType: string }
+      const notificationDetails = req.query as {
+        notificationFor: string;
+        notificationType: string;
+      };
 
-
-      const notification = await userModel.getGeneralNotification(notificationDetails);
+      const notification = await userModel.getGeneralNotification(
+        notificationDetails
+      );
       if (notification?.data && notification.data.length > 0) {
         const data = notification.data.map((item) => {
-          return { notification_description: item.notification_description, ...item.notification_from }
-        })
+          return {
+            notification_description: item.notification_description,
+            ...item.notification_from,
+          };
+        });
         console.log(data);
-
 
         res.status(notification.status).json({
           success: true,
@@ -230,7 +236,26 @@ const userController = {
         .status(500)
         .json({ success: false, message: "Internal server error", error });
     }
-  }
+  },
+  getFriendsDetails: async (req: Request, res: Response) => {
+    try {
+      const userId = req.query.userId as string;
+      console.log("userId", userId);
+
+      const response = await userModel.getFriendsDetails(userId);
+      res.status(response.status).json({
+        success: true,
+        data: response.data || null,
+        error: response.error || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  },
 };
 
 export default userController;
