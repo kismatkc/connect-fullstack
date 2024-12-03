@@ -181,9 +181,8 @@ const userController = {
     try {
       const notificationDetails = req.body as createGeneralNotificationsType;
 
-      const notification = await userModel.createGeneralNotifications(
-        notificationDetails
-      );
+      const notification =
+        await userModel.createGeneralNotifications(notificationDetails);
       res.status(notification.status).json({
         success: true,
         data: notification.data || null,
@@ -204,9 +203,8 @@ const userController = {
         notificationType: string;
       };
 
-      const notification = await userModel.getGeneralNotification(
-        notificationDetails
-      );
+      const notification =
+        await userModel.getGeneralNotification(notificationDetails);
       if (notification?.data && notification.data.length > 0) {
         const data = notification.data.map((item) => {
           return {
@@ -239,13 +237,17 @@ const userController = {
   },
   getFriendsDetails: async (req: Request, res: Response) => {
     try {
-      const userId = req.query.userId as string;
-      console.log("userId", userId);
+      const userId = req.query.query as string;
 
       const response = await userModel.getFriendsDetails(userId);
+      const data = response.data.map((item) => {
+        const { fk_recipient, fk_requester } = item;
+        //@ts-ignore
+        return fk_recipient.id === userId ? fk_requester : fk_recipient;
+      });
       res.status(response.status).json({
         success: true,
-        data: response.data || null,
+        data: data || null,
         error: response.error || null,
         message: response.message,
       });

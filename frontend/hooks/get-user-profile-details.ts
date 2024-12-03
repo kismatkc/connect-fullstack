@@ -8,8 +8,15 @@ async function getUserProfileDetails(query: string) {
         query,
       },
     });
+    const friendsDetails = await Api.get("/get-friends", {
+      params: {
+        query,
+      },
+    });
+    
+    const user = {...introDetails.data.data,friends: friendsDetails.data.data};
 
-    return introDetails.data.data;
+    return user;
   } catch (error) {
     throw error;
   }

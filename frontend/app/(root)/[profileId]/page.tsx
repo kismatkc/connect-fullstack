@@ -14,7 +14,7 @@ import { useSession } from "next-auth/react";
 import { truncuateTillKeyword } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import FriendRequestButton from "@/components/friend-request-button";
-import ProfilePageFriendsSection from "@/components/profilepage-freinds-section";
+import ProfilePageFriendsSection from "@/components/profilepage-friends-section";
 
 const UserProfile = ({ params }: { params: { profileId: string } }) => {
   const {
@@ -100,7 +100,7 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
                     </Avatar>
                   ))}
                 </div> */}
-                <ProfilePageFriendsSection friendsDetails={user} />
+                <ProfilePageFriendsSection friendsDetails={user.friends} />
                 <div className="flex gap-x-4 w-full justify-center p-2">
                   {session && params && (
                     <FriendRequestButton
