@@ -67,3 +67,41 @@ to picl from
 
 
 
+
+
+
+
+posts,like and comment functionilty overview
+
+post table = {
+picture link,
+description,
+user infor(fk),
+created_at
+}
+
+picture - we wil use multer and sharp to store to the supabse
+
+like table
+like ={
+id,
+post reference(fk)
+user(fk),
+created_At
+}
+
+comments table
+
+comments ={
+id,
+post refernce(fk),
+user(fk),
+created_at,
+comment description
+}
+
+
+
+
+
+

@@ -92,14 +92,7 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
             </div>
             {!(session?.user.id === params.profileId) && (
               <>
-                {/* <span className="font-medium">10 Friends</span>
-                <div className="flex gap-x-2 ">
-                  {Array.from({ length: 7 }).map((item, i) => (
-                    <Avatar className="size-8" key={i}>
-                      <AvatarImage src={user.profile_picture_url} />
-                    </Avatar>
-                  ))}
-                </div> */}
+   
                 <ProfilePageFriendsSection friendsDetails={user.friends} />
                 <div className="flex gap-x-4 w-full justify-center p-2">
                   {session && params && (

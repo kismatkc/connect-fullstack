@@ -5,7 +5,7 @@ import MessengerChatBox from "@/components/messenger-chat-box";
 import Posts from "@/components/posts";
 import StoryCarousal from "@/components/story-carousal";
 
-const Home = ({}) => {
+const Home = () => {
   return (
     <>
       {/* <Header /> */}
