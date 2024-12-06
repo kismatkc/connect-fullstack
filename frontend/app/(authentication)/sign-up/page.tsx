@@ -257,7 +257,7 @@ const SignUp = () => {
                 <FormLabel>Profile</FormLabel>
                 <FormControl>
                   <ProfileUpload
-                    onValueChange={(value: File) => {
+                    onProfileChange={(value: File) => {
                       field.onChange(value);
                     }}
                   />

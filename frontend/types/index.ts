@@ -24,4 +24,14 @@ export interface PostGresUser {
   created_at: string;
 }
 
-export type createGeneralNotificationsType = { notificationFor: string, notificationFrom: string, notificationType: string, notificationDescription: string }
+export type PostDetailsType = {
+  description: string;
+  picture: File;
+};
+
+export type createGeneralNotificationsType = {
+  notificationFor: string;
+  notificationFrom: string;
+  notificationType: string;
+  notificationDescription: string;
+};

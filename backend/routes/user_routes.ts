@@ -11,6 +11,7 @@ router.post(
   "/create-general-notification",
   userController.createGeneralNotifications
 );
+router.post("/create-post", userController.createPost);
 router.get("/get-pending-request", userController.getPendingRequests);
 router.get("/get-friendship-status", userController.getFriendshipStatus);
 router.get("/get-friends", userController.getFriendsDetails);

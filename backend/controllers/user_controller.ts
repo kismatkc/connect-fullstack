@@ -181,8 +181,9 @@ const userController = {
     try {
       const notificationDetails = req.body as createGeneralNotificationsType;
 
-      const notification =
-        await userModel.createGeneralNotifications(notificationDetails);
+      const notification = await userModel.createGeneralNotifications(
+        notificationDetails
+      );
       res.status(notification.status).json({
         success: true,
         data: notification.data || null,
@@ -203,8 +204,9 @@ const userController = {
         notificationType: string;
       };
 
-      const notification =
-        await userModel.getGeneralNotification(notificationDetails);
+      const notification = await userModel.getGeneralNotification(
+        notificationDetails
+      );
       if (notification?.data && notification.data.length > 0) {
         const data = notification.data.map((item) => {
           return {
@@ -256,6 +258,14 @@ const userController = {
       res
         .status(500)
         .json({ success: false, message: "Internal server error", error });
+    }
+  },
+  createPost: async (req: Request, res: Response) => {
+    try {
+      const postDetails = req.body;
+      console.log(postDetails);
+    } catch (error) {
+      console.log(error);
     }
   },
 };

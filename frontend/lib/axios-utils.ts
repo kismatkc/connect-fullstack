@@ -1,4 +1,4 @@
-import { createGeneralNotificationsType } from "@/types";
+import { createGeneralNotificationsType, PostDetailsType } from "@/types";
 import axios from "axios";
 const ApiOptions = () => {
   const options = {
@@ -127,6 +127,19 @@ export const notifications = {
       return response.data.data;
     } catch (error) {
       console.log("error getting friends details", error);
+    }
+  },
+};
+
+export const posts = {
+  createPost: async ({ description, picture }: PostDetailsType) => {
+    try {
+      const formData = new FormData();
+      formData.append("picture", picture);
+      formData.append("description", description);
+      console.log(formData);
+    } catch (error) {
+      console.log(error);
     }
   },
 };
