@@ -262,9 +262,16 @@ const userController = {
   },
   createPost: async (req: Request, res: Response) => {
     try {
-      const postDetails = req.body;
-      console.log(postDetails);
+      const description = req.body.description;
+      const file = req.file;
+      console.log(description);
+      console.log(file);
+
+      res.status(200);
     } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
       console.log(error);
     }
   },

@@ -37,10 +37,10 @@ const CreatePostDialog = () => {
 
   const handleSubmit = async () => {
     try {
-      if (!(description && pictureFile)) return;
+      if (!(description || pictureFile)) return;
       const postDetails: PostDetailsType = {
         description,
-        picture: pictureFile,
+        picture: pictureFile as File,
       };
       const response = await posts.createPost(postDetails);
     } catch (error) {

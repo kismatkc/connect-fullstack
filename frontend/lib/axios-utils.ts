@@ -135,8 +135,10 @@ export const posts = {
   createPost: async ({ description, picture }: PostDetailsType) => {
     try {
       const formData = new FormData();
+
       formData.append("picture", picture);
       formData.append("description", description);
+      const response = Api.post("/create-post", { formData });
       console.log(formData);
     } catch (error) {
       console.log(error);
