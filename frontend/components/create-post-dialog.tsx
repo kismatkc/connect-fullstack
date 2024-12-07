@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useSession } from "next-auth/react";
 import PostImageUpload from "@/components/profile-upload";
-import { useEffect, useState, useRef, MouseEventHandler } from "react";
+import { useEffect, useState, useRef } from "react";
 import { posts } from "@/lib/axios-utils";
 import { PostDetailsType } from "@/types";
+import { toast } from "sonner";
 
 const CreatePostDialog = () => {
   const { data } = useSession();
@@ -41,7 +42,6 @@ const CreatePostDialog = () => {
         description,
         picture: pictureFile,
       };
-      // postDetails: PostDetailsType
       const response = await posts.createPost(postDetails);
     } catch (error) {
       console.log(error);
@@ -104,11 +104,10 @@ const CreatePostDialog = () => {
               ? "bg-gray-400"
               : "bg-green-400 hover:bg-green-500 "
           }`}
-          disabled={!(pictureFile || description)}
           onClick={() => {
-            console.log("here");
+            if (pictureFile || description) return handleSubmit();
 
-            handleSubmit();
+            toast.error("Please provide either a description or a picture");
           }}
         >
           Upload
