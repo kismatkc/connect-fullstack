@@ -13,7 +13,6 @@ router.post(
   userController.createGeneralNotifications
 );
 router.post("/create-post", formDataResolver, userController.createPost);
-
 router.get("/get-pending-request", userController.getPendingRequests);
 router.get("/get-friendship-status", userController.getFriendshipStatus);
 router.get("/get-friends", userController.getFriendsDetails);

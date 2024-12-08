@@ -17,7 +17,7 @@ async function saveProfile(file: File) {
     const { data, error } = await supabase.storage
       .from(bucketName)
       .upload(filePath, file, { upsert: true });
-    console.log(data);
+
 
     if (error) throw error;
     const {

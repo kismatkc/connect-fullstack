@@ -138,8 +138,8 @@ export const posts = {
 
       formData.append("picture", picture);
       formData.append("description", description);
-      const response = Api.post("/create-post", { formData });
-      console.log(formData);
+      const response = Api.post("/create-post",  formData );
+console.log(formData)
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,8 @@
 import express, { json } from "express";
 
 import userRoutes from "./routes/user_routes.js";
+import formDataResolver from "./lib/form-data-resolver.ts";
+import userController from "./controllers/user_controller.ts";
 
 import cors from "cors";
 import { corsOptions, verifyToken } from "./lib/utils.ts";
@@ -11,11 +13,10 @@ const PORT = 4000;
 app.use(cors(corsOptions()));
 app.use(cookieParser());
 
+
 app.use(json());
 
 app.use("/api", userRoutes);
-
-app.use("/api", verifyToken);
 
 app.get("/", (req, res) => {
   res.send("Hello from the connect backend");
