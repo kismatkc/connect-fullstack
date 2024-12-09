@@ -183,8 +183,9 @@ const userController = {
     try {
       const notificationDetails = req.body as createGeneralNotificationsType;
 
-      const notification =
-        await userModel.createGeneralNotifications(notificationDetails);
+      const notification = await userModel.createGeneralNotifications(
+        notificationDetails
+      );
       res.status(notification.status).json({
         success: true,
         data: notification.data || null,
@@ -205,8 +206,9 @@ const userController = {
         notificationType: string;
       };
 
-      const notification =
-        await userModel.getGeneralNotification(notificationDetails);
+      const notification = await userModel.getGeneralNotification(
+        notificationDetails
+      );
       if (notification?.data && notification.data.length > 0) {
         const data = notification.data.map((item) => {
           return {
@@ -262,41 +264,52 @@ const userController = {
   },
   createPost: async (req: Request, res: Response) => {
     try {
-      //       {
-      //   fieldname: 'picture',
-      //   originalname: 'DVR #1_Rec + Excerise Room_DVR #1_20240814072634_20240814072650_83805105 (2).jpg',
-      //   encoding: '7bit',
-      //   mimetype: 'image/jpeg',
-      //   buffer: <Buffer ff d8 ff fe 00 0b 68 69 6b 76 69 73 69 6f 6e ff db 00 43 00 06 04 05 06 05 04 06 06 05 06 07 07 06 08 0a 10 0a 0a 09 09 0a 14 0e 0f 0c 10 17 14 18 18 ... 50304 more bytes>,
-      //   size: 50354
-      // }
       const description = req.body.description;
       const file = req.file;
+      const userId = req.body.userId;
       if (!(file || description))
         throw new Error("No file or description provided");
+
+      const uuid = crypto.randomUUID();
+
       const images = [
-        { width: 640, fileName: `small-${file.originalname}` },
-        { width: 1024, fileName: `medium-${file.originalname}` },
-        { width: 1280, fileName: `large-${file.originalname}` },
+        { width: 640, fileName: `small-${uuid}-${file.originalname}` },
+        { width: 1024, fileName: `medium-${uuid}-${file.originalname}` },
+        { width: 1280, fileName: `large-${uuid}-${file.originalname}` },
       ];
 
-      const resizedimages = await Promise.all(
+      const fileNameWithoutSize = `${uuid}-${file.originalname}`;
+
+      const [urlWithoutSize] = await Promise.all(
         images.map(async (image) => {
           const buffer = await sharp(file.buffer)
             .resize({ width: image.width })
             .toBuffer();
-          const response = await uploadPicture(image.fileName, buffer);
+          const response = await uploadPicture(
+            image.fileName,
+            buffer,
+            fileNameWithoutSize
+          );
           return response;
-        }),
+        })
       );
-      console.log(resizedimages);
+      const response = await userModel.createPost(
+        urlWithoutSize,
+        description,
+        userId
+      );
 
-      res.status(200);
+      res.status(response.status).json({
+        response: response.success,
+        data: response.data || null,
+        error: response.error || null,
+        message: response.message,
+      });
     } catch (error) {
+      console.log(error);
       res
         .status(500)
         .json({ success: false, message: "Internal server error", error });
-      console.log(error);
     }
   },
 };

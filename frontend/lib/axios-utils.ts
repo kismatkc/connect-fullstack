@@ -132,14 +132,15 @@ export const notifications = {
 };
 
 export const posts = {
-  createPost: async ({ description, picture }: PostDetailsType) => {
+  createPost: async ({ description, picture, userId }: PostDetailsType) => {
     try {
       const formData = new FormData();
 
       formData.append("picture", picture);
       formData.append("description", description);
-      const response = Api.post("/create-post",  formData );
-console.log(formData)
+      formData.append("userId", userId);
+      const response = await Api.post("/create-post", formData);
+      console.log(formData);
     } catch (error) {
       console.log(error);
     }

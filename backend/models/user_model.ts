@@ -2,6 +2,7 @@ import { SignUpForm, SignInForm } from "../../frontend/types/index.ts";
 import { supabase } from "../lib/database.ts";
 import bcrypt from "bcrypt";
 import { createGeneralNotificationsType } from "../types/index.ts";
+import { UUID } from "bson";
 const userModel = {
   create: async (userDetails: SignUpForm) => {
     try {
@@ -295,6 +296,35 @@ const userModel = {
         return { status: 400, message: "Database error", error };
       }
       return { status: 200, message: "Friends found", data };
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  createPost: async (
+    urlWithoutSize: string,
+    description: string,
+    userId: UUID
+  ) => {
+    try {
+      const { data, error } = await supabase
+        .from("posts")
+        .insert([
+          { post_picture_link: urlWithoutSize, description, user_id: userId },
+        ])
+        .single();
+      if (error)
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      return {
+        status: 201,
+        message: "User creating successful",
+        data,
+        success: true,
+      };
     } catch (error) {
       throw new Error(error);
     }

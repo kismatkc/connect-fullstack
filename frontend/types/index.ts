@@ -1,3 +1,5 @@
+import { UUID } from "crypto";
+
 export type SignInForm = {
   email: string;
   password: string;
@@ -27,6 +29,7 @@ export interface PostGresUser {
 export type PostDetailsType = {
   description: string;
   picture: File;
+  userId: UUID;
 };
 
 export type createGeneralNotificationsType = {

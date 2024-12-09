@@ -13,6 +13,7 @@ import { useEffect, useState, useRef } from "react";
 import { posts } from "@/lib/axios-utils";
 import { PostDetailsType } from "@/types";
 import { toast } from "sonner";
+import { UUID } from "crypto";
 
 const CreatePostDialog = () => {
   const { data } = useSession();
@@ -38,9 +39,11 @@ const CreatePostDialog = () => {
   const handleSubmit = async () => {
     try {
       if (!(description || pictureFile)) return;
+
       const postDetails: PostDetailsType = {
         description,
         picture: pictureFile as File,
+        userId: data?.user.id as UUID,
       };
       const response = await posts.createPost(postDetails);
     } catch (error) {

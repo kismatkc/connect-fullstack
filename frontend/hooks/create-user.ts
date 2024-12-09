@@ -11,18 +11,17 @@ import { supabase } from "@/lib/supabase";
 async function saveProfile(file: File) {
   try {
     const bucketName = process.env.NEXT_PUBLIC_PROFILE_BUCKET_NAME;
-    const filePath: string = `${Date.now()}-${file.name}`;
+    const fileName: string = `${Date.now()}-${file.name}`;
 
     if (!bucketName) throw new Error("Please provide bucket name");
     const { data, error } = await supabase.storage
       .from(bucketName)
-      .upload(filePath, file, { upsert: true });
-
+      .upload(fileName, file, { upsert: true });
 
     if (error) throw error;
     const {
       data: { publicUrl },
-    } = supabase.storage.from(bucketName).getPublicUrl(filePath);
+    } = supabase.storage.from(bucketName).getPublicUrl(fileName);
     return {
       url: publicUrl,
     };
