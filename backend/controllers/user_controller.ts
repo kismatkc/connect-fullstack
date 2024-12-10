@@ -3,7 +3,10 @@ import { Request, response, Response } from "express";
 import userModel from "../models/user_model.ts";
 import { createGeneralNotificationsType } from "../types/index.ts";
 import sharp from "sharp";
-import { uploadPicture } from "../lib/upload-picture-supabase.ts";
+import {
+  deletePictures,
+  uploadPicture,
+} from "../lib/picture-supabase-utils.ts";
 
 const userController = {
   create: async (req: Request, res: Response) => {
@@ -298,6 +301,27 @@ const userController = {
         description,
         userId
       );
+
+      res.status(response.status).json({
+        response: response.success,
+        data: response.data || null,
+        error: response.error || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  },
+  deletePost: async (req: Request, res: Response) => {
+    try {
+      const postId = req.query.postId as string;
+      const pictureUrl = req.query.url as string;
+
+      const response = await userModel.deletePost(postId);
+      const deleted = await deletePictures(response.data.post_picture_link);
 
       res.status(response.status).json({
         response: response.success,

@@ -145,5 +145,17 @@ export const posts = {
       console.log(error);
     }
   },
+  deletePost: async (postId: string, url: string): Promise<boolean> => {
+    try {
+      const response = await Api.delete("/delete-post", {
+        params: { postId, url },
+      });
+
+      return response.data.success;
+    } catch (error) {
+      console.log("deleting request errors");
+      return false;
+    }
+  },
 };
 export const Api = axios.create(ApiOptions());

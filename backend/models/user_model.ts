@@ -329,6 +329,31 @@ const userModel = {
       throw new Error(error);
     }
   },
+  deletePost: async (postId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("posts")
+        .delete()
+        .eq("id", postId)
+        .select()
+        .single();
+      if (error)
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      return {
+        status: 200,
+        message: "post deletion successful",
+        data,
+        success: true,
+      };
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 };
 
 export default userModel;

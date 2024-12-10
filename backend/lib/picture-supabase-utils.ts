@@ -1,4 +1,5 @@
 import { supabase } from "./database.ts";
+import { getAfterKeywordText } from "./utils.ts";
 export const uploadPicture = async (
   fileNameWithSize: string,
   buffer: Buffer,
@@ -19,5 +20,25 @@ export const uploadPicture = async (
     return publicUrl;
   } catch (error) {
     console.log(error);
+  }
+};
+export const deletePictures = async (url: string) => {
+  try {
+    const bucketName = "posts_pictures";
+    const sizes = ["small", "medium", "large"];
+    const filePath = sizes.map((size) => {
+      const baseName = getAfterKeywordText(url, `${bucketName}/`);
+      const fileName = `${size}-${baseName}`;
+      return fileName;
+    });
+
+    const { data, error } = await supabase.storage
+      .from(bucketName)
+      .remove(filePath);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };

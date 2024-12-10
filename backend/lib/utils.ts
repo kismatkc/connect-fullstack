@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export const corsOptions = (): CorsOptions => ({
   origin: process.env.FRONTEND_URL,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "OPTIONS","DELETE","PATCH"],
+  methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"],
 });
 
 type user = {
@@ -26,7 +26,7 @@ export const generateToken = (user: user) => {
 export const verifyToken = (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const token = req.cookies.jwt;
@@ -40,3 +40,13 @@ export const verifyToken = (
     console.log(error);
   }
 };
+
+export function getAfterKeywordText(
+  string: string,
+  keyword: string
+): string | null {
+  if (!(string || keyword)) return null;
+  const desiredStringLength = string.indexOf(keyword) + keyword.length;
+  const desiredString = string.slice(desiredStringLength);
+  return desiredString;
+}
