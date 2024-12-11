@@ -1,11 +1,10 @@
 import express, { json } from "express";
 
 import userRoutes from "./routes/user_routes.js";
-import formDataResolver from "./lib/form-data-resolver.ts";
-import userController from "./controllers/user_controller.ts";
+
 
 import cors from "cors";
-import { corsOptions, verifyToken } from "./lib/utils.ts";
+import { corsOptions } from "./lib/utils.ts";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -25,3 +24,5 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+

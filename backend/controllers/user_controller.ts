@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 
 import userModel from "../models/user_model.ts";
 import { createGeneralNotificationsType } from "../types/index.ts";
@@ -186,9 +186,8 @@ const userController = {
     try {
       const notificationDetails = req.body as createGeneralNotificationsType;
 
-      const notification = await userModel.createGeneralNotifications(
-        notificationDetails
-      );
+      const notification =
+        await userModel.createGeneralNotifications(notificationDetails);
       res.status(notification.status).json({
         success: true,
         data: notification.data || null,
@@ -209,9 +208,8 @@ const userController = {
         notificationType: string;
       };
 
-      const notification = await userModel.getGeneralNotification(
-        notificationDetails
-      );
+      const notification =
+        await userModel.getGeneralNotification(notificationDetails);
       if (notification?.data && notification.data.length > 0) {
         const data = notification.data.map((item) => {
           return {
@@ -276,30 +274,22 @@ const userController = {
       const uuid = crypto.randomUUID();
 
       const images = [
-        { width: 640, fileName: `small-${uuid}-${file.originalname}` },
-        { width: 1024, fileName: `medium-${uuid}-${file.originalname}` },
-        { width: 1280, fileName: `large-${uuid}-${file.originalname}` },
+        { width: 680, fileName: `680-${uuid}-${file.originalname}` },
       ];
-
-      const fileNameWithoutSize = `${uuid}-${file.originalname}`;
 
       const [urlWithoutSize] = await Promise.all(
         images.map(async (image) => {
           const buffer = await sharp(file.buffer)
             .resize({ width: image.width })
             .toBuffer();
-          const response = await uploadPicture(
-            image.fileName,
-            buffer,
-            fileNameWithoutSize
-          );
+          const response = await uploadPicture(image.fileName, buffer);
           return response;
-        })
+        }),
       );
       const response = await userModel.createPost(
         urlWithoutSize,
         description,
-        userId
+        userId,
       );
 
       res.status(response.status).json({
@@ -336,6 +326,23 @@ const userController = {
         .json({ success: false, message: "Internal server error", error });
     }
   },
+  getPosts: async (req: Request, res: Response) => {
+    try{
+      const userId = req.query.userId as string;
+      const response = await userModel.getPosts(userId);
+      res.status(response.status).json({
+        response: response.success,
+        data: response.data || null,
+        error: response.error || null,
+        message: response.message,
+      });
+    }catch(error){
+       console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  }
 };
 
 export default userController;

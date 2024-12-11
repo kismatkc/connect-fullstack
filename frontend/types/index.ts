@@ -38,3 +38,15 @@ export type createGeneralNotificationsType = {
   notificationType: string;
   notificationDescription: string;
 };
+
+export type Post = {
+  user: {
+    firstName: string;
+    lastName: string;
+    avatarLink: string;
+    userId: string;
+  };
+  postId: string;
+  description: string;
+  pictureLink: string;
+};

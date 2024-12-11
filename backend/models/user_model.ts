@@ -2,7 +2,9 @@ import { SignUpForm, SignInForm } from "../../frontend/types/index.ts";
 import { supabase } from "../lib/database.ts";
 import bcrypt from "bcrypt";
 import { createGeneralNotificationsType } from "../types/index.ts";
-import { UUID } from "bson";
+
+
+
 const userModel = {
   create: async (userDetails: SignUpForm) => {
     try {
@@ -303,7 +305,7 @@ const userModel = {
   createPost: async (
     urlWithoutSize: string,
     description: string,
-    userId: UUID
+    userId: string
   ) => {
     try {
       const { data, error } = await supabase
@@ -351,9 +353,20 @@ const userModel = {
         success: true,
       };
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   },
+  getPosts: async (userId: string) =>{
+    try{
+      const {data,error} = await supabase.from("posts").select("user_id(*),id,post_picture_link,description").eq("user_id",userId);
+      if(error){
+        return {status:400,message:"Database error occurred",error,success: false};
+      }
+      return {status:200,message:"Posts found",data,success: true};
+    }catch(error){
+      throw error
+    }
+  }
 };
 
 export default userModel;

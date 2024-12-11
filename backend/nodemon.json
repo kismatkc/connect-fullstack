@@ -1,7 +1,9 @@
+
+
 {
   "watch": ["*"],
   "ext": "ts",
   "ignore": ["node_modules"],
-
-  "exec": "node --loader ts-node/esm app.ts"
+  "exec": "tsc && node --loader ts-node/esm/transpile-only app.ts"
 }
+
