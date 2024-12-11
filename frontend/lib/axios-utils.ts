@@ -132,7 +132,11 @@ export const notifications = {
 };
 
 export const posts = {
-  createPost: async ({ description, picture, userId }: PostDetailsType) => {
+  createPost: async ({
+    description,
+    picture,
+    userId,
+  }: PostDetailsType): Promise<boolean> => {
     try {
       const formData = new FormData();
 
@@ -140,9 +144,10 @@ export const posts = {
       formData.append("description", description);
       formData.append("userId", userId);
       const response = await Api.post("/create-post", formData);
-      console.log(formData);
+      return true;
     } catch (error) {
       console.log(error);
+      return false;
     }
   },
   deletePost: async (postId: string, url: string): Promise<boolean> => {

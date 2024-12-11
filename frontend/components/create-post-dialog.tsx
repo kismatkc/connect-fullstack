@@ -46,6 +46,9 @@ const CreatePostDialog = () => {
         userId: data?.user.id as UUID,
       };
       const response = await posts.createPost(postDetails);
+      if (!response) return toast.error("Post creation failed");
+      toast.success("Post created");
+      setOpen(false);
     } catch (error) {
       console.log(error);
     }
