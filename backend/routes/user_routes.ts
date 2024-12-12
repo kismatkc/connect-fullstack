@@ -22,7 +22,7 @@ router.get(
   userController.getGeneralNotifications
 );
 router.delete("/delete-pending-request", userController.deletePendingRequest);
-// router.delete("/delete-post", userController.deletePost);
+router.delete("/delete-post", userController.deletePost);
 router.patch("/accept-pending-request", userController.acceptPendingRequest);
 
 export default router;

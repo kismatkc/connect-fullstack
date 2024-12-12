@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { toast } from "sonner";
 
@@ -44,7 +44,6 @@ const createUser = async (input: SignUpForm) => {
 };
 
 export default function useCreateUser() {
-  const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
     mutationFn: createUser,

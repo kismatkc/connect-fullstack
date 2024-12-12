@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { userAgent } from "next/server";
+import useConfirmation from "@/components/confirmation";
+
 
 export default function Page() {
+    const { ConfirmationModel,decision } = useConfirmation();
 
-    const {user,value} = tester();
-
-    return <div>{user.age}{value}</div>;
-}
-
-
-function tester(){
-const user = {
-    name: "kismat",
-    age: 22
-}
-    return {
-    user,
-        value:5
-    }
+    return (
+        <div>
+            <ConfirmationModel
+                title="Are you absolutely sure?"
+                description="This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers."
+                options={{
+                    cancel: "Cancel",
+                    action: "Delete",
+                }}
+            />
+        </div>
+    );
 }

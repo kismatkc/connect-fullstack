@@ -186,9 +186,8 @@ const userController = {
     try {
       const notificationDetails = req.body as createGeneralNotificationsType;
 
-      const notification = await userModel.createGeneralNotifications(
-        notificationDetails
-      );
+      const notification =
+        await userModel.createGeneralNotifications(notificationDetails);
       res.status(notification.status).json({
         success: true,
         data: notification.data || null,
@@ -209,9 +208,8 @@ const userController = {
         notificationType: string;
       };
 
-      const notification = await userModel.getGeneralNotification(
-        notificationDetails
-      );
+      const notification =
+        await userModel.getGeneralNotification(notificationDetails);
       if (notification?.data && notification.data.length > 0) {
         const data = notification.data.map((item) => {
           return {
@@ -276,7 +274,7 @@ const userController = {
       const uuid = crypto.randomUUID();
 
       const images = [
-        { width: 680, fileName: `680-${uuid}-${file.originalname}` },
+        { width: 680, fileName: `680-${uuid}-${userId}photo` },
       ];
 
       const [urlWithoutSize] = await Promise.all(
@@ -286,12 +284,12 @@ const userController = {
             .toBuffer();
           const response = await uploadPicture(image.fileName, buffer);
           return response;
-        })
+        }),
       );
       const response = await userModel.createPost(
         urlWithoutSize,
         description,
-        userId
+        userId,
       );
 
       res.status(response.status).json({
@@ -310,13 +308,12 @@ const userController = {
   deletePost: async (req: Request, res: Response) => {
     try {
       const postId = req.query.postId as string;
-      const pictureUrl = req.query.url as string;
 
       const response = await userModel.deletePost(postId);
       const deleted = await deletePictures(response.data.post_picture_link);
 
       res.status(response.status).json({
-        response: response.success,
+        success: true,
         data: response.data || null,
         error: response.error || null,
         message: response.message,
@@ -329,28 +326,11 @@ const userController = {
     }
   },
 
-  //[
-  //   {
-  //     "id": "8aea964f-e2d2-4956-a7c5-c84fcaa9496d",
-  //     "post_picture_link": "https://lotpqdywijkjinsgfkkv.supabase.co/storage/v1/object/public/posts_pictures/680-dc5c048a-2f5b-41e7-a29e-f4bf3e4b928c-DVR%20#1_Rec%20+%20Excerise%20Room_DVR%20#1_20240814072634_20240814072650_83805105%20(2).jpg",
-  //     "description": "hi",
-  //     "user_id": {
-  //       "id": "5d81e3fa-ed1b-4f36-8257-8193ef78a3c9",
-  //       "dob": "1967-11-25",
-  //       "city": "Ajax, Ontario, Canada",
-  //       "email": "robertmiller33@gmail.com",
-  //       "gender": "male",
-  //       "college": "Fanshawe College, 1001 Fanshawe College Blvd., London, Ontario N5V 1W2, Canada",
-  //       "last_name": "Miller",
-  //       "created_at": "2024-11-12T08:12:28.981549+00:00",
-  //       "first_name": "Robert",
-  //       "password_hash": "$2b$10$QuKYeHPf0T/Owckl1q9esOVmtUIb75.TcYVM0cwRLRaAeTaVa/Z/S",
-  //       "profile_picture_url": "https://lotpqdywijkjinsgfkkv.supabase.co/storage/v1/object/public/profile_pictures/1731399042818-male_3.jpg"
-  //   }
-  // ]
+  
   getPosts: async (req: Request, res: Response) => {
     try {
       const userId = req.query.userId as string;
+      console.log(userId)
       const response = await userModel.getPosts(userId);
       const posts = response.data.map((post: any) => {
         return {

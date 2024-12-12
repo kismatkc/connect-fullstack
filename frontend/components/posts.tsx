@@ -9,23 +9,23 @@ import { posts } from "@/lib/axios-utils";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import Link from "next/link";
+import { toast } from "sonner";
+import useGetPosts from "@/hooks/get-posts";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "@radix-ui/react-dropdown-menu";
 
 const Posts = () => {
-  const [postData, setPostData] = useState<Post[]>([]);
   const { data: user } = useSession();
-  useEffect(() => {
-    (async function () {
-      try {
-        const userId = user?.user?.id;
-        if (!userId) return;
-        const newPosts: Post[] = await posts.getPosts(userId);
-        if (newPosts.length > 0) setPostData(newPosts);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [user]);
-  if (!(postData.length > 0)) {
+
+  const { data: postData, isPending, error } = useGetPosts();
+  const queryClient = useQueryClient();
+
+  if (isPending || error || !postData || !(postData.length > 0)) {
     return (
       <div className="flex flex-col dark:container-bg-dark container-bg-light gap-y-3">
         <div className="flex gap-x-1 items-center pl-2.5 pt-2 justify-between pr-6 ">
@@ -56,24 +56,53 @@ const Posts = () => {
           >
             <CardHeader className="flex flex-col pl-1.5 pb-4">
               <div className="flex justify-between items-center mb-2 ">
-                <figure className="flex gap-x-2 items-center">
-                  <Avatar className="size-8 ">
-                    <AvatarImage
-                      src={post.user.avatarLink}
-                      className="rounded-full"
-                    />
-                    <AvatarFallback className="rounded-full">
-                      {post.user.firstName[0].toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <figcaption className="flex flex-nowrap gap-x-1">
-                    <span>{post.user.firstName}</span>
-                    <span>{post.user.lastName}</span>
-                  </figcaption>
-                </figure>
-                <div className="flex items-center">
-                  <Ellipsis />
-                  <X />
+                <Link href={`/${post.user.userId}`}>
+                  <figure className="flex gap-x-2 items-center">
+                    <Avatar className="size-8 ">
+                      <AvatarImage
+                        src={post.user.avatarLink}
+                        className="rounded-full"
+                      />
+                      <AvatarFallback className="rounded-full">
+                        {post.user.firstName[0].toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <figcaption className="flex flex-nowrap gap-x-1">
+                      <span>{post.user.firstName}</span>
+                      <span>{post.user.lastName}</span>
+                    </figcaption>
+                  </figure>
+                </Link>
+                <div className="flex items-center gap-x-1.5">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Ellipsis />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent  >
+                      <div className="flex gap-x-1 jusitfy-between">
+                        <span>Delete</span>
+                        
+                      <X
+                        onClick={async () => {
+                          try {
+                            const postId = post.postId;
+                            if (!postId) return;
+                            const response = await posts.deletePost(postId);
+                            if (response) {
+                              toast.success("Post deleted successfully");
+                              const userId = user?.user?.id;
+                              if (!userId) return;
+                              return queryClient.invalidateQueries({
+                                queryKey: ["posts"],
+                              });
+                            }
+                            return toast.error("Error deleting post");
+                          } catch (error) {}
+                        }}
+                      />
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
               <p className="text-base pl-1.5">{post.description}</p>

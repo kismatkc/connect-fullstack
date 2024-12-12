@@ -140,8 +140,7 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
         </div>
         <div className="flex flex-col">
           <Posts />
-          <Posts />
-          <Posts />
+    
         </div>
       </section>
     );

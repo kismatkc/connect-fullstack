@@ -1,4 +1,4 @@
-import { createGeneralNotificationsType, PostDetailsType } from "@/types";
+import { createGeneralNotificationsType, Post, PostDetailsType } from "@/types";
 import axios from "axios";
 const ApiOptions = () => {
   const options = {
@@ -150,10 +150,10 @@ export const posts = {
       return false;
     }
   },
-  deletePost: async (postId: string, url: string): Promise<boolean> => {
+  deletePost: async (postId: string): Promise<boolean> => {
     try {
       const response = await Api.delete("/delete-post", {
-        params: { postId, url },
+        params: { postId },
       });
 
       return response.data.success;
@@ -162,12 +162,13 @@ export const posts = {
       return false;
     }
   },
-  getPosts: async (userId: string)=>{
+  getPosts: async (userId: string): Promise<Post[]>=>{
     try{
+      console.log("fetching on going")
       const response = await Api.get("/get-posts", {
         params: { userId },
       });
-console.log(response.data.data)
+
       return response.data.data;
     }catch(error){
       console.log(error)

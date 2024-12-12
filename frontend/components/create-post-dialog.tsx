@@ -14,9 +14,12 @@ import { posts } from "@/lib/axios-utils";
 import { PostDetailsType } from "@/types";
 import { toast } from "sonner";
 import { UUID } from "crypto";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CreatePostDialog = () => {
   const { data } = useSession();
+  const queryClient = useQueryClient();
+
   const [description, setDescription] = useState<string>("");
   const [pictureFile, setPictureFile] = useState<File | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -47,7 +50,11 @@ const CreatePostDialog = () => {
       };
       const response = await posts.createPost(postDetails);
       if (!response) return toast.error("Post creation failed");
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
       toast.success("Post created");
+      setDescription("");
       setOpen(false);
     } catch (error) {
       console.log(error);
@@ -85,7 +92,7 @@ const CreatePostDialog = () => {
               data?.user
                 ? `,${data.user.name?.slice(
                     0,
-                    data.user.name.lastIndexOf(" ")
+                    data.user.name.lastIndexOf(" "),
                   )}`
                 : ""
             }?`}
@@ -111,7 +118,9 @@ const CreatePostDialog = () => {
               : "bg-green-400 hover:bg-green-500 "
           }`}
           onClick={() => {
-            if (pictureFile || description) return handleSubmit();
+            if (pictureFile || description) {
+              return handleSubmit();
+            }
 
             toast.error("Please provide either a description or a picture");
           }}
