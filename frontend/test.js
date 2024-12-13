@@ -1,10 +1,24 @@
-function autoReceiveValue(a) {
-  console.log("value automaticlaly received", a);
-}
+const decision = (value) =>
+  new Promise((resolve, reject) => {
+    if (value === 5) resolve(5);
+    reject(6);
+  });
 
-function autoPassValue(fn) {
-  const a = 5;
-  return fn(a);
-}
+// console.log(
+//   decision(7)
+//     .then((val) => console.log(val))
+//     .catch((er) => console.log(er))
+// );
+// const decision = (value) =>
+//   new Promise((resolve, reject) => {
+//     if (value === 5) return resolve(5); // Fulfill the promise with 5
+//     return reject(6); // Reject the promise with 6
+//   });
 
-autoPassValue(autoReceiveValue);
+decision(7)
+  .then((result) => {
+    console.log("Resolved with:", result); // This runs if resolve is called
+  })
+  .catch((error) => {
+    console.log("Rejected with:", error); // This runs if reject is called
+  });
