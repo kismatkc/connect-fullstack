@@ -79,20 +79,20 @@ const CreatePostDialog = () => {
         className="dark:container-bg-dark container-bg-light rounded-lg flex flex-col  "
         ref={dialogRef}
       >
-        <AlertDialogHeader className="flex flex-row justify-between items-center ">
+        <AlertDialogHeader className="flex flex-row justify-between items-center">
           <AlertDialogTitle className="p-1">Create post</AlertDialogTitle>
-          <AlertDialogCancel className="border-none rounded-full">
+          <AlertDialogCancel className="border-none rounded-full  bg-icon-bg-light dark:bg-icon-bg-dark ">
             X
           </AlertDialogCancel>
         </AlertDialogHeader>
         <div className="flex flex-col gap-y-3 ">
           <input
-            className="dark:container-bg-dark container-bg-light border-none focus:outline-none  p-1"
+            className="dark:container-bg-dark bg-background border-none focus:outline-none  p-1"
             placeholder={`Whats on your mind${
               data?.user
                 ? `,${data.user.name?.slice(
                     0,
-                    data.user.name.lastIndexOf(" "),
+                    data.user.name.lastIndexOf(" ")
                   )}`
                 : ""
             }?`}

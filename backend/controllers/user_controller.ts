@@ -186,8 +186,9 @@ const userController = {
     try {
       const notificationDetails = req.body as createGeneralNotificationsType;
 
-      const notification =
-        await userModel.createGeneralNotifications(notificationDetails);
+      const notification = await userModel.createGeneralNotifications(
+        notificationDetails
+      );
       res.status(notification.status).json({
         success: true,
         data: notification.data || null,
@@ -208,8 +209,9 @@ const userController = {
         notificationType: string;
       };
 
-      const notification =
-        await userModel.getGeneralNotification(notificationDetails);
+      const notification = await userModel.getGeneralNotification(
+        notificationDetails
+      );
       if (notification?.data && notification.data.length > 0) {
         const data = notification.data.map((item) => {
           return {
@@ -243,6 +245,7 @@ const userController = {
   getFriendsDetails: async (req: Request, res: Response) => {
     try {
       const userId = req.query.query as string;
+      console.log(req.query);
 
       const response = await userModel.getFriendsDetails(userId);
       const data = response.data.map((item) => {
@@ -273,9 +276,7 @@ const userController = {
 
       const uuid = crypto.randomUUID();
 
-      const images = [
-        { width: 680, fileName: `680-${uuid}-${userId}photo` },
-      ];
+      const images = [{ width: 680, fileName: `680-${uuid}-${userId}photo` }];
 
       const [urlWithoutSize] = await Promise.all(
         images.map(async (image) => {
@@ -284,12 +285,12 @@ const userController = {
             .toBuffer();
           const response = await uploadPicture(image.fileName, buffer);
           return response;
-        }),
+        })
       );
       const response = await userModel.createPost(
         urlWithoutSize,
         description,
-        userId,
+        userId
       );
 
       res.status(response.status).json({
@@ -326,12 +327,50 @@ const userController = {
     }
   },
 
-  
-  getPosts: async (req: Request, res: Response) => {
+  getYourPosts: async (req: Request, res: Response) => {
     try {
       const userId = req.query.userId as string;
-      console.log(userId)
-      const response = await userModel.getPosts(userId);
+
+      const response = await userModel.getYourPosts(userId);
+      const posts = response.data.map((post: any) => {
+        return {
+          user: {
+            firstName: post.user_id.first_name,
+            lastName: post.user_id.last_name,
+            avatarLink: post.user_id.profile_picture_url,
+            userId: post.user_id.id,
+          },
+          postId: post.id,
+          description: post.description,
+          pictureLink: post.post_picture_link,
+        };
+      });
+
+      const data = res.status(response.status).json({
+        response: response.success,
+        data: posts || null,
+        error: response.error || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
+    }
+  },
+
+  getFriendsPosts: async (req: Request, res: Response) => {
+    try {
+      const userId = req.query.userId as string;
+      const friendsResponse = await userModel.getFriendsDetails(userId);
+      const friendsDetails = friendsResponse.data.map((item) => {
+        const { fk_recipient, fk_requester } = item;
+        //@ts-ignore
+        return fk_recipient.id === userId ? fk_requester : fk_recipient;
+      });
+      const friendIds = friendsDetails.map((friend: any) => friend.id);
+      const response = await userModel.getFriendsPosts(friendIds);
       const posts = response.data.map((post: any) => {
         return {
           user: {

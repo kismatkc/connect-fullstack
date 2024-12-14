@@ -1,17 +1,16 @@
 "use client";
-import { Ellipsis, TrashIcon, X } from "lucide-react";
+import { Ellipsis, Share2Icon, TrashIcon, X } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import Image from "next/image";
 import CommentSection from "./comment-section";
-import { useEffect, useState } from "react";
-import { Post } from "@/types";
+
 import { posts } from "@/lib/axios-utils";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { toast } from "sonner";
-import useGetPosts from "@/hooks/get-posts";
+
 import { useQueryClient } from "@tanstack/react-query";
 import {
   DropdownMenu,
@@ -19,12 +18,14 @@ import {
   DropdownMenuContent,
 } from "@radix-ui/react-dropdown-menu";
 import useConfirmation from "@/components/confirmation";
-import { describe } from "node:test";
+import useGetFriendsPosts from "@/hooks/get-friends-posts";
+import useGetYourPosts from "@/hooks/get-your-posts";
 const Posts = () => {
   const { data: user } = useSession();
   const { ConfirmationModel, decision: getDecision } = useConfirmation();
 
-  const { data: postData, isPending, error } = useGetPosts();
+  const { data: postData, isPending, error } = useGetFriendsPosts();
+
   const queryClient = useQueryClient();
 
   if (isPending || error || !postData || !(postData.length > 0)) {
@@ -86,29 +87,57 @@ const Posts = () => {
                       <Ellipsis />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex gap-x-0.5 p-1.5 items-center ">
-                        <TrashIcon size={16} />
-                        <button
-                          onClick={async () => {
-                            try {
-                              const decision = await getDecision();
-                              const postId = post.postId;
-                              if (!decision || !postId) return;
-                              const response = await posts.deletePost(postId);
-                              if (response) {
-                                toast.success("Post deleted successfully");
+                      {user?.user.id === post.user.userId ? (
+                        <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex  p-1.5 items-center w-full">
+                          <TrashIcon size={16} />
+                          <button
+                            onClick={async () => {
+                              try {
+                                const decision = await getDecision();
+                                const postId = post.postId;
+                                if (!decision || !postId) return;
+                                const response = await posts.deletePost(postId);
+                                if (response) {
+                                  toast.success("Post deleted successfully");
 
-                                return queryClient.invalidateQueries({
-                                  queryKey: ["posts"],
-                                });
-                              }
-                              return toast.error("Error deleting post");
-                            } catch (error) {}
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </div>
+                                  return queryClient.invalidateQueries({
+                                    queryKey: ["posts"],
+                                  });
+                                }
+                                return toast.error("Error deleting post");
+                              } catch (error) {}
+                            }}
+                            className="px-4"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      ) : (
+                        <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex  p-1.5 items-center ">
+                          <Share2Icon size={16} />
+                          <button
+                            className="px-4"
+                            onClick={async () => {
+                              try {
+                                const decision = await getDecision();
+                                const postId = post.postId;
+                                if (!decision || !postId) return;
+                                const response = await posts.deletePost(postId);
+                                if (response) {
+                                  toast.success("Post deleted successfully");
+
+                                  return queryClient.invalidateQueries({
+                                    queryKey: ["posts"],
+                                  });
+                                }
+                                return toast.error("Error deleting post");
+                              } catch (error) {}
+                            }}
+                          >
+                            Share
+                          </button>
+                        </div>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>

@@ -162,18 +162,29 @@ export const posts = {
       return false;
     }
   },
-  getPosts: async (userId: string): Promise<Post[]>=>{
-    try{
-      console.log("fetching on going")
-      const response = await Api.get("/get-posts", {
+  getYourPosts: async (userId: string): Promise<Post[]> => {
+    try {
+      const response = await Api.get("/get-your-posts", {
         params: { userId },
       });
 
       return response.data.data;
-    }catch(error){
-      console.log(error)
-      throw error
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
-  }
+  },
+  getFriendsPosts: async (userId: string): Promise<Post[]> => {
+    try {
+      const response = await Api.get("/get-friends-posts", {
+        params: { userId },
+      });
+
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
 };
 export const Api = axios.create(ApiOptions());

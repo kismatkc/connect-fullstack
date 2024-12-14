@@ -30,9 +30,6 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
     status: string;
     id: string;
   }>({ status: "", id: "" });
-  if (user) {
-    console.log("test,", user);
-  }
 
   useEffect(() => {
     const requestDetails = {
@@ -92,7 +89,6 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
             </div>
             {!(session?.user.id === params.profileId) && (
               <>
-   
                 <ProfilePageFriendsSection friendsDetails={user.friends} />
                 <div className="flex gap-x-4 w-full justify-center p-2">
                   {session && params && (
@@ -140,7 +136,6 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
         </div>
         <div className="flex flex-col">
           <Posts />
-    
         </div>
       </section>
     );

@@ -16,7 +16,8 @@ router.post("/create-post", formDataResolver, userController.createPost);
 router.get("/get-pending-request", userController.getPendingRequests);
 router.get("/get-friendship-status", userController.getFriendshipStatus);
 router.get("/get-friends", userController.getFriendsDetails);
-router.get("/get-posts", userController.getPosts);
+router.get("/get-your-posts", userController.getYourPosts);
+router.get("/get-friends-posts", userController.getFriendsPosts);
 router.get(
   "/get-general-notifications",
   userController.getGeneralNotifications

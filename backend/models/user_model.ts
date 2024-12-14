@@ -3,8 +3,6 @@ import { supabase } from "../lib/database.ts";
 import bcrypt from "bcrypt";
 import { createGeneralNotificationsType } from "../types/index.ts";
 
-
-
 const userModel = {
   create: async (userDetails: SignUpForm) => {
     try {
@@ -356,17 +354,44 @@ const userModel = {
       throw error;
     }
   },
-  getPosts: async (userId: string) =>{
-    try{
-      const {data,error} = await supabase.from("posts").select("user_id(*),id,post_picture_link,description").eq("user_id",userId);
-      if(error){
-        return {status:400,message:"Database error occurred",error,success: false};
+  getYourPosts: async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("user_id(*),id,post_picture_link,description")
+        .eq("user_id", userId);
+      if (error) {
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
       }
-      return {status:200,message:"Posts found",data,success: true};
-    }catch(error){
-      throw error
+      return { status: 200, message: "Posts found", data, success: true };
+    } catch (error) {
+      throw error;
     }
-  }
+  },
+  getFriendsPosts: async (userId: string[]) => {
+    try {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("user_id(*),id,post_picture_link,description")
+        .in("user_id", userId);
+      if (error) {
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      }
+      return { status: 200, message: "Posts found", data, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default userModel;
