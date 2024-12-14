@@ -1,5 +1,5 @@
 "use client";
-import { Ellipsis, X } from "lucide-react";
+import { Ellipsis, TrashIcon, X } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import Image from "next/image";
 import CommentSection from "./comment-section";
@@ -19,36 +19,11 @@ import {
   DropdownMenuContent,
 } from "@radix-ui/react-dropdown-menu";
 import useConfirmation from "@/components/confirmation";
+import { describe } from "node:test";
 const Posts = () => {
   const { data: user } = useSession();
-  const {
-    ConfirmationModel,
-    decision,
-    setDecision,
-    setOpen: openConfirmationModel,
-  } = useConfirmation();
-  const [postIdToDelete, setPostIdToDelete] = useState("");
+  const { ConfirmationModel, decision: getDecision } = useConfirmation();
 
-  useEffect(() => {
-    if (!(decision && postIdToDelete)) return;
-    const deleteSelectedPost = async () => {
-      try {
-        const response = await posts.deletePost(postIdToDelete);
-        if (response) {
-          toast.success("Post deleted successfully");
-          const userId = user?.user?.id;
-          if (!userId) return;
-          setDecision(false);
-          setPostIdToDelete("");
-          return queryClient.invalidateQueries({
-            queryKey: ["posts"],
-          });
-        }
-        return toast.error("Error deleting post");
-      } catch (error) {}
-    };
-    deleteSelectedPost();
-  }, [decision, postIdToDelete]);
   const { data: postData, isPending, error } = useGetPosts();
   const queryClient = useQueryClient();
 
@@ -79,10 +54,6 @@ const Posts = () => {
         title="Are you absolutely sure?"
         description="This action cannot be undone. This will permanently delete your
             account and remove your data from our servers."
-        options={{
-          cancel: "Cancel",
-          action: "Delete",
-        }}
       />
       {postData.map((post) => {
         return (
@@ -115,12 +86,24 @@ const Posts = () => {
                       <Ellipsis />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <div className="flex gap-x-1 jusitfy-between dark:bg-white dark:text-black">
+                      <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex gap-x-0.5 p-1.5 items-center ">
+                        <TrashIcon size={16} />
                         <button
-                          className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-[rgba(156_163_175)] hover:bg-opacity-20 px-4 py-1 text-center"
-                          onClick={() => {
-                            openConfirmationModel(true);
-                            setPostIdToDelete(post.postId);
+                          onClick={async () => {
+                            try {
+                              const decision = await getDecision();
+                              const postId = post.postId;
+                              if (!decision || !postId) return;
+                              const response = await posts.deletePost(postId);
+                              if (response) {
+                                toast.success("Post deleted successfully");
+
+                                return queryClient.invalidateQueries({
+                                  queryKey: ["posts"],
+                                });
+                              }
+                              return toast.error("Error deleting post");
+                            } catch (error) {}
                           }}
                         >
                           Delete

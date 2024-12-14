@@ -1,3 +1,63 @@
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+// } from "@/components/ui/alert-dialog";
+// import { useState, useRef, useEffect } from "react";
+
+// export default function useConfirmation() {
+//   const [decision, setDecision] = useState<boolean>(false);
+//   const dialogRef = useRef<HTMLDivElement>(null);
+
+//   const [open, setOpen] = useState<boolean>(false);
+//   useEffect(() => {
+//     const handleClickOutside = (e: MouseEvent) => {
+//       const target = e.target;
+//       if (!dialogRef.current?.contains(target as Node)) {
+//         setOpen(false);
+//       }
+//     };
+//     document.addEventListener("click", handleClickOutside);
+
+//     return () => {
+//       document.removeEventListener("click", handleClickOutside);
+//     };
+//   }, [open]);
+//   const ConfirmationModel = ({
+//     title,
+//     description,
+//     options,
+//   }: {
+//     title: string;
+//     description: string;
+//     options: { cancel: string; action: string };
+//   }) => {
+//     return (
+//       <AlertDialog open={open} onOpenChange={(change) => setOpen(change)}>
+//         <AlertDialogContent ref={dialogRef}>
+//           <AlertDialogHeader>
+//             <AlertDialogTitle>{title}</AlertDialogTitle>
+//             <AlertDialogDescription>{description}</AlertDialogDescription>
+//           </AlertDialogHeader>
+//           <AlertDialogFooter>
+//             <AlertDialogCancel>Cancel</AlertDialogCancel>
+//             <AlertDialogAction onClick={() => setDecision(true)}>
+//               Continue
+//             </AlertDialogAction>
+//           </AlertDialogFooter>
+//         </AlertDialogContent>
+//       </AlertDialog>
+//     );
+//   };
+
+//   return { ConfirmationModel, decision, setOpen ,setDecision};
+// }
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,10 +72,19 @@ import {
 import { useState, useRef, useEffect } from "react";
 
 export default function useConfirmation() {
-  const [decision, setDecision] = useState<boolean>(false);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const [promiseResolver, setPromiseResolver] = useState<
+    null | ((value: boolean) => void)
+  >(null);
 
   const [open, setOpen] = useState<boolean>(false);
+  const decision = async () => {
+    setOpen(true);
+    return new Promise((resolve) => {
+      setPromiseResolver(() => resolve); // Save the resolver in state
+    });
+  };
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target;
@@ -32,11 +101,9 @@ export default function useConfirmation() {
   const ConfirmationModel = ({
     title,
     description,
-    options,
   }: {
     title: string;
     description: string;
-    options: { cancel: string; action: string };
   }) => {
     return (
       <AlertDialog open={open} onOpenChange={(change) => setOpen(change)}>
@@ -46,8 +113,20 @@ export default function useConfirmation() {
             <AlertDialogDescription>{description}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => setDecision(true)}>
+            <AlertDialogCancel
+              onClick={() => {
+                promiseResolver?.(false);
+                setOpen(false);
+              }}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                promiseResolver?.(true);
+                setOpen(false);
+              }}
+            >
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -56,5 +135,5 @@ export default function useConfirmation() {
     );
   };
 
-  return { ConfirmationModel, decision, setOpen ,setDecision};
+  return { ConfirmationModel, setOpen, decision };
 }
