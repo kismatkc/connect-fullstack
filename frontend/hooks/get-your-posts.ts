@@ -7,7 +7,7 @@ export default function useGetYourPosts() {
   const user = useSession();
 
   return useQuery({
-    queryKey: ["yourPosts"],
+    queryKey: ["posts-yours"],
     queryFn: ({ queryKey }) => {
       const userId = user.data?.user?.id as string;
       if (!userId) return [];

@@ -20,11 +20,17 @@ import {
 import useConfirmation from "@/components/confirmation";
 
 import useDecidePostContent from "@/hooks/decide-post-content";
+import useGetYourPosts from "@/hooks/get-your-posts";
 const Posts = () => {
   const { data: user } = useSession();
   const { ConfirmationModel, decision: getDecision } = useConfirmation();
 
   const { postData, isPending, error } = useDecidePostContent();
+  // const {
+  //   data: postData,
+  //   isPending: isPending,
+  //   error: error,
+  // } = useGetYourPosts();
   const queryClient = useQueryClient();
 
   if (isPending || error || !postData || !(postData.length > 0)) {
@@ -100,7 +106,9 @@ const Posts = () => {
                                   toast.success("Post deleted successfully");
 
                                   return queryClient.invalidateQueries({
-                                    queryKey: ["yourPosts", "friendsPosts"],
+                                    // queryKey: ["yourPosts", "friendsPosts"],
+                                    queryKey: ["posts-yours"],
+                                    exact: true,
                                   });
                                 }
                                 return toast.error("Error deleting post");

@@ -7,7 +7,7 @@ export default function useGetFriendsPosts() {
   const user = useSession();
 
   return useQuery({
-    queryKey: ["friendsPosts"],
+    queryKey: ["posts-friends"],
     queryFn: ({ queryKey }) => {
       const userId = user.data?.user?.id as string;
       if (!userId) return [];
