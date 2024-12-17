@@ -107,7 +107,7 @@ what picture size of what?
 
 my enitre webiste will be repsoive to
 till 640(defualt) 480px
-
+ddd
 
 
 posts
