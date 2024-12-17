@@ -6,12 +6,19 @@ const ApiOptions = () => {
     baseURL: "http://localhost:4000/api",
   };
 
-  if (process.env.NEXT_PUBLIC_ENVIRONMENT == "replit") {
-    options.baseURL =
-      "https://96283587-40ff-470f-a4ea-4f30bdcaad52-00-care00ttvfz8.spock.replit.dev:3000/api";
-  }
+
   return options;
 };
+// const ApiOptions = () => {
+//   const options = {
+//     withCredentials: true,
+//     baseURL:       "https://96283587-40ff-470f-a4ea-4f30bdcaad52-00-care00ttvfz8.spock.replit.dev:3000/api"
+    
+//   };
+
+
+//   return options;
+// };
 
 export const friendRequest = {
   send: async (requestDetails: {

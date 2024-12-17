@@ -271,7 +271,7 @@ const userController = {
       const description = req.body.description;
       const file = req.file;
       const userId = req.body.userId;
-      if (!(file || description))
+      if (!(file && description))
         throw new Error("No file or description provided");
 
       const uuid = crypto.randomUUID();

@@ -76,12 +76,12 @@ const CreatePostDialog = () => {
         }?`}
       </AlertDialogTrigger>
       <AlertDialogContent
-        className="dark:container-bg-dark container-bg-light rounded-lg flex flex-col  "
+        className="container-bg-dark container-bg-light rounded-lg flex flex-col  "
         ref={dialogRef}
       >
         <AlertDialogHeader className="flex flex-row justify-between items-center">
           <AlertDialogTitle className="p-1">Create post</AlertDialogTitle>
-          <AlertDialogCancel className="border-none rounded-full  bg-icon-bg-light dark:bg-icon-bg-dark ">
+          <AlertDialogCancel className="border-none rounded-full container-bg-dark container-bg-light hover:bg-icon-bg-light hover:dark:bg-icon-bg-dark ">
             X
           </AlertDialogCancel>
         </AlertDialogHeader>
@@ -113,16 +113,16 @@ const CreatePostDialog = () => {
 
         <button
           className={`rounded-sm p-2  ${
-            !(pictureFile || description)
+            !(pictureFile && description)
               ? "bg-gray-400"
               : "bg-green-400 hover:bg-green-500 "
           }`}
           onClick={() => {
-            if (pictureFile || description) {
+            if (pictureFile && description) {
               return handleSubmit();
             }
 
-            toast.error("Please provide either a description or a picture");
+            toast.error("Please provide description and a picture");
           }}
         >
           Upload

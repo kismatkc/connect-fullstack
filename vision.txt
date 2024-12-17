@@ -110,5 +110,19 @@ till 640(defualt) 480px
 
 
 
+posts
+
+
+we need to decide what data to feed to postData
+defualt postData = []
+scenarios
+1.path matches route postData = yourData
+2.path doesnot matches route postData = friendsData
+3.path  matches root postData = friendsData
+4.path not available postData = [] done
+
+
+
+
 
 

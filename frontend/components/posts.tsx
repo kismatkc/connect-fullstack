@@ -18,14 +18,13 @@ import {
   DropdownMenuContent,
 } from "@radix-ui/react-dropdown-menu";
 import useConfirmation from "@/components/confirmation";
-import useGetFriendsPosts from "@/hooks/get-friends-posts";
-import useGetYourPosts from "@/hooks/get-your-posts";
+
+import useDecidePostContent from "@/hooks/decide-post-content";
 const Posts = () => {
   const { data: user } = useSession();
   const { ConfirmationModel, decision: getDecision } = useConfirmation();
 
-  const { data: postData, isPending, error } = useGetFriendsPosts();
-
+  const { postData, isPending, error } = useDecidePostContent();
   const queryClient = useQueryClient();
 
   if (isPending || error || !postData || !(postData.length > 0)) {
@@ -86,8 +85,8 @@ const Posts = () => {
                     <DropdownMenuTrigger className="focus:outline-none">
                       <Ellipsis />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {user?.user.id === post.user.userId ? (
+                    <DropdownMenuContent className="z-[30]">
+                      {user?.user.id === post.user.userId && (
                         <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex  p-1.5 items-center w-full">
                           <TrashIcon size={16} />
                           <button
@@ -101,7 +100,7 @@ const Posts = () => {
                                   toast.success("Post deleted successfully");
 
                                   return queryClient.invalidateQueries({
-                                    queryKey: ["posts"],
+                                    queryKey: ["yourPosts", "friendsPosts"],
                                   });
                                 }
                                 return toast.error("Error deleting post");
@@ -112,32 +111,12 @@ const Posts = () => {
                             Delete
                           </button>
                         </div>
-                      ) : (
-                        <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex  p-1.5 items-center ">
-                          <Share2Icon size={16} />
-                          <button
-                            className="px-4"
-                            onClick={async () => {
-                              try {
-                                const decision = await getDecision();
-                                const postId = post.postId;
-                                if (!decision || !postId) return;
-                                const response = await posts.deletePost(postId);
-                                if (response) {
-                                  toast.success("Post deleted successfully");
-
-                                  return queryClient.invalidateQueries({
-                                    queryKey: ["posts"],
-                                  });
-                                }
-                                return toast.error("Error deleting post");
-                              } catch (error) {}
-                            }}
-                          >
-                            Share
-                          </button>
-                        </div>
                       )}
+
+                      <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex  p-1.5 items-center ">
+                        <Share2Icon size={16} />
+                        <button className="px-4">Share</button>
+                      </div>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
