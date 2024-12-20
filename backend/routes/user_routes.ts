@@ -13,8 +13,11 @@ router.post(
   userController.createGeneralNotifications
 );
 router.post("/create-post", formDataResolver, userController.createPost);
+router.post("/create-like", userController.createLike);
+router.delete("/delete-like/:likeId", userController.deleteLike);
 router.get("/get-pending-request", userController.getPendingRequests);
 router.get("/get-friendship-status", userController.getFriendshipStatus);
+router.get("/get-like-status", userController.likeStatus);
 router.get("/get-friends", userController.getFriendsDetails);
 router.get("/get-your-posts", userController.getYourPosts);
 router.get("/get-friends-posts", userController.getFriendsPosts);

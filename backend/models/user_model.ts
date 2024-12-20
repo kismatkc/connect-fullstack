@@ -392,6 +392,74 @@ const userModel = {
       throw error;
     }
   },
+  createLike: async (likeDetails: { postId: string; userId: string }) => {
+    try {
+      const { data, error } = await supabase
+        .from("likes")
+        .insert([
+          { post: likeDetails.postId, user_details: likeDetails.userId },
+        ])
+        .select("id")
+        .single();
+
+      if (error) {
+        return {
+          status: 400,
+
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      }
+      return { status: 201, message: "Like created", data, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+  likeStatus: async (likeDetails: { postId: string; userId: string }) => {
+    try {
+      const { data, error } = await supabase
+        .from("likes")
+        .select("id")
+        .eq("user_details", likeDetails.userId)
+        .eq("post", likeDetails.postId);
+
+      if (error) {
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      }
+      if (!(data.length > 0))
+        ({ status: 200, message: "Like not found", data, success: true });
+
+      return { status: 200, message: "Like found", data, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+  deleteLike: async (likeId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("likes")
+        .delete()
+        .eq("id", likeId);
+
+      if (error) {
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      }
+      return { status: 200, message: "Like deleted", data, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default userModel;

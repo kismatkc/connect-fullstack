@@ -126,3 +126,39 @@ scenarios
 
 
 
+Like ={
+  id: PK,UUID
+  postid: refrence the posts table (fk),
+  user: refences the user table (fk),
+  created at: dat eith time stamp
+
+}
+
+
+
+like functionilty pseudocode
+1.user clicks on the like button we create a Like row
+2.user clicks on the like button again we delete the Like created earlier
+3.using useeffect to track liked state and if user choses to  like use debouncing to cancel/commit like api call(5s)
+4.After ~5s we commit the call
+
+ scenarios and Edge cases 
+ 1.anything event under 5 sec is covered by useffect cleanup 
+ 2. if user choses to dislike after 5 sec it has to bypass a consion that acutal like was commited.So i will intruce a new state caleed likedCreated to track it.
+ if like likeCreated is tru than only you cna delte it after deltion set the liked and likedSUcces state to false
+
+
+like status
+1.post component mounts it also fetchs the status of like and until we have it it wont render post at all.if status  is not determiend it passes as props.
+2.how to determine the status?
+check if any row with  postId and useriD exist
+if yes then like state will be true 
+if no then like state will be false.
+
+
+likestatus controller
+so it receves the userId and postId and it chekcs if such row exist.
+if relation found it send 200 with data obejct(.single)
+if no rleation ofund it sends 404 with error so in client side in catch block if any error then it will defualt that to false.
+
+

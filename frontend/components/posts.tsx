@@ -20,20 +20,16 @@ import {
 import useConfirmation from "@/components/confirmation";
 
 import useDecidePostContent from "@/hooks/decide-post-content";
-import useGetYourPosts from "@/hooks/get-your-posts";
+import { useEffect, useState } from "react";
 const Posts = () => {
   const { data: user } = useSession();
   const { ConfirmationModel, decision: getDecision } = useConfirmation();
 
   const { postData, isPending, error } = useDecidePostContent();
-  // const {
-  //   data: postData,
-  //   isPending: isPending,
-  //   error: error,
-  // } = useGetYourPosts();
+
   const queryClient = useQueryClient();
 
-  if (isPending || error || !postData || !(postData.length > 0)) {
+  if (isPending || error || !postData || !(postData.length > 0 || !user)) {
     return (
       <div className="flex flex-col dark:container-bg-dark container-bg-light gap-y-3">
         <div className="flex gap-x-1 items-center pl-2.5 pt-2 justify-between pr-6 ">
@@ -106,7 +102,6 @@ const Posts = () => {
                                   toast.success("Post deleted successfully");
 
                                   return queryClient.invalidateQueries({
-                                    // queryKey: ["yourPosts", "friendsPosts"],
                                     queryKey: ["posts-yours"],
                                     exact: true,
                                   });
@@ -140,7 +135,10 @@ const Posts = () => {
               />
             </CardContent>
             <CardFooter>
-              <CommentSection />
+              <CommentSection
+                postId={post.postId}
+                userId={user?.user.id as string}
+              />
             </CardFooter>
           </Card>
         );

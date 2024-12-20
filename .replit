@@ -22,12 +22,32 @@ externalPort = 3001
 exposeLocalhost = true
 
 [[ports]]
+localPort = 34483
+externalPort = 8080
+exposeLocalhost = true
+
+[[ports]]
+localPort = 35451
+externalPort = 9000
+exposeLocalhost = true
+
+[[ports]]
+localPort = 37469
+externalPort = 8008
+exposeLocalhost = true
+
+[[ports]]
 localPort = 38125
 externalPort = 3002
 exposeLocalhost = true
 
 [[ports]]
-localPort = 40955
+localPort = 40225
+externalPort = 8081
+exposeLocalhost = true
+
+[[ports]]
+localPort = 40481
 externalPort = 5173
 exposeLocalhost = true
 
@@ -42,6 +62,21 @@ externalPort = 3003
 exposeLocalhost = true
 
 [[ports]]
+localPort = 42687
+externalPort = 8000
+exposeLocalhost = true
+
+[[ports]]
 localPort = 43667
 externalPort = 6000
+exposeLocalhost = true
+
+[[ports]]
+localPort = 44387
+externalPort = 8099
+exposeLocalhost = true
+
+[[ports]]
+localPort = 46517
+externalPort = 6800
 exposeLocalhost = true

@@ -6,16 +6,14 @@ const ApiOptions = () => {
     baseURL: "http://localhost:4000/api",
   };
 
-
   return options;
 };
 // const ApiOptions = () => {
 //   const options = {
 //     withCredentials: true,
 //     baseURL:       "https://96283587-40ff-470f-a4ea-4f30bdcaad52-00-care00ttvfz8.spock.replit.dev:3000/api"
-    
-//   };
 
+//   };
 
 //   return options;
 // };
@@ -93,9 +91,7 @@ export const notifications = {
       });
       if (!response) return;
       return response.data.data;
-    } catch (error) {
-      console.log("Error getting friendship status");
-    }
+    } catch (error) {}
   },
   createGeneralNotification: async (
     notificationsDetails: createGeneralNotificationsType
@@ -191,6 +187,44 @@ export const posts = {
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  },
+};
+
+export const like = {
+  create: async (
+    postId: string,
+    userId: string
+  ): Promise<{ id: string } | undefined> => {
+    try {
+      const response = await Api.post("/create-like", { postId, userId });
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  status: async (
+    postId: string,
+    userId: string
+  ): Promise<{ id: string }[] | undefined> => {
+    try {
+      const response = await Api.get("/get-like-status", {
+        params: { postId, userId },
+      });
+
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  delete: async (likeId: string): Promise<boolean> => {
+    try {
+      const response = await Api.delete(`/delete-like/${likeId}`);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   },
 };

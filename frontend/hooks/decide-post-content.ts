@@ -26,9 +26,6 @@ export default function useDecidePostContent() {
     (fullPath && fullPath.length > 1 ? fullPath.slice(1) : fullPath) || null;
 
   useEffect(() => {
-    console.log(postData, path, id, path === id);
-  }, [path, postData, id]);
-  useEffect(() => {
     if (!path || !id) {
       setError(null);
       setIsPending(true);

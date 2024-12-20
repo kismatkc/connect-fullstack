@@ -9,15 +9,19 @@ import {
   SmileIcon,
   ThumbsUp,
 } from "lucide-react";
+import Like from "./like";
 
-const CommentSection = () => {
+const CommentSection = ({
+  postId,
+  userId,
+}: {
+  postId: string;
+  userId: string;
+}) => {
   return (
     <div className="flex flex-col w-full mt-2 icon-bg-light dark:icon-bg-dark">
       <div className="flex justify-between border-b-2 pb-3">
-        <figure className="flex">
-          <img src="/posts/like.svg" width={24} height={24} />
-          <figcaption className="ml-1">4.1K</figcaption>
-        </figure>
+        <Like postId={postId} userId={userId} />
         <div className="flex gap-x-1 ">
           <figure className="flex">
             <figcaption>1.3K</figcaption>
