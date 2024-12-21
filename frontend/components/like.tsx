@@ -3,6 +3,8 @@ import { like } from "@/lib/axios-utils";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import SelectOptions from "./select-options";
+import { count } from "console";
 
 const Like = ({ postId, userId }: { postId: string; userId: string }) => {
   const [likeDetails, setLikeDetails] = useState<{ id: string } | undefined>(
@@ -12,20 +14,36 @@ const Like = ({ postId, userId }: { postId: string; userId: string }) => {
   const [debounceFunction, setDebounceFunction] = useState<null | (() => void)>(
     null
   );
+  const [peopleWhoLikedThePost, setPeopleWhoLikedThePost] = useState<
+    | {
+        id: string;
+        firstName: string;
+        lastName: string;
+        profilePictureUrl: string;
+      }[]
+    | undefined
+  >(undefined);
+  const [peopleWhoLikedThePostCount, setPeopleWhoLikedThePostCount] = useState<
+    number | undefined
+  >(undefined);
   const unMounting = useRef<boolean>(false);
   useEffect(() => {
-    unMounting.current = false; // Reset flag when the effect runs
+    unMounting.current = false;
 
     (async function () {
-      const response = await like.status(postId, userId);
-      if (!response) return;
-      setLikeStatus(response.length > 0);
-      setLikeDetails(response && response[0]);
+      const status = await like.status(postId, userId);
+      const likes = await like.getPeopleWhoLikedThePost(postId);
+
+      if (!status || !likes) return;
+      setPeopleWhoLikedThePost(likes);
+      setLikeStatus(status.length > 0);
+      setLikeDetails(status && status[0]);
+      setPeopleWhoLikedThePostCount(likes.length);
     })();
   }, []);
 
   useEffect(() => {
-    unMounting.current = false; // Reset flag when the effect runs
+    unMounting.current = false;
 
     if (!debounceFunction) return;
 
@@ -33,31 +51,42 @@ const Like = ({ postId, userId }: { postId: string; userId: string }) => {
 
     return () => {
       if (unMounting.current) {
-        return; // Skip cleanup on unmount
+        return;
       }
 
-      clearTimeout(clear); // Cleanup normally during dependency changes
+      clearTimeout(clear);
     };
   }, [debounceFunction]);
 
   useLayoutEffect(() => {
     return () => {
-      unMounting.current = true; // Set flag on unmount
+      unMounting.current = true;
     };
   }, []);
 
-  if (likeStatus === undefined) return <Loader2 className="animate-spin" />;
+  if (likeStatus === undefined || peopleWhoLikedThePost === undefined)
+    return <Loader2 className="animate-spin" />;
   return (
-    <figure className="flex">
+    <div className="flex">
       {likeStatus ? (
         <Image
           src="/posts/after-like.svg"
           onClick={() => {
             setLikeStatus(false);
+            setPeopleWhoLikedThePostCount((count) => {
+              if (!(count || count === 0)) return count;
+              return --count;
+            });
+
             setDebounceFunction(() => async () => {
               if (!likeDetails) return;
+
               const response = await like.delete(likeDetails?.id);
-              if (!response) setLikeStatus(true);
+              if (!response) {
+                setPeopleWhoLikedThePostCount(peopleWhoLikedThePostCount);
+
+                return setLikeStatus(true);
+              }
               setLikeStatus(false);
             });
           }}
@@ -71,6 +100,10 @@ const Like = ({ postId, userId }: { postId: string; userId: string }) => {
           src="/posts/before-like.svg"
           onClick={() => {
             setLikeStatus(true);
+            setPeopleWhoLikedThePostCount((count) => {
+              if (!(count || count === 0)) return count;
+              return ++count;
+            });
             setDebounceFunction(() => async () => {
               try {
                 const response = await like.create(postId, userId);
@@ -78,6 +111,7 @@ const Like = ({ postId, userId }: { postId: string; userId: string }) => {
                 setLikeStatus(true);
               } catch (error) {
                 setLikeStatus(false);
+                setPeopleWhoLikedThePostCount(peopleWhoLikedThePostCount);
               }
             });
           }}
@@ -87,8 +121,12 @@ const Like = ({ postId, userId }: { postId: string; userId: string }) => {
           priority
         />
       )}
-      <figcaption className="ml-1">4.1K</figcaption>
-    </figure>
+      <SelectOptions
+        triggerValue={peopleWhoLikedThePostCount as number}
+        options={peopleWhoLikedThePost}
+        userId={userId}
+      />
+    </div>
   );
 };
 

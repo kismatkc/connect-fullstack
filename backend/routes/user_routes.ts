@@ -25,6 +25,10 @@ router.get(
   "/get-general-notifications",
   userController.getGeneralNotifications
 );
+router.get(
+  "/get-people-who-liked-the-post/:postId",
+  userController.getPeopleWhoLikedThePost
+);
 router.delete("/delete-pending-request", userController.deletePendingRequest);
 router.delete("/delete-post", userController.deletePost);
 router.patch("/accept-pending-request", userController.acceptPendingRequest);

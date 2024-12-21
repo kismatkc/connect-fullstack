@@ -1,7 +1,10 @@
 import { SignUpForm, SignInForm } from "../../frontend/types/index.ts";
 import { supabase } from "../lib/database.ts";
 import bcrypt from "bcrypt";
-import { createGeneralNotificationsType } from "../types/index.ts";
+import {
+  createGeneralNotificationsType,
+  supbaseDataModifiedType,
+} from "../types/index.ts";
 
 const userModel = {
   create: async (userDetails: SignUpForm) => {
@@ -456,6 +459,33 @@ const userModel = {
         };
       }
       return { status: 200, message: "Like deleted", data, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+  getPeopleWhoLikedThePost: async (postId: string) => {
+    try {
+      // @ts-ignore
+      const { data, error }: { data: supbaseDataModifiedType; error: Error } =
+        await supabase
+          .from("likes")
+          .select("user_details(id,first_name,last_name,profile_picture_url)")
+          .eq("post", postId);
+
+      if (error) {
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      }
+      return {
+        status: 200,
+        message: "People likes exists",
+        data,
+        success: true,
+      };
     } catch (error) {
       throw error;
     }

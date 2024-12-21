@@ -227,5 +227,25 @@ export const like = {
       return false;
     }
   },
+  getPeopleWhoLikedThePost: async (
+    postId: string
+  ): Promise<
+    | {
+        id: string;
+        firstName: string;
+        lastName: string;
+        profilePictureUrl: string;
+      }[]
+    | undefined
+  > => {
+    try {
+      const response = await Api.get(
+        `/get-people-who-liked-the-post/${postId}`
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 export const Api = axios.create(ApiOptions());

@@ -1,30 +1,38 @@
-"use client";
+import * as React from "react";
 
-import useConfirmation from "@/components/test-confirmation";
-import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-// export default function Page() {
-//   const [value, setvalue] = useState(5);
-//   useEffect(() => {
-//     setvalue(hello);
-//   }, []);
-//   function hello(val: number) {
-//     console.log(val, "from the setter");
-//     return val;
-//   }
-//   return <>{value}</>;
-// }
-
-export default function Page() {
-  const { ConfirmationModel } = useConfirmation();
-
+export default function SelectScrollable() {
   return (
-    <div>
-      <ConfirmationModel
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers."
-      />
-    </div>
+    <Select>
+      <SelectTrigger className="w-[280px]">
+        <SelectValue placeholder="Select a timezone" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>North America</SelectLabel>
+          <SelectItem value="est">Eastern Standard Time (EST)</SelectItem>
+          <SelectItem value="cst">Central Standard Time (CST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 }
