@@ -490,6 +490,70 @@ const userModel = {
       throw error;
     }
   },
+  createComment: async (likeDetails: {
+    postId: string;
+    userId: string;
+    description: string;
+  }) => {
+    try {
+      const { data, error } = await supabase.from("comments").insert([
+        {
+          post: likeDetails.postId,
+          user_details: likeDetails.userId,
+          description: likeDetails.description,
+        },
+      ]);
+
+      if (error) {
+        return {
+          status: 400,
+
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      }
+      return { status: 201, message: "Comment created", success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+  getAllComments: async (postId: string) => {
+    try {
+      interface commentsType extends supbaseDataModifiedType {
+        description: string;
+        commentId: string;
+      }
+      // @ts-ignore
+      const { data, error }: { data: commentsType; error: Error } =
+        await supabase
+          .from("comments")
+          .select(
+            "user_details(id,first_name,last_name,profile_picture_url),description,id,created_at"
+          )
+          .eq("post", postId)
+          .order("created_at", {
+            ascending: false,
+          });
+
+      if (error) {
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      }
+      return {
+        status: 200,
+        message: "Comments exists",
+        data,
+        success: true,
+      };
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default userModel;

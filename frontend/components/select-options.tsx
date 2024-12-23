@@ -34,13 +34,21 @@ const SelectOptions = ({
         router.push(`/${value}`);
       }}
     >
-      <SelectTrigger>{triggerValue}</SelectTrigger>
+      <SelectTrigger
+        disabled={!(options.length > 0) || options[0].id === userId}
+      >
+        {triggerValue}
+      </SelectTrigger>
       <SelectContent side="right" className="focus:outline-none">
         {options.length > 0 ? (
           options.map(({ id, firstName, lastName, profilePictureUrl }) => {
             if (id === userId) return null;
             return (
-              <SelectItem value={id} className="w-full flex gap-x-2" key={id}>
+              <SelectItem
+                value={id}
+                className="w-full flex gap-x-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+                key={id}
+              >
                 <Avatar className="size-9 ">
                   <AvatarImage
                     src={profilePictureUrl}

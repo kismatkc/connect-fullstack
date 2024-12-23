@@ -138,6 +138,8 @@ const Posts = () => {
               <CommentSection
                 postId={post.postId}
                 userId={user?.user.id as string}
+                fullName={user?.user.name as string}
+                profilePictureUrl={user?.user.image as string}
               />
             </CardFooter>
           </Card>

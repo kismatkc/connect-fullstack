@@ -162,3 +162,31 @@ if relation found it send 200 with data obejct(.single)
 if no rleation ofund it sends 404 with error so in client side in catch block if any error then it will defualt that to false.
 
 
+
+
+comments
+
+structure
+comment = {
+id pk,
+postId refrences posts tbale fk on delte cacade,
+userId refrences users table fk on delte cacade,
+description text,
+createdAt timestampz
+}
+
+ui logics
+1.we will use normal axios post request for creating comments.Upon succesful creation we will invalidte the query 
+2.we will use useQuery for fetching commets for responsiveness.Fetch with most recent one on the top 
+
+ui view
+1.If 0 comments show 
+No commets yet
+creating comment box
+2.if 1 comment show it only with no View more comments button
+3.if more than 1 then oppen a sheet from right just below the post.
+Sheet ui
+it will have a crete ocmment logic in the bottom on the top it will shwo the ocmmend as well.
+
+
+

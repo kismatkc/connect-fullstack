@@ -248,4 +248,39 @@ export const like = {
     }
   },
 };
+
+export const comments = {
+  create: async (commentDetails: {
+    postId: string;
+    userId: string;
+    description: string;
+  }): Promise<Boolean | Error> => {
+    try {
+      const response = await Api.post("/create-comment", commentDetails);
+      return response.data.success;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Couldnot create comment");
+    }
+  },
+  getAllComments: async (
+    postId: string
+  ): Promise<
+    | {
+        id: string;
+        firstName: string;
+        lastName: string;
+        profilePictureUrl: string;
+        description: string;
+      }[]
+  > => {
+    try {
+      const response = await Api.get(`/get-all-comments/${postId}`);
+      return response.data.data;
+    } catch (error: any) {
+      console.log(error);
+      throw new Error(error);
+    }
+  },
+};
 export const Api = axios.create(ApiOptions());

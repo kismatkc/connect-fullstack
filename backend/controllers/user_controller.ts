@@ -462,8 +462,11 @@ const userController = {
 
       const response = await userModel.getPeopleWhoLikedThePost(postId);
       const data =
+        //@ts-ignore
         response.data.length > 0
-          ? response.data.map((like) => ({
+          ? //@ts-ignore
+
+            response.data.map((like) => ({
               id: like.user_details.id,
 
               firstName: like.user_details.first_name,
@@ -485,6 +488,60 @@ const userController = {
       res
         .status(500)
         .json({ success: false, message: "Internal server error" });
+    }
+  },
+  createComment: async (req: Request, res: Response) => {
+    try {
+      const commentDetails = req.body;
+      const response = await userModel.createComment(commentDetails);
+      res.status(response.status).json({
+        response: response.success,
+
+        error: response.message || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  },
+  getAllComments: async (req: Request, res: Response) => {
+    try {
+      const postId = req.params.postId;
+
+      const response = await userModel.getAllComments(postId);
+      const data =
+        //@ts-ignore
+        response.data.length > 0
+          ? //@ts-ignore
+
+            response.data.map((comment: any) => ({
+              id: comment.user_details.id,
+
+              firstName: comment.user_details.first_name,
+
+              lastName: comment.user_details.last_name,
+
+              profilePictureUrl: comment.user_details.profile_picture_url,
+              description: comment.description,
+              commentId: comment.id,
+            }))
+          : response.data;
+      res.status(response.status).json({
+        response: response.success,
+        data,
+        error: response.error || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error", error });
     }
   },
 };

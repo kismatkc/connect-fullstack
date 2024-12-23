@@ -14,12 +14,14 @@ router.post(
 );
 router.post("/create-post", formDataResolver, userController.createPost);
 router.post("/create-like", userController.createLike);
+router.post("/create-comment", userController.createComment);
 router.delete("/delete-like/:likeId", userController.deleteLike);
 router.get("/get-pending-request", userController.getPendingRequests);
 router.get("/get-friendship-status", userController.getFriendshipStatus);
 router.get("/get-like-status", userController.likeStatus);
 router.get("/get-friends", userController.getFriendsDetails);
 router.get("/get-your-posts", userController.getYourPosts);
+router.get("/get-all-comments/:postId", userController.getAllComments);
 router.get("/get-friends-posts", userController.getFriendsPosts);
 router.get(
   "/get-general-notifications",
