@@ -1,6 +1,7 @@
 import {
   Ellipsis,
   Laugh,
+  Loader2,
   MessageCircle,
   Send,
   Share,
@@ -14,7 +15,7 @@ import { comments } from "@/lib/axios-utils";
 import { toast } from "sonner";
 import useGetAllPostComments from "@/hooks/get-all-comment";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils";
+import { cn, normalizeInput } from "@/lib/utils";
 import Image from "next/image";
 import { ViewMoreComment } from "./comment-sheet";
 
@@ -30,9 +31,17 @@ const CommentSection = ({
   fullName: string;
 }) => {
   const [description, setDescription] = useState<string>("");
-  const { data, error, isLoading } = useGetAllPostComments(postId);
+  const [showMore, setShowMore] = useState<boolean>(false);
+  const { data, error } = useGetAllPostComments(postId);
   useEffect(() => {}, [data]);
   const queryClient = useQueryClient();
+  if (!data || error) {
+    return (
+      <div className="p-8 flex items-center justify-center w-full">
+        <Loader2 className="size-10 animate-spin" />
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col w-full mt-2 icon-bg-light dark:icon-bg-dark">
       <div className="flex justify-between border-b-2 pb-3 items-center">
@@ -41,44 +50,69 @@ const CommentSection = ({
         <Share />
       </div>
       <div className="flex flex-col pt-2 pb-1">
-        {/* <button
-          className={cn("text-base text-left transition-opacity", {
-            "opacity-0 invisible": !(data && data.length > 1),
-          })}
-        >
-          View more comments
-        </button> */}
-        <ViewMoreComment showMoreButton={!(data && data.length > 1)} />
+        <ViewMoreComment
+          showMoreButton={!(data && data.length > 1)}
+          //@ts-ignore
+          comments={data}
+        />
+
         {data && data.length > 0 ? (
-          <figure className="flex gap-x-2 items-center pt-3 ">
+          <div
+            className="flex justify-between items-start  gap-x-3"
+            key={data[0].id}
+          >
             <Image
               src={data[0].profilePictureUrl}
-              alt={data[0].firstName[0].toLocaleLowerCase()}
+              alt={data[0].firstName[0].toLocaleUpperCase()}
               width={40}
               height={40}
               className="rounded-full"
               priority
             />
-
-            <figcaption className="flex flex-col px-4 py-1 rounded-full  bg-icon-bg-light dark:bg-icon-bg-dark">
-              <div className="flex flex-nowrap gap-x-1">
-                <span>{data[0].firstName}</span>
-                <span>{data[0].lastName}</span>
+            <div className="flex flex-col grow ">
+              <div className="flex justify-between pb-2">
+                <div className="flex flex-nowrap ">
+                  <span>{data[0].firstName}</span>
+                  <span>{data[0].lastName}</span>
+                </div>
+                <Ellipsis className="size-6 opacity-50 cursor-pointer" />
               </div>
-              <span>{data[0].description}</span>
-            </figcaption>
-            <Ellipsis className="size-6 opacity-50 cursor-pointer" />
-          </figure>
+
+              <p className="grow bg-icon-bg-light dark:bg-icon-bg-dark rounded-lg text-left break-all p-3 hyphens-auto text-ellipsis">
+                {showMore ? (
+                  <div className="flex flex-col">
+                    <span>{data[0].description}</span>
+                    <button
+                      className="text-right"
+                      onClick={() => setShowMore(false)}
+                    >
+                      Show less
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col">
+                    <span>{data[0].description.slice(0, 70)}... </span>
+                    <button
+                      className="text-right"
+                      onClick={() => setShowMore(true)}
+                    >
+                      Read more
+                    </button>
+                  </div>
+                )}
+              </p>
+            </div>
+          </div>
         ) : (
           <div className="w-full font-medium text-center py-2 px-1">
             <p>Be the first one to comment.</p>
           </div>
         )}
 
-        <div className="flex gap-x-2 pt-4 items-center">
+        <div className="flex gap-x-2 pt-4 items-center mt-1">
           <Image
             src={profilePictureUrl}
-            alt={fullName[0].toLocaleLowerCase()}
+            alt={fullName[0].toLocaleUpperCase()}
             width={40}
             height={40}
             className="rounded-full"
@@ -108,12 +142,12 @@ const CommentSection = ({
                 try {
                   if (!description)
                     return toast.error("Opps you forgot to write");
+                  const trimmedDescription = normalizeInput;
                   const response = await comments.create({
                     postId,
                     userId,
-                    description,
+                    description: trimmedDescription(description),
                   });
-
                   setDescription("");
                   queryClient.invalidateQueries({
                     queryKey: ["comments", postId],

@@ -27,9 +27,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function normalizeInput(input: string): string {
+  return input
+    .trim() // Remove spaces from the start and end
+    .replace(/\s+/g, " ") // Replace multiple spaces, tabs, or newlines with a single space
+    .replace(/\u00A0/g, " ");
+}
+
 export function truncuateTillKeyword(
   string: string,
-  keyword: string,
+  keyword: string
 ): string | null {
   if (!(string || keyword)) return null;
   const desiredStringLength = string.indexOf(keyword) + keyword.length;
