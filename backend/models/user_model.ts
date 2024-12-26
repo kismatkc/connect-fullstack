@@ -554,6 +554,26 @@ const userModel = {
       throw error;
     }
   },
+  deleteComment: async (commentId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("comments")
+        .delete()
+        .eq("id", commentId);
+
+      if (error) {
+        return {
+          status: 400,
+          message: "Database error occurred",
+          error,
+          success: false,
+        };
+      }
+      return { status: 200, message: "comment deleted", data, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default userModel;

@@ -189,4 +189,11 @@ Sheet ui
 it will have a crete ocmment logic in the bottom on the top it will shwo the ocmmend as well.
 
 
+description ui 
+1.description is guaranted
+
+2.if description is > 70  append ... and a readmore button 
+
+
+3.if desceiption is < 70 show the entire description.
 

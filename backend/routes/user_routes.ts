@@ -16,6 +16,7 @@ router.post("/create-post", formDataResolver, userController.createPost);
 router.post("/create-like", userController.createLike);
 router.post("/create-comment", userController.createComment);
 router.delete("/delete-like/:likeId", userController.deleteLike);
+router.delete("/delete-comment/:commentId", userController.deleteComment);
 router.get("/get-pending-request", userController.getPendingRequests);
 router.get("/get-friendship-status", userController.getFriendshipStatus);
 router.get("/get-like-status", userController.likeStatus);

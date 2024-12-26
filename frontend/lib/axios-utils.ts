@@ -272,14 +272,26 @@ export const comments = {
         lastName: string;
         profilePictureUrl: string;
         description: string;
+        commentId: string;
       }[]
   > => {
     try {
       const response = await Api.get(`/get-all-comments/${postId}`);
+      console.log("comments structure", response.data.data);
+
       return response.data.data;
     } catch (error: any) {
       console.log(error);
       throw new Error(error);
+    }
+  },
+  delete: async (commentId: string): Promise<boolean> => {
+    try {
+      const response = await Api.delete(`/delete-comment/${commentId}`);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   },
 };

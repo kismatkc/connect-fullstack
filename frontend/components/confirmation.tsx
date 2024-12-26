@@ -38,6 +38,7 @@ export default function useConfirmation() {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [open]);
+
   const ConfirmationModel = ({
     title,
     description,

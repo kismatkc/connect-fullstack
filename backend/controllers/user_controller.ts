@@ -544,6 +544,25 @@ const userController = {
         .json({ success: false, message: "Internal server error", error });
     }
   },
+  deleteComment: async (req: Request, res: Response) => {
+    try {
+      const commentId = req.params.commentId;
+
+      const response = await userModel.deleteComment(commentId);
+      res.status(response.status).json({
+        response: response.success,
+        data: null,
+        error: response.error || null,
+        message: response.message,
+      });
+    } catch (error) {
+      console.log(error);
+
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  },
 };
 
 export default userController;

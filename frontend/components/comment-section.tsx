@@ -8,7 +8,10 @@ import {
   Smile,
   SmileIcon,
   ThumbsUp,
+  Share2Icon,
+  TrashIcon,
 } from "lucide-react";
+
 import Like from "./like";
 import { useEffect, useState } from "react";
 import { comments } from "@/lib/axios-utils";
@@ -18,7 +21,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { cn, normalizeInput } from "@/lib/utils";
 import Image from "next/image";
 import { ViewMoreComment } from "./comment-sheet";
-
+import ReadMore from "./read-more-text";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "@radix-ui/react-dropdown-menu";
+import useConfirmation from "./confirmation";
+import AutoGrowTextarea from "./auto-grow-text-area";
 const CommentSection = ({
   postId,
   userId,
@@ -31,7 +41,8 @@ const CommentSection = ({
   fullName: string;
 }) => {
   const [description, setDescription] = useState<string>("");
-  const [showMore, setShowMore] = useState<boolean>(false);
+  const { ConfirmationModel, decision: getDecision } = useConfirmation();
+
   const { data, error } = useGetAllPostComments(postId);
   useEffect(() => {}, [data]);
   const queryClient = useQueryClient();
@@ -44,6 +55,11 @@ const CommentSection = ({
   }
   return (
     <div className="flex flex-col w-full mt-2 icon-bg-light dark:icon-bg-dark">
+      <ConfirmationModel
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your
+            comment and also remove it from our servers."
+      />
       <div className="flex justify-between border-b-2 pb-3 items-center">
         <Like postId={postId} userId={userId} />
 
@@ -52,8 +68,10 @@ const CommentSection = ({
       <div className="flex flex-col pt-2 pb-1">
         <ViewMoreComment
           showMoreButton={!(data && data.length > 1)}
+          userId={userId}
           //@ts-ignore
           comments={data}
+          postId={postId}
         />
 
         {data && data.length > 0 ? (
@@ -75,30 +93,52 @@ const CommentSection = ({
                   <span>{data[0].firstName}</span>
                   <span>{data[0].lastName}</span>
                 </div>
-                <Ellipsis className="size-6 opacity-50 cursor-pointer" />
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="focus:outline-none">
+                    <Ellipsis className="size-6  cursor-pointer" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="z-[30]">
+                    {userId === data[0].id && (
+                      <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex  p-1.5 items-center w-full">
+                        <TrashIcon size={16} />
+                        <button
+                          onClick={async () => {
+                            try {
+                              const decision = await getDecision();
+                              const commentId = data[0].commentId;
+                              if (!decision || !commentId) return;
+                              const response = await comments.delete(commentId);
+                              if (response) {
+                                toast.success("Comment deleted successfully");
+
+                                return queryClient.invalidateQueries({
+                                  queryKey: ["comments", postId],
+                                  exact: true,
+                                });
+                              }
+                              return toast.error("Error deleting Comment");
+                            } catch (error) {}
+                          }}
+                          className="px-4"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+
+                    <div className=" dark:text-white dark:container-bg-dark container-bg-light hover:bg-gray-200 dark:hover:bg-black flex  p-1.5 items-center ">
+                      <Share2Icon size={16} />
+                      <button className="px-4">Share</button>
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               <p className="grow bg-icon-bg-light dark:bg-icon-bg-dark rounded-lg text-left break-all p-3 hyphens-auto text-ellipsis">
-                {showMore ? (
-                  <div className="flex flex-col">
-                    <span>{data[0].description}</span>
-                    <button
-                      className="text-right"
-                      onClick={() => setShowMore(false)}
-                    >
-                      Show less
-                    </button>
-                  </div>
+                {data[0].description.length > 70 ? (
+                  <ReadMore description={data[0].description} />
                 ) : (
-                  <div className="flex flex-col">
-                    <span>{data[0].description.slice(0, 70)}... </span>
-                    <button
-                      className="text-right"
-                      onClick={() => setShowMore(true)}
-                    >
-                      Read more
-                    </button>
-                  </div>
+                  data[0].description
                 )}
               </p>
             </div>
@@ -118,7 +158,7 @@ const CommentSection = ({
             className="rounded-full"
             priority
           />
-          <div className="w-full relative">
+          {/* <div className="w-full relative">
             <textarea
               className="w-full border rounded-3xl py-3 px-4 
                          focus:outline-none 
@@ -157,7 +197,14 @@ const CommentSection = ({
                 }
               }}
             />
-          </div>
+          </div> */}
+          {/* <textarea className="resize-none w-full rounded-lg" /> */}
+
+          <AutoGrowTextarea
+            placeholder={`Comment as ${fullName}`}
+            postId={postId}
+            userId={userId}
+          />
         </div>
       </div>
     </div>
