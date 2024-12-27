@@ -18,7 +18,7 @@ import { comments } from "@/lib/axios-utils";
 import { toast } from "sonner";
 import useGetAllPostComments from "@/hooks/get-all-comment";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn, normalizeInput } from "@/lib/utils";
+
 import Image from "next/image";
 import { ViewMoreComment } from "./comment-sheet";
 import ReadMore from "./read-more-text";
@@ -26,6 +26,7 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+
 } from "@radix-ui/react-dropdown-menu";
 import useConfirmation from "./confirmation";
 import AutoGrowTextarea from "./auto-grow-text-area";
@@ -42,7 +43,7 @@ const CommentSection = ({
 }) => {
   const [description, setDescription] = useState<string>("");
   const { ConfirmationModel, decision: getDecision } = useConfirmation();
-
+const [open,setOpen] = useState<boolean>(false)
   const { data, error } = useGetAllPostComments(postId);
   useEffect(() => {}, [data]);
   const queryClient = useQueryClient();
@@ -93,7 +94,7 @@ const CommentSection = ({
                   <span>{data[0].firstName}</span>
                   <span>{data[0].lastName}</span>
                 </div>
-                <DropdownMenu>
+                <DropdownMenu open={open} onOpenChange={(state)=> {setOpen(state)}}>
                   <DropdownMenuTrigger className="focus:outline-none">
                     <Ellipsis className="size-6  cursor-pointer" />
                   </DropdownMenuTrigger>
@@ -107,6 +108,7 @@ const CommentSection = ({
                               const decision = await getDecision();
                               const commentId = data[0].commentId;
                               if (!decision || !commentId) return;
+                              setOpen(false)
                               const response = await comments.delete(commentId);
                               if (response) {
                                 toast.success("Comment deleted successfully");
@@ -158,47 +160,7 @@ const CommentSection = ({
             className="rounded-full"
             priority
           />
-          {/* <div className="w-full relative">
-            <textarea
-              className="w-full border rounded-3xl py-3 px-4 
-                         focus:outline-none 
-                         min-h-[72px]
-                         dark:bg-gray-800 dark:border-gray-700
-                         transition-colors duration-200 bg-icon-bg-light dark:bg-icon-bg-dark mr-3"
-              placeholder={`Comment as ${fullName}`}
-              value={description}
-              onChange={(e) => {
-                const description = e.target.value;
 
-                setDescription(description);
-              }}
-            />
-            <div className="flex gap-x-1 absolute left-4 bottom-[4%]  [&>svg]:stroke-[1.5px] dark:[&>svg]:stroke-[1px] [&>svg]:stroke-gray-700 dark:[&>svg]:stroke-white mb-1">
-              <SmileIcon className="cursor-pointer" />
-            </div>
-            <Send
-              className="absolute bottom-[4%] right-3 stroke-[1.5px] dark:stroke-[1px] stroke-gray-700 dark:stroke-white cursor-pointer mr-1 mb-1"
-              onClick={async () => {
-                try {
-                  if (!description)
-                    return toast.error("Opps you forgot to write");
-                  const trimmedDescription = normalizeInput;
-                  const response = await comments.create({
-                    postId,
-                    userId,
-                    description: trimmedDescription(description),
-                  });
-                  setDescription("");
-                  queryClient.invalidateQueries({
-                    queryKey: ["comments", postId],
-                  });
-                } catch (error: any) {
-                  return toast.error(error.message);
-                }
-              }}
-            />
-          </div> */}
-          {/* <textarea className="resize-none w-full rounded-lg" /> */}
 
           <AutoGrowTextarea
             placeholder={`Comment as ${fullName}`}

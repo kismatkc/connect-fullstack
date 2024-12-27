@@ -1,16 +1,16 @@
 import { CorsOptions } from "cors";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-export const corsOptions = (): CorsOptions => ({
-  origin: "http://localhost:3000",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"],
-});
 // export const corsOptions = (): CorsOptions => ({
-//   origin: "https://96283587-40ff-470f-a4ea-4f30bdcaad52-00-care00ttvfz8.spock.replit.dev",
+//   origin: "http://localhost:3000",
 //   credentials: true,
 //   methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"],
 // });
+export const corsOptions = (): CorsOptions => ({
+  origin: "https://96283587-40ff-470f-a4ea-4f30bdcaad52-00-care00ttvfz8.spock.replit.dev",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"],
+});
 
 type user = {
   email: string;
