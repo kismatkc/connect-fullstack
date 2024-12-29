@@ -1,14 +1,29 @@
 import { create } from "zustand";
-interface MessengerStore {
-  openSheet: boolean;
-  openChatbox: boolean;
-  setOpenSheet: (value: boolean) => void;
-  setOpenChatbox: (value: boolean) => void;
+interface MobileChatSheetStore {
+  openMobileChatSheet: boolean;
+  showIndividualChat: boolean;
+  user: {
+    id: string;
+    name: string;
+    profilePicture: string;
+  } | null;
+  setOpenMobileChatSheet: (value: boolean) => void;
+  setShowIndividualChat: (value: boolean) => void;
+  setUser: (
+    user: {
+      id: string;
+      name: string;
+      profilePicture: string;
+    } | null
+  ) => void;
 }
 
-export const useMessengerStore = create<MessengerStore>((set) => ({
-  openSheet: false,
-  openChatbox: false,
-  setOpenSheet: (value) => set(() => ({ openSheet: value })),
-  setOpenChatbox: (value) => set(() => ({ openChatbox: value })),
+export const useMobileChatSheetStore = create<MobileChatSheetStore>((set) => ({
+  openMobileChatSheet: false,
+  showIndividualChat: false,
+  user: null,
+  setUser: (user) => set(() => ({ user })),
+  setOpenMobileChatSheet: (value) =>
+    set(() => ({ openMobileChatSheet: value })),
+  setShowIndividualChat: (value) => set(() => ({ showIndividualChat: value })),
 }));

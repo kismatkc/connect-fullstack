@@ -15,6 +15,7 @@ import { truncuateTillKeyword } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import FriendRequestButton from "@/components/friend-request-button";
 import ProfilePageFriendsSection from "@/components/profilepage-friends-section";
+import { useMobileChatSheetStore } from "@/hooks/global-zustand-hooks";
 
 const UserProfile = ({ params }: { params: { profileId: string } }) => {
   const {
@@ -24,7 +25,8 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
     isPending,
     mutate: getProfileDetails,
   } = useGetUserProfileDetails();
-
+  const { setOpenMobileChatSheet, setShowIndividualChat } =
+    useMobileChatSheetStore();
   const { data: session } = useSession();
   const [friendshipStatus, setFriendshipStatus] = useState<{
     status: string;
@@ -43,7 +45,7 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
           requestDetails
         )) as { status: string; id: string };
         if (status) {
-          console.log(status);
+      
           return setFriendshipStatus(status);
         }
         return setFriendshipStatus({ status: "", id: "" });
@@ -103,7 +105,13 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
                     />
                   )}
 
-                  <button className="bg-blue-500 hover:bg-blue-600 transition-colors rounded-md flex gap-x-2 items-center px-2 py-2">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-600 transition-colors rounded-md flex gap-x-2 items-center px-2 py-2"
+                    onClick={() => {
+                      setOpenMobileChatSheet(true);
+                      setShowIndividualChat(true);
+                    }}
+                  >
                     <FacebookMessengerIcon />
                     <span className="text-lg">Message</span>
                   </button>

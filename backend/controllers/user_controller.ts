@@ -245,7 +245,7 @@ const userController = {
   getFriendsDetails: async (req: Request, res: Response) => {
     try {
       const userId = req.query.query as string;
-      console.log(req.query);
+     
 
       const response = await userModel.getFriendsDetails(userId);
       const data = response.data.map((item) => {

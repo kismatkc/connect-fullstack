@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Send, SmileIcon } from "lucide-react";
 import React, { useState, useRef, FormEvent, useEffect } from "react";
 import { toast } from "sonner";
-import Emojis from "./emoji-picker";
+
 import EmojiPicker from "emoji-picker-react";
 import {
   DropdownMenu,
@@ -12,14 +12,13 @@ import {
   DropdownMenuContent,
 } from "@radix-ui/react-dropdown-menu";
 
-
 const AutoGrowTextarea = ({
   placeholder,
   postId,
   userId,
 }: {
   placeholder: string;
-  postId: string;
+  postId?: string;
   userId: string;
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -36,7 +35,6 @@ const AutoGrowTextarea = ({
     }
   };
 
-
   return (
     <div className="flex flex-col w-full ">
       <textarea
@@ -45,7 +43,6 @@ const AutoGrowTextarea = ({
         onInput={(e: any) => {
           const description = e.target.value;
 
-      
           setDescription(description);
 
           handleInput();
@@ -72,10 +69,10 @@ const AutoGrowTextarea = ({
               onEmojiClick={({ emoji }) => {
                 const textarea = textareaRef.current as HTMLTextAreaElement;
                 const { selectionStart: emojiPosition } = textarea;
-                const beforeEmoji = textarea.value.substring(0,emojiPosition)
-                const afterEmoji = textarea.value.substring(emojiPosition)
+                const beforeEmoji = textarea.value.substring(0, emojiPosition);
+                const afterEmoji = textarea.value.substring(emojiPosition);
                 const newDescription = beforeEmoji + emoji + afterEmoji;
-              setDescription(newDescription)
+                setDescription(newDescription);
               }}
             />
           </DropdownMenuContent>
@@ -87,6 +84,7 @@ const AutoGrowTextarea = ({
             try {
               if (!description) return toast.error("Opps you forgot to write");
               const trimmedDescription = normalizeInput;
+              if (!postId || !userId) return;
               const response = await comments.create({
                 postId,
                 userId,

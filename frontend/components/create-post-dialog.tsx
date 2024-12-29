@@ -15,9 +15,10 @@ import { PostDetailsType } from "@/types";
 import { toast } from "sonner";
 import { UUID } from "crypto";
 import { useQueryClient } from "@tanstack/react-query";
+import { Session } from "next-auth";
 
-const CreatePostDialog = () => {
-  const { data } = useSession();
+const CreatePostDialog = ({data}: {data: Session | null}) => {
+  // const { data } = useSession();
   const queryClient = useQueryClient();
 
   const [description, setDescription] = useState<string>("");

@@ -6,16 +6,15 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import ThemeToggleButton from "./theme-toggler-button";
 import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
-import { useMessengerStore } from "@/hooks/global-zustand-hooks";
 import HeaderUserDropDownMenu from "./header-user-dropdown";
 import Link from "next/link";
 import FriendsSuggestion from "./friends-suggestion";
 import Notifications from "./notifications";
+import MobileChatSheet from "./mobile-chat-sheet";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
-  const { openSheet, setOpenSheet } = useMessengerStore();
 
   useEffect(() => {
     setMounted(true);
@@ -42,14 +41,8 @@ const Header = () => {
       </div>
       <div className="flex gap-x-1 justify-between items-center ">
         <ThemeToggleButton />
-        <button
-          className="rounded-full bg-icon-bg-light dark:bg-icon-bg-dark  pb-1 pr-1
-                         hover:bg-gray-200 dark:hover:bg-gray-700
-                         transition-all duration-200"
-          onClick={() => setOpenSheet(true)}
-        >
-          <FacebookMessengerIcon />
-        </button>
+
+        <MobileChatSheet />
 
         <Notifications />
         <HeaderUserDropDownMenu />

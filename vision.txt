@@ -197,3 +197,16 @@ description ui
 
 3.if desceiption is < 70 show the entire description.
 
+
+
+Chat ui
+1. On click to sheet button we will display a sheet from right sidecovering 80 percentage.
+2. from the phone ss get an idea
+3.so 
+
+
+
+
+conversation ui and logic
+1.its talk between people 
+2.
