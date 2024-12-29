@@ -1,22 +1,22 @@
 import { createGeneralNotificationsType, Post, PostDetailsType } from "@/types";
 import axios from "axios";
-// const ApiOptions = () => {
-//   const options = {
-//     withCredentials: true,
-//     baseURL: "http://localhost:4000/api",
-//   };
-
-//   return options;
-// };
 const ApiOptions = () => {
   const options = {
     withCredentials: true,
-    baseURL:
-      "https://96283587-40ff-470f-a4ea-4f30bdcaad52-00-care00ttvfz8.spock.replit.dev:3000/api",
+    baseURL: "http://localhost:4000/api",
   };
 
   return options;
 };
+// const ApiOptions = () => {
+//   const options = {
+//     withCredentials: true,
+//     baseURL:
+//       "https://96283587-40ff-470f-a4ea-4f30bdcaad52-00-care00ttvfz8.spock.replit.dev:3000/api",
+//   };
+
+//   return options;
+// };
 
 export const friendRequest = {
   send: async (requestDetails: {
@@ -254,7 +254,7 @@ export const comments = {
     postId: string;
     userId: string;
     description: string;
-  }): Promise<Boolean | Error> => {
+  }): Promise<boolean | Error> => {
     try {
       const response = await Api.post("/create-comment", commentDetails);
       return response.data.success;

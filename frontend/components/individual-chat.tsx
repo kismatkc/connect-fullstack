@@ -13,7 +13,7 @@ const IndividualChat = () => {
 
   if (!user)
     return (
-      <section className="flex w-full h-full ">
+      <section className="flex w-full h-full justify-center items-center">
         <Loader2 className="animate-spin" />
       </section>
     );
@@ -23,7 +23,7 @@ const IndividualChat = () => {
       <div className="flex justify-between ">
         <div className="flex gap-x-1">
           <Image
-            src={user?.picture as string}
+            src={user?.profilePicture as string}
             alt={`${user.name} picture `}
             width={36}
             height={36}

@@ -1,3 +1,4 @@
+import { EnumLike } from "zod";
 import { create } from "zustand";
 interface MobileChatSheetStore {
   openMobileChatSheet: boolean;
@@ -6,6 +7,7 @@ interface MobileChatSheetStore {
     id: string;
     name: string;
     profilePicture: string;
+    status: "online" | "offline";
   } | null;
   setOpenMobileChatSheet: (value: boolean) => void;
   setShowIndividualChat: (value: boolean) => void;
@@ -14,6 +16,7 @@ interface MobileChatSheetStore {
       id: string;
       name: string;
       profilePicture: string;
+      status: "online" | "offline";
     } | null
   ) => void;
 }

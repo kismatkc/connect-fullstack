@@ -1,7 +1,6 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet-no-x";
 import FacebookMessengerIcon from "@/public/header/facebook-messeneger";
-import PastConversations from "./chats-friends-tab";
-import { useState } from "react";
+import ChatOrFriendsTab from "./chats-friends-tab";
 import IndividualChat from "./individual-chat";
 import { useMobileChatSheetStore } from "@/hooks/global-zustand-hooks";
 import { ArrowLeft } from "lucide-react";
@@ -40,7 +39,7 @@ const MobileChatSheet = () => {
             <span className="text-sm">Messages</span>
           </button>
         )}
-        {showIndividualChat ? <IndividualChat /> : <PastConversations />}
+        {showIndividualChat ? <IndividualChat /> : <ChatOrFriendsTab />}
       </SheetContent>
     </Sheet>
   );

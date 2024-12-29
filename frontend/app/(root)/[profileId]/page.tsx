@@ -25,7 +25,7 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
     isPending,
     mutate: getProfileDetails,
   } = useGetUserProfileDetails();
-  const { setOpenMobileChatSheet, setShowIndividualChat } =
+  const { setOpenMobileChatSheet, setShowIndividualChat, setUser } =
     useMobileChatSheetStore();
   const { data: session } = useSession();
   const [friendshipStatus, setFriendshipStatus] = useState<{
@@ -45,7 +45,6 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
           requestDetails
         )) as { status: string; id: string };
         if (status) {
-      
           return setFriendshipStatus(status);
         }
         return setFriendshipStatus({ status: "", id: "" });
@@ -110,6 +109,19 @@ const UserProfile = ({ params }: { params: { profileId: string } }) => {
                     onClick={() => {
                       setOpenMobileChatSheet(true);
                       setShowIndividualChat(true);
+                      const chatUser: {
+                        id: string;
+                        name: string;
+                        profilePicture: string;
+                        status: "online" | "offline";
+                      } | null = {
+                        id: user.id,
+                        status: "online",
+                        profilePicture: user.profile_picture_url,
+                        name: `${user.first_name} ${user.last_name}`,
+                      };
+
+                      setUser(chatUser);
                     }}
                   >
                     <FacebookMessengerIcon />

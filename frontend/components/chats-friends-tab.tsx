@@ -6,56 +6,55 @@ import { useRef } from "react";
 import useGetFriends from "@/hooks/get-friends";
 import { useSession } from "next-auth/react";
 const ChatOrFriendsTab = () => {
-  const { setShowIndividualChat } = useMobileChatSheetStore();
-  const {data: user}= useSession();
+  const { setShowIndividualChat, setUser } = useMobileChatSheetStore();
+  const { data: user } = useSession();
   const chatsOrFriendsContainerRef = useRef<HTMLDivElement>(null);
-  const {data: friends} = useGetFriends(user?.user?.id)
+  const { data: friends } = useGetFriends(user?.user?.id);
   const chats = [
     {
-      picture:
+      profile_picture_url:
         "https://lotpqdywijkjinsgfkkv.supabase.co/storage/v1/object/public/profile_pictures/1734105690633-dvfinal.jpg",
-      name: "Henry Campbell",
+      first_name: "Henry",
+      last_name: "Campbell",
       lastMessage: "Hey, how are you?",
       id: 1,
-      timestamp: "2024-12-27T10:00:00Z",
     },
     {
-      picture:
+      profile_picture_url:
         "https://lotpqdywijkjinsgfkkv.supabase.co/storage/v1/object/public/profile_pictures/1734105690633-dvfinal.jpg",
-      name: "Alice Johnson",
+      first_name: "Alice",
+      last_name: "Johnson",
       lastMessage: "Are we still on for today?",
       id: 2,
-      timestamp: "2024-12-27T09:45:00Z",
     },
     {
-      picture:
+      profile_picture_url:
         "https://lotpqdywijkjinsgfkkv.supabase.co/storage/v1/object/public/profile_pictures/1734105690633-dvfinal.jpg",
-      name: "James Smith",
+      first_name: "James",
+      last_name: "Smith",
       lastMessage: "Let me know when you're free.",
       id: 3,
-      timestamp: "2024-12-27T09:30:00Z",
     },
     {
-      picture:
+      profile_picture_url:
         "https://lotpqdywijkjinsgfkkv.supabase.co/storage/v1/object/public/profile_pictures/1734105690633-dvfinal.jpg",
-      name: "Emma Davis",
+      first_name: "Emma",
+      last_name: "Davis",
       lastMessage: "Thanks for the update!",
       id: 4,
-      timestamp: "2024-12-27T08:50:00Z",
     },
     {
-      picture:
+      profile_picture_url:
         "https://lotpqdywijkjinsgfkkv.supabase.co/storage/v1/object/public/profile_pictures/1734105690633-dvfinal.jpg",
-      name: "Oliver Brown",
+      first_name: "Oliver",
+      last_name: "Brown",
       lastMessage: "See you soon.",
       id: 5,
-      timestamp: "2024-12-27T08:30:00Z",
     },
   ];
- 
 
   return (
-    <Tabs defaultValue="chats" className="w-full" >
+    <Tabs defaultValue="chats" className="w-full">
       <TabsList className="w-full mb-2  bg-icon-bg-light dark:bg-icon-bg-dark">
         <TabsTrigger value="chats" className="w-full">
           Chats
@@ -71,27 +70,44 @@ const ChatOrFriendsTab = () => {
             className="flex flex-col gap-y-4 h-full overflow-y-scroll"
             ref={chatsOrFriendsContainerRef}
             onClick={(e) => {
-              const target = e.target as any;
               const container = chatsOrFriendsContainerRef.current;
+              const target = e.target as HTMLElement;
               if (container?.contains(target) && target === container) return;
+              const divParent = target.closest("[data-user]") as HTMLDivElement;
+              if (!divParent?.dataset?.user) return;
+              const data = JSON.parse(divParent.dataset.user);
+              const user: any = {
+                id: data.id,
+                name: `${data.first_name} ${data.last_name}`,
+                profilePicture: data.profile_picture_url,
+                status: "online",
+              };
+              console.log(user);
+
+              setUser(user);
+
               setShowIndividualChat(true);
             }}
           >
             {chats?.length > 0 ? (
-              chats.map((user) => (
-                <div key={user.id} className="flex gap-x-1 justify-start">
+              chats.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex gap-x-1 justify-start"
+                  data-user={JSON.stringify(item)}
+                >
                   <Image
-                    src={user?.picture as string}
-                    alt={`${user.name} picture `}
+                    src={item?.profile_picture_url as string}
+                    alt={`${item.first_name} picture `}
                     width={48}
                     height={48}
                     className="rounded-full w-[48px] h-[48px]"
                     priority
                   />
                   <div className="flex flex-col">
-                    <span className="text-lg font-semibold">{user?.name}</span>
+                    <span className="text-lg font-semibold">{`${item?.first_name} ${item?.last_name}`}</span>
                     <span className="text-sm font-medium ">
-                      {user?.lastMessage}
+                      {item?.lastMessage}
                     </span>
                   </div>
                 </div>
@@ -113,28 +129,43 @@ const ChatOrFriendsTab = () => {
             className="flex flex-col gap-y-4 h-full overflow-y-scroll"
             ref={chatsOrFriendsContainerRef}
             onClick={(e) => {
-              const target = e.target as any;
               const container = chatsOrFriendsContainerRef.current;
-              
+              const target = e.target as HTMLElement;
               if (container?.contains(target) && target === container) return;
+              const divParent = target.closest("[data-user]") as HTMLDivElement;
+              if (!divParent?.dataset?.user) return;
+              const data = JSON.parse(divParent.dataset.user);
+              const user: any = {
+                id: data.id,
+                name: `${data.first_name} ${data.last_name}`,
+                profilePicture: data.profile_picture_url,
+                status: "online",
+              };
+              console.log(user);
+
+              setUser(user);
+
               setShowIndividualChat(true);
             }}
           >
             {friends && friends?.length > 0 ? (
-              friends.map((user) => (
+              friends.map((item) => (
                 <div
-                  key={user.id}
+                  key={item.id}
                   className="flex justify-start items-center gap-x-5"
+                  data-user={JSON.stringify(item)}
                 >
                   <Image
-                    src={user?.profile_picture_url as string}
-                    alt={`${user.first_name} picture `}
+                    src={item?.profile_picture_url as string}
+                    alt={`${item.first_name} picture `}
                     width={48}
                     height={48}
                     className="rounded-full w-[48px] h-[48px]"
                     priority
                   />
-                  <span className="text-lg font-semibold">{user?.first_name}</span>
+                  <span className="text-lg font-semibold">
+                    {item?.first_name}
+                  </span>
                 </div>
               ))
             ) : (
