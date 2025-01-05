@@ -6,6 +6,15 @@ import { useEffect, useRef, useState } from "react";
 import useGetFriends from "@/hooks/get-friends";
 import { useSession } from "next-auth/react";
 import OnlineIndicator from "./online-indicator";
+import { Api } from "@/lib/axios-utils";
+
+const getFriendsStatus = async (ids: string[]) => {
+  try {
+    const response = await Api.get("/friends-status", {
+      params: { ids },
+    });
+  } catch (error) {}
+};
 const ChatOrFriendsTab = () => {
   const { setShowIndividualChat, setUser, lastTab, setLastTab } =
     useMobileChatSheetStore();
@@ -67,6 +76,8 @@ const ChatOrFriendsTab = () => {
   ];
   useEffect(() => {
     if (!friends) return;
+    const ids = friends.length > 0 ? friends.map((item) => item.id) : friends;
+    getFriendsStatus(ids);
     const friendsWithStatus =
       friends.length > 0
         ? friends.map((item) => ({ ...item, status: "online" }))

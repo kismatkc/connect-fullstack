@@ -87,6 +87,7 @@ const IndividualChat = () => {
                   className={cn("w-full text-left my-3", {
                     "text-right": message.senderId === senderUser.user.id,
                   })}
+                  key={message.created_at}
                 >
                   <span className=" bg-icon-bg-light dark:bg-icon-bg-dark rounded-lg px-3 py-3">
                     {message.message}

@@ -25,10 +25,12 @@ io.on("connection", (socket) => {
   socket.on("registerUser", (user: { senderId: string }) => {
     const { senderId } = user;
     onlineUsers[senderId] = socket.id;
+    console.log("regiwtered", onlineUsers);
   });
   socket.on("unregisterUser", (user: { senderId: string }) => {
     const { senderId } = user;
     const hi = delete onlineUsers[senderId];
+
     console.log("user unregistered", onlineUsers);
   });
   socket.on("sendMessage", (user: { receiverId: string; message: string }) => {
@@ -45,10 +47,32 @@ io.on("connection", (socket) => {
 app.use(json());
 app.use("/api/friends-status", (req, res) => {
   try {
-    const userIds = req.query;
-    console.log(userIds);
+    const userIds = req.query.ids as string[];
+    const onlineFriends =
+      userIds.length > 0
+        ? userIds.map((item) => {
+            const status = Object.hasOwn(onlineUsers, item)
+              ? "online"
+              : "offline";
+            return { [item]: status };
+          })
+        : userIds;
+    console.log(onlineFriends);
+
+    res.status(200).json({
+      response: true,
+      data: onlineFriends || null,
+
+      message: "online friends found",
+    });
   } catch (error) {
     console.log(error);
+    res.status(500).json({
+      response: false,
+      error: error || null,
+
+      message: "online friends not found",
+    });
   }
 });
 app.use("/api", userRoutes);
