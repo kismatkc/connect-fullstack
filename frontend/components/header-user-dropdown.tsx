@@ -11,6 +11,8 @@ import { signOut, useSession } from "next-auth/react";
 import { HelpCircleIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
+import { socketInstance } from "@/lib/web-sockets";
 
 const HeaderUserDropDownMenu = ({}) => {
   const { data: session } = useSession();
@@ -61,7 +63,15 @@ const HeaderUserDropDownMenu = ({}) => {
         <DropdownMenuItem
           className="flex items-center "
           onClick={() => {
-            signOut();
+            try {
+              signOut();
+              socketInstance.emit("unregisterUser", {
+                senderId: session?.user.id,
+              });
+              socketInstance.disconnect();
+            } catch (error) {
+              toast.error("Please try again");
+            }
           }}
         >
           <button

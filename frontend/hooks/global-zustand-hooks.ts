@@ -3,16 +3,19 @@ import { create } from "zustand";
 interface MobileChatSheetStore {
   openMobileChatSheet: boolean;
   showIndividualChat: boolean;
-  user: {
+  lastTab: string | null;
+  receiveruser: {
     id: string;
     name: string;
     profilePicture: string;
     status: "online" | "offline";
   } | null;
+  setLastTab: (lastTab: string) => void;
+
   setOpenMobileChatSheet: (value: boolean) => void;
   setShowIndividualChat: (value: boolean) => void;
   setUser: (
-    user: {
+    receiveruser: {
       id: string;
       name: string;
       profilePicture: string;
@@ -24,8 +27,11 @@ interface MobileChatSheetStore {
 export const useMobileChatSheetStore = create<MobileChatSheetStore>((set) => ({
   openMobileChatSheet: false,
   showIndividualChat: false,
-  user: null,
-  setUser: (user) => set(() => ({ user })),
+  receiveruser: null,
+  lastTab: null,
+  setUser: (receiveruser) => set(() => ({ receiveruser })),
+  setLastTab: (lastTab) => set(() => ({ lastTab })),
+
   setOpenMobileChatSheet: (value) =>
     set(() => ({ openMobileChatSheet: value })),
   setShowIndividualChat: (value) => set(() => ({ showIndividualChat: value })),

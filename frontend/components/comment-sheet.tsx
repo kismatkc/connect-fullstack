@@ -98,10 +98,7 @@ export function ViewMoreComment({
                               onClick={async (e) => {
                                 e.stopPropagation();
                                 try {
-                                  console.log("from the button click , before");
-
                                   const decision = await getDecision();
-                                  console.log("from the button click , after");
 
                                   const commentId = data.commentId;
                                   if (!decision || !commentId) return;

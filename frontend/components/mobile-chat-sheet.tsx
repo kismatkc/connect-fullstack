@@ -10,6 +10,7 @@ const MobileChatSheet = () => {
     openMobileChatSheet,
     setShowIndividualChat,
     showIndividualChat,
+    lastTab,
     setOpenMobileChatSheet,
   } = useMobileChatSheetStore();
   return (
@@ -36,7 +37,7 @@ const MobileChatSheet = () => {
             }}
           >
             <ArrowLeft size={28} />
-            <span className="text-sm">Messages</span>
+            <span className="text-sm">{lastTab}</span>
           </button>
         )}
         {showIndividualChat ? <IndividualChat /> : <ChatOrFriendsTab />}

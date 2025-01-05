@@ -2,14 +2,27 @@ import { useMobileChatSheetStore } from "@/hooks/global-zustand-hooks";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import useGetFriends from "@/hooks/get-friends";
 import { useSession } from "next-auth/react";
+import OnlineIndicator from "./online-indicator";
 const ChatOrFriendsTab = () => {
-  const { setShowIndividualChat, setUser } = useMobileChatSheetStore();
+  const { setShowIndividualChat, setUser, lastTab, setLastTab } =
+    useMobileChatSheetStore();
   const { data: user } = useSession();
   const chatsOrFriendsContainerRef = useRef<HTMLDivElement>(null);
+
   const { data: friends } = useGetFriends(user?.user?.id);
+  const [friendDetailsWithStatus, setFriendDetailsWithStatus] = useState<
+    | {
+        id: string;
+        first_name: string;
+        last_name: string;
+        profile_picture_url: string;
+        status: string;
+      }[]
+    | undefined
+  >(undefined);
   const chats = [
     {
       profile_picture_url:
@@ -52,18 +65,28 @@ const ChatOrFriendsTab = () => {
       id: 5,
     },
   ];
+  useEffect(() => {
+    if (!friends) return;
+    const friendsWithStatus =
+      friends.length > 0
+        ? friends.map((item) => ({ ...item, status: "online" }))
+        : [];
+    console.log(friendsWithStatus);
+
+    setFriendDetailsWithStatus(friendsWithStatus);
+  }, [friends]);
 
   return (
-    <Tabs defaultValue="chats" className="w-full">
+    <Tabs defaultValue={lastTab || "Chats"} className="w-full">
       <TabsList className="w-full mb-2  bg-icon-bg-light dark:bg-icon-bg-dark">
-        <TabsTrigger value="chats" className="w-full">
+        <TabsTrigger value="Chats" className="w-full">
           Chats
         </TabsTrigger>
-        <TabsTrigger value="friends" className="w-full">
+        <TabsTrigger value="Friends" className="w-full">
           Friends
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="chats">
+      <TabsContent value="Chats">
         <section className="flex flex-col gap-y-2 h-full">
           <h1 className="font-bold text-xl">Chats</h1>
           <div
@@ -82,10 +105,9 @@ const ChatOrFriendsTab = () => {
                 profilePicture: data.profile_picture_url,
                 status: "online",
               };
-              console.log(user);
 
               setUser(user);
-
+              setLastTab("Chats");
               setShowIndividualChat(true);
             }}
           >
@@ -122,7 +144,7 @@ const ChatOrFriendsTab = () => {
           </div>
         </section>
       </TabsContent>
-      <TabsContent value="friends">
+      <TabsContent value="Friends">
         <section className="flex flex-col gap-y-2 h-full">
           <h1 className="font-bold text-xl">Friends</h1>
           <div
@@ -141,31 +163,32 @@ const ChatOrFriendsTab = () => {
                 profilePicture: data.profile_picture_url,
                 status: "online",
               };
-              console.log(user);
 
               setUser(user);
+              setLastTab("Friends");
 
               setShowIndividualChat(true);
             }}
           >
-            {friends && friends?.length > 0 ? (
-              friends.map((item) => (
+            {friendDetailsWithStatus && friendDetailsWithStatus?.length > 0 ? (
+              friendDetailsWithStatus.map((item) => (
                 <div
                   key={item.id}
                   className="flex justify-start items-center gap-x-5"
                   data-user={JSON.stringify(item)}
                 >
-                  <Image
-                    src={item?.profile_picture_url as string}
-                    alt={`${item.first_name} picture `}
-                    width={48}
-                    height={48}
-                    className="rounded-full w-[48px] h-[48px]"
-                    priority
+                  <OnlineIndicator
+                    profilePictureUrl={item?.profile_picture_url as string}
+                    firstName={item.first_name}
                   />
-                  <span className="text-lg font-semibold">
-                    {item?.first_name}
-                  </span>
+                  <div className="flex gap-x-1 flex-nowrap">
+                    <span className="text-lg font-semibold">
+                      {item?.first_name}
+                    </span>
+                    <span className="text-lg font-semibold">
+                      {item?.last_name}
+                    </span>
+                  </div>
                 </div>
               ))
             ) : (

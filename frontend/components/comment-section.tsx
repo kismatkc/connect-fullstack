@@ -26,10 +26,9 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-
 } from "@radix-ui/react-dropdown-menu";
 import useConfirmation from "./confirmation";
-import AutoGrowTextarea from "./auto-grow-text-area";
+import AutoGrowTextarea from "./auto-grow-text-area-comments";
 const CommentSection = ({
   postId,
   userId,
@@ -43,7 +42,7 @@ const CommentSection = ({
 }) => {
   const [description, setDescription] = useState<string>("");
   const { ConfirmationModel, decision: getDecision } = useConfirmation();
-const [open,setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
   const { data, error } = useGetAllPostComments(postId);
   useEffect(() => {}, [data]);
   const queryClient = useQueryClient();
@@ -94,7 +93,12 @@ const [open,setOpen] = useState<boolean>(false)
                   <span>{data[0].firstName}</span>
                   <span>{data[0].lastName}</span>
                 </div>
-                <DropdownMenu open={open} onOpenChange={(state)=> {setOpen(state)}}>
+                <DropdownMenu
+                  open={open}
+                  onOpenChange={(state) => {
+                    setOpen(state);
+                  }}
+                >
                   <DropdownMenuTrigger className="focus:outline-none">
                     <Ellipsis className="size-6  cursor-pointer" />
                   </DropdownMenuTrigger>
@@ -108,7 +112,7 @@ const [open,setOpen] = useState<boolean>(false)
                               const decision = await getDecision();
                               const commentId = data[0].commentId;
                               if (!decision || !commentId) return;
-                              setOpen(false)
+                              setOpen(false);
                               const response = await comments.delete(commentId);
                               if (response) {
                                 toast.success("Comment deleted successfully");
@@ -160,7 +164,6 @@ const [open,setOpen] = useState<boolean>(false)
             className="rounded-full"
             priority
           />
-
 
           <AutoGrowTextarea
             placeholder={`Comment as ${fullName}`}

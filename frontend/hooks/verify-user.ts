@@ -6,6 +6,7 @@ import { SignInForm } from "@/types/index";
 import { Api } from "@/lib/axios-utils";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { socketInstance } from "@/lib/web-sockets";
 
 const verifyUser = async (input: SignInForm) => {
   try {
@@ -18,6 +19,7 @@ const verifyUser = async (input: SignInForm) => {
 
 export default function useVerifyUser() {
   const router = useRouter();
+
   return useMutation({
     mutationFn: verifyUser,
     onSuccess: async (user, variables) => {
@@ -26,6 +28,10 @@ export default function useVerifyUser() {
 
         redirect: false,
       });
+      socketInstance.emit("registerUser", {
+        senderId: user?.data?.id,
+      });
+
       router.push("/");
     },
     onError: () => {

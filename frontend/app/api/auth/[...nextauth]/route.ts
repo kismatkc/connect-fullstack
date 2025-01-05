@@ -32,9 +32,7 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: async function (params) {
       const { user, token, session } = params;
-      console.log("user", user);
-      console.log("token", token);
-      console.log("session", session);
+
       if (!user) return token;
       // @ts-ignore
       token.name = `${user.first_name} ${user.last_name}`;
@@ -46,13 +44,11 @@ const authOptions: NextAuthOptions = {
       return token;
     },
     session: async function ({ session, token }) {
-      console.log("session", session);
       if (token) {
         // @ts-ignore
 
         session.user.id = token.id;
       }
-      console.log("session", session);
 
       return session;
     },

@@ -205,8 +205,35 @@ Chat ui
 3.so 
 
 
-
-
-conversation ui and logic
-1.its talk between people 
+final pseudocode for chat
+1.Nisha wants to chat with praman.She clicks the praman message button.we emitt he registerUser event in the back and we intitlaize the userId to the mappign sytem where it lcoates the socket id.
 2.
+
+message =     { message: string; senderId: string; receiverId: string }
+message = message[]
+
+
+data = [18,23,3,43,1,2,3,46,32]
+
+
+online status ui and logic
+
+ui
+friendsTab
+defulat will be grey dot on the right bottom corner 
+if online a green dot 
+indiviudal chat
+defualt offline 
+if online it switches to online 
+
+logic
+so on succesful rfgster we wil emit onlien eevtna dn on succesful logout we will emit offline evnt to the userid
+
+
+
+
+
+logic to blend status witht he query 
+
+1.request to /api/friends-status
+2.the controller gets all the friends ids 
