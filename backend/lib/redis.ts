@@ -1,5 +1,5 @@
-import Redis from "ioredis";
+import RedisConstructor from "ioredis";
 //@ts-ignore
-const client = new Redis(
-  "rediss://default:********@profound-orca-48859.upstash.io:6379"
+export const Redis: RedisConstructor.Redis = new RedisConstructor(
+  "rediss://default:Ab7bAAIjcDFlNTg4MzVlOTk2ZTM0MjIzOWExNjE2MWIyZGE4NTczZHAxMA@profound-orca-48859.upstash.io:6379"
 );

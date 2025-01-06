@@ -7,6 +7,7 @@ import { corsOptions } from "./lib/utils.ts";
 import cookieParser from "cookie-parser";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { Redis } from "./lib/redis.ts";
 
 const app = express();
 const PORT = 4000;
@@ -18,26 +19,25 @@ const io = new Server(httpServer, {
   cors: corsOptions(),
 });
 
-const onlineUsers = {};
-
 io.on("connection", (socket) => {
-  // socket.on("status")
-  socket.on("registerUser", (user: { senderId: string }) => {
+  socket.on("registerUser", async (user: { senderId: string }) => {
     const { senderId } = user;
-    onlineUsers[senderId] = socket.id;
-    console.log("regiwtered", onlineUsers);
+    await Redis.hset("onlineUsers", senderId, socket.id);
   });
-  socket.on("unregisterUser", (user: { senderId: string }) => {
+  socket.on("unregisterUser", async (user: { senderId: string }) => {
     const { senderId } = user;
-    const hi = delete onlineUsers[senderId];
-
-    console.log("user unregistered", onlineUsers);
+    // const hi = delete onlineUsers[senderId];`
+    await Redis.hdel("onlineUsers", senderId);
   });
-  socket.on("sendMessage", (user: { receiverId: string; message: string }) => {
-    const { receiverId, message } = user;
+  socket.on(
+    "sendMessage",
+    async (user: { receiverId: string; message: string }) => {
+      const { receiverId, message } = user;
 
-    io.to(onlineUsers[receiverId]).emit("receiveMessage", message);
-  });
+      const recipientId = await Redis.hget("onlineUsers", receiverId);
+      io.to(recipientId).emit("receiveMessage", message);
+    }
+  );
 
   socket.on("disconnect", (user) => {
     console.log(`user disconnected`);
@@ -45,9 +45,10 @@ io.on("connection", (socket) => {
 });
 
 app.use(json());
-app.use("/api/friends-status", (req, res) => {
+app.use("/api/friends-status", async (req, res) => {
   try {
     const userIds = req.query.ids as string[];
+    const onlineUsers = await Redis.hgetall("onlineUsers");
     const onlineFriends =
       userIds.length > 0
         ? userIds.map((item) => {
@@ -57,7 +58,6 @@ app.use("/api/friends-status", (req, res) => {
             return { [item]: status };
           })
         : userIds;
-    console.log(onlineFriends);
 
     res.status(200).json({
       response: true,

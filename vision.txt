@@ -236,4 +236,17 @@ so on succesful rfgster we wil emit onlien eevtna dn on succesful logout we will
 logic to blend status witht he query 
 
 1.request to /api/friends-status
-2.the controller gets all the friends ids 
+2.the controller gets all the friends ids \
+
+
+
+
+
+
+
+obejctive how to implement online and offline wiht reddis 
+
+1.resiter user when session is created.Have a flag this on once the code is fired and upon called in same session it wont do that 
+
+
+we will impelemtn hearbeat and on signout remove thing for rmeoving 
