@@ -6,7 +6,6 @@ import { SignInForm } from "@/types/index";
 import { Api } from "@/lib/axios-utils";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { socketInstance } from "@/lib/web-sockets";
 
 const verifyUser = async (input: SignInForm) => {
   try {
@@ -27,9 +26,6 @@ export default function useVerifyUser() {
         ...user.data,
 
         redirect: false,
-      });
-      socketInstance.emit("registerUser", {
-        senderId: user?.data?.id,
       });
 
       router.push("/");

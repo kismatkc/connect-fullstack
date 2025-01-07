@@ -26,7 +26,6 @@ io.on("connection", (socket) => {
   });
   socket.on("unregisterUser", async (user: { senderId: string }) => {
     const { senderId } = user;
-    // const hi = delete onlineUsers[senderId];`
     await Redis.hdel("onlineUsers", senderId);
   });
   socket.on(
@@ -48,6 +47,7 @@ app.use(json());
 app.use("/api/friends-status", async (req, res) => {
   try {
     const userIds = req.query.ids as string[];
+
     const onlineUsers = await Redis.hgetall("onlineUsers");
     const onlineFriends =
       userIds.length > 0
@@ -58,6 +58,7 @@ app.use("/api/friends-status", async (req, res) => {
             return { [item]: status };
           })
         : userIds;
+    console.log(onlineUsers);
 
     res.status(200).json({
       response: true,
