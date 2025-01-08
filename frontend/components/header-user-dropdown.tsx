@@ -89,6 +89,3 @@ const HeaderUserDropDownMenu = ({}) => {
 };
 
 export default HeaderUserDropDownMenu;
-{
-  /* href={`/${session?.user.name?.replaceAll(/ /g, "").toLowerCase()}`} */
-}

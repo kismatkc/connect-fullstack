@@ -14,7 +14,6 @@ const interFont = Inter({
 });
 import ReactQueryProvider from "@/components/react-query-provider";
 import { Toaster } from "@/components/ui/sonner";
-import SocketManager from "@/components/web-sockets-wrapper";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,7 +30,6 @@ export default function RootLayout({
               enableSystem={false}
               disableTransitionOnChange
             >
-              <SocketManager />
               {children}
               <Toaster />
             </ThemeProvider>
