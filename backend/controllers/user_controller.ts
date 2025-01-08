@@ -245,7 +245,6 @@ const userController = {
   getFriendsDetails: async (req: Request, res: Response) => {
     try {
       const userId = req.query.query as string;
-     
 
       const response = await userModel.getFriendsDetails(userId);
       const data = response.data.map((item) => {
@@ -420,7 +419,6 @@ const userController = {
     try {
       const likeDetails = req.query as { postId: string; userId: string };
       const response = await userModel.likeStatus(likeDetails);
-      console.log(response.data);
 
       res.status(response.status).json({
         response: response.success,

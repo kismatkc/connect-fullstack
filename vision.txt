@@ -244,6 +244,29 @@ logic to blend status witht he query
 
 
 
+
+
+online and offlien logic
+online
+create socket instance when .connect and emit registerEvent
+
+1.when the layout code is ufn (authencated && sessionid is vlaible) and if he is online
+
+
+
+
+offline
+disonnect instance .dissonnect and eit unregister user wehn 
+1.manual log out
+2.befor unload event 
+3.when offline 
+
+
+
+
+
+
+
 obejctive how to implement online and offline wiht reddis 
 
 1.resiter user when session is created.Have a flag this on once the code is fired and upon called in same session it wont do that 

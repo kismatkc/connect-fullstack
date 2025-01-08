@@ -20,13 +20,28 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
+  const socketIdleLimit = 24 * 60 * 60 * 1000;
+  let oldSettimeOut = undefined;
+  const resetSocket = () => {
+    if (oldSettimeOut) clearTimeout(oldSettimeOut);
+    oldSettimeOut = setTimeout(() => socket.disconnect(true), socketIdleLimit);
+  };
+
+  socket.onAny(() => {
+    resetSocket();
+  });
+  resetSocket();
+  console.log(`user connected`, socket.id);
+
   socket.on("registerUser", async (user: { senderId: string }) => {
     const { senderId } = user;
     await Redis.hset("onlineUsers", senderId, socket.id);
+    console.log("user registered", senderId);
   });
   socket.on("unregisterUser", async (user: { senderId: string }) => {
     const { senderId } = user;
     await Redis.hdel("onlineUsers", senderId);
+    console.log("user unregistered", senderId);
   });
   socket.on(
     "sendMessage",
@@ -38,8 +53,10 @@ io.on("connection", (socket) => {
     }
   );
 
-  socket.on("disconnect", (user) => {
-    console.log(`user disconnected`);
+  socket.on("disconnect", () => {
+    if (oldSettimeOut) clearTimeout(oldSettimeOut);
+
+    console.log(`user disconnected`, socket.id);
   });
 });
 
@@ -58,7 +75,6 @@ app.use("/api/friends-status", async (req, res) => {
             return { [item]: status };
           })
         : userIds;
-    console.log(onlineUsers);
 
     res.status(200).json({
       response: true,
