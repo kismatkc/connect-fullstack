@@ -130,7 +130,7 @@ const Posts = () => {
               <Image
                 src={post.pictureLink}
                 fill
-                alt={`${post.user.firstName} ${post.user.lastName} post picture`}
+                alt={`${post.user.firstName} post picture`}
                 priority
               />
             </CardContent>

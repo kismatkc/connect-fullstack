@@ -8,13 +8,6 @@ import { useSession } from "next-auth/react";
 import OnlineIndicator from "./online-indicator";
 import { Api } from "@/lib/axios-utils";
 
-const getFriendsStatus = async (ids: string[]) => {
-  try {
-    const response = await Api.get("/friends-status", {
-      params: { ids },
-    });
-  } catch (error) {}
-};
 const ChatOrFriendsTab = () => {
   const { setShowIndividualChat, setUser, lastTab, setLastTab } =
     useMobileChatSheetStore();
@@ -77,14 +70,27 @@ const ChatOrFriendsTab = () => {
   useEffect(() => {
     if (!friends) return;
     const ids = friends.length > 0 ? friends.map((item) => item.id) : friends;
-    getFriendsStatus(ids);
-    const friendsWithStatus =
-      friends.length > 0
-        ? friends.map((item) => ({ ...item, status: "online" }))
-        : [];
-    console.log(friendsWithStatus);
+    const getFriendsStatus = async (ids: string[]) => {
+      try {
+        const response = await Api.get("/friends-status", {
+          params: { ids },
+        });
+        console.log(response.data.data);
 
-    setFriendDetailsWithStatus(friendsWithStatus);
+        const friendsWithStatus =
+          friends.length > 0
+            ? friends.map((item) => ({
+                ...item,
+                status: response.data.data[item.id],
+              }))
+            : [];
+        console.log(friendsWithStatus);
+        setFriendDetailsWithStatus(friendsWithStatus);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFriendsStatus(ids);
   }, [friends]);
 
   return (
@@ -131,7 +137,7 @@ const ChatOrFriendsTab = () => {
                 >
                   <Image
                     src={item?.profile_picture_url as string}
-                    alt={`${item.first_name} picture `}
+                    alt={`${item.first_name[0].toLocaleUpperCase()} picture `}
                     width={48}
                     height={48}
                     className="rounded-full w-[48px] h-[48px]"
@@ -191,6 +197,7 @@ const ChatOrFriendsTab = () => {
                   <OnlineIndicator
                     profilePictureUrl={item?.profile_picture_url as string}
                     firstName={item.first_name}
+                    status={item.status}
                   />
                   <div className="flex gap-x-1 flex-nowrap">
                     <span className="text-lg font-semibold">

@@ -5,16 +5,18 @@ import { useState } from "react";
 const OnlineIndicator = ({
   profilePictureUrl,
   firstName,
+  status,
 }: {
   profilePictureUrl: string;
   firstName: string;
+  status: string;
 }) => {
-  const [online, setOnline] = useState<boolean>(false);
+  const [online, setOnline] = useState<boolean>(status === "online");
   return (
     <div className="relative">
       <Image
         src={profilePictureUrl}
-        alt={`${firstName} picture `}
+        alt={`${firstName[0].toLocaleUpperCase()} picture `}
         width={48}
         height={48}
         className="rounded-full w-[48px] h-[48px] "

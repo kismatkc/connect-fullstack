@@ -76,9 +76,11 @@ app.use("/api/friends-status", async (req, res) => {
           })
         : userIds;
 
+    const data = Object.assign({}, ...onlineFriends);
+
     res.status(200).json({
       response: true,
-      data: onlineFriends || null,
+      data: data || null,
 
       message: "online friends found",
     });

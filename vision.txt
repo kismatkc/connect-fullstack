@@ -273,3 +273,9 @@ obejctive how to implement online and offline wiht reddis
 
 
 we will impelemtn hearbeat and on signout remove thing for rmeoving 
+
+
+
+
+1.we fetach initial status of the user
+2.if any user unregister then we emit went offline event else we emit came online event 
