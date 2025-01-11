@@ -8,8 +8,6 @@ const SocketManager = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    console.log("hook mounted");
-
     if (!session?.user.id) return;
 
     socketInstance.connect();
@@ -21,7 +19,19 @@ const SocketManager = ({ children }: { children: ReactNode }) => {
       socketInstance.disconnect();
     };
 
+    setInterval(() => {
+      socketInstance.emit("ping");
+    }, 5 * 1000);
+
     window.addEventListener("beforeunload", userLeaving);
+
+    window.addEventListener("offline", () => {
+      console.log("offline");
+    });
+    window.addEventListener("online", () => {
+      console.log("online");
+    });
+
     return () => {
       socketInstance.emit("unregisterUser", { senderId: session.user.id });
       window.removeEventListener("beforeunload", userLeaving);

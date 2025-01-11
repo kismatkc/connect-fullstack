@@ -20,27 +20,41 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  const socketIdleLimit = 24 * 60 * 60 * 1000;
-  let oldSettimeOut = undefined;
-  const resetSocket = () => {
-    if (oldSettimeOut) clearTimeout(oldSettimeOut);
-    oldSettimeOut = setTimeout(() => socket.disconnect(true), socketIdleLimit);
+  const userIdleLimit = 10 * 1000;
+  let userSetTimeout = undefined;
+  let activeUser = undefined;
+  const resetPinPongTimer = () => {
+    if (userSetTimeout) clearTimeout(userSetTimeout);
+    userSetTimeout = setTimeout(() => {
+      console.log("kicked out due to inactivity");
+      Redis.hdel("onlineUsers", activeUser).then(() =>
+        io.emit("isOffline", activeUser)
+      );
+
+      socket.disconnect(true);
+    }, userIdleLimit);
   };
 
-  socket.onAny(() => {
-    resetSocket();
+  socket.on("ping", () => {
+    console.log("ping");
+
+    resetPinPongTimer();
   });
-  resetSocket();
+  resetPinPongTimer();
   console.log(`user connected`, socket.id);
 
   socket.on("registerUser", async (user: { senderId: string }) => {
     const { senderId } = user;
+    activeUser = senderId;
     await Redis.hset("onlineUsers", senderId, socket.id);
+    io.emit("isOnline", senderId);
     console.log("user registered", senderId);
   });
   socket.on("unregisterUser", async (user: { senderId: string }) => {
     const { senderId } = user;
     await Redis.hdel("onlineUsers", senderId);
+    io.emit("isOffline", senderId);
+
     console.log("user unregistered", senderId);
   });
   socket.on(
@@ -54,7 +68,7 @@ io.on("connection", (socket) => {
   );
 
   socket.on("disconnect", () => {
-    if (oldSettimeOut) clearTimeout(oldSettimeOut);
+    if (userSetTimeout) clearTimeout(userSetTimeout);
 
     console.log(`user disconnected`, socket.id);
   });

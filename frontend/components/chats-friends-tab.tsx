@@ -198,6 +198,7 @@ const ChatOrFriendsTab = () => {
                     profilePictureUrl={item?.profile_picture_url as string}
                     firstName={item.first_name}
                     status={item.status}
+                    id={item.id}
                   />
                   <div className="flex gap-x-1 flex-nowrap">
                     <span className="text-lg font-semibold">

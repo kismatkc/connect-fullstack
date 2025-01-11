@@ -8,15 +8,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { signOut, useSession } from "next-auth/react";
-import { HelpCircleIcon, LogOutIcon } from "lucide-react";
+import { HelpCircleIcon, LogOutIcon, Router } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { socketInstance } from "@/lib/web-sockets";
+import { useRouter } from "next/navigation";
 
 const HeaderUserDropDownMenu = ({}) => {
   const { data: session } = useSession();
   const [openDropdown, setOpenDrowdown] = useState(false);
+  const router = useRouter();
 
   return (
     <DropdownMenu
@@ -68,6 +70,7 @@ const HeaderUserDropDownMenu = ({}) => {
               socketInstance.emit("unregisterUser", {
                 senderId: session?.user.id,
               });
+              router.push("/log-in");
               socketInstance.disconnect();
             } catch (error) {
               toast.error("Please try again");
